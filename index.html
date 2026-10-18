@@ -33,7 +33,6 @@
 
         /* Glassmorphism Card Style */
         .interactive-card {
-            background: rgba(255, 255, 255, 0.82);
             padding: 30px 20px;
             border-radius: 28px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.6);
@@ -43,6 +42,32 @@
             -webkit-backdrop-filter: blur(16px);
             border: 2px solid rgba(255, 255, 255, 0.85);
             transition: all 0.4s ease;
+        }
+
+        /* Envelope Styles */
+        .env-glass {
+            background: rgba(255, 255, 255, 0.82);
+            color: #be123c;
+        }
+        .env-romantic-red {
+            background: linear-gradient(135deg, rgba(225, 29, 72, 0.9), rgba(159, 18, 57, 0.95));
+            color: #ffffff;
+            border-color: rgba(254, 205, 211, 0.5);
+        }
+        .env-pastel-pink {
+            background: rgba(252, 231, 243, 0.92);
+            color: #9d174d;
+            border-color: rgba(244, 114, 182, 0.6);
+        }
+        .env-classic-gold {
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95));
+            color: #78350f;
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+        .env-dark-velvet {
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95));
+            color: #f43f5e;
+            border-color: rgba(244, 63, 94, 0.4);
         }
 
         .step-view {
@@ -227,18 +252,57 @@
 
         .paper-sheet {
             position: relative;
-            background-color: rgba(255, 253, 248, 0.97);
-            backdrop-filter: blur(10px);
-            background-image: 
-                radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0),
-                linear-gradient(to right, rgba(0,0,0,0.01) 1px, transparent 1px);
-            background-size: 12px 12px, 100% 100%;
             width: 100%;
             padding: 28px 20px 24px 20px;
             border-radius: 16px;
             box-shadow: -8px 15px 35px rgba(0, 0, 0, 0.18);
             border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
         }
+
+        /* Paper Letter Themes */
+        .paper-classic {
+            background-color: rgba(255, 253, 248, 0.97);
+            color: #2b2b2b;
+            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0);
+            background-size: 12px 12px;
+        }
+        .paper-classic .paper-title { color: #b91c1c; border-bottom: 2px dashed #fca5a5; }
+        .paper-classic .paper-sig { color: #9f1239; }
+
+        .paper-rose {
+            background-color: rgba(255, 241, 242, 0.97);
+            color: #881337;
+            background-image: radial-gradient(rgba(244, 63, 94, 0.1) 1px, transparent 0);
+            background-size: 14px 14px;
+        }
+        .paper-rose .paper-title { color: #be123c; border-bottom: 2px dashed #fda4af; }
+        .paper-rose .paper-sig { color: #e11d48; }
+
+        .paper-vintage {
+            background-color: rgba(254, 243, 199, 0.97);
+            color: #451a03;
+            border-color: #fde68a;
+        }
+        .paper-vintage .paper-title { color: #78350f; border-bottom: 2px dashed #fcd34d; }
+        .paper-vintage .paper-sig { color: #92400e; }
+
+        .paper-grid {
+            background-color: rgba(255, 255, 255, 0.97);
+            color: #1e293b;
+            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+        .paper-grid .paper-title { color: #0284c7; border-bottom: 2px dashed #38bdf8; }
+        .paper-grid .paper-sig { color: #0369a1; }
+
+        .paper-dark {
+            background-color: rgba(15, 23, 42, 0.96);
+            color: #f1f5f9;
+            border-color: #334155;
+        }
+        .paper-dark .paper-title { color: #fb7185; border-bottom: 2px dashed #f43f5e; }
+        .paper-dark .paper-sig { color: #fda4af; }
 
         .paperclip {
             position: absolute;
@@ -251,6 +315,22 @@
             z-index: 6;
             transform: rotate(8deg);
             box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Preset Gif Thumbnails */
+        .gif-thumb {
+            width: 52px;
+            height: 52px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .gif-thumb:hover, .gif-thumb.selected {
+            border-color: #ec4899;
+            transform: scale(1.08);
+            box-shadow: 0 4px 10px rgba(236, 72, 153, 0.4);
         }
 
         /* Custom Scrollbar for sidebar editor */
@@ -282,7 +362,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg text-white leading-tight">Love Surprise Builder</h1>
-                    <p class="text-xs text-pink-400">စာသားများနှင့် Link များကို လွယ်ကူစွာ ပြင်ဆင်ပါ</p>
+                    <p class="text-xs text-pink-400">GIF, Paper & Envelope Design များ စိတ်ကြိုက်ပြင်ပါ</p>
                 </div>
             </div>
             
@@ -294,10 +374,13 @@
         <!-- Tab Controls for Builder -->
         <div class="flex gap-2 mb-5 p-1 bg-slate-800/80 rounded-xl border border-slate-700/60">
             <button onclick="switchTab('content')" id="tab-btn-content" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow">
-                <i class="fa-solid fa-pen-to-square mr-1"></i> စာသား & ပုံများ
+                <i class="fa-solid fa-pen-to-square mr-1"></i> စာသား & GIFs
+            </button>
+            <button onclick="switchTab('design')" id="tab-btn-design" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
+                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Card & Paper Style
             </button>
             <button onclick="switchTab('settings')" id="tab-btn-settings" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
-                <i class="fa-solid fa-sliders mr-1"></i> Theme & Formspree
+                <i class="fa-solid fa-sliders mr-1"></i> Theme & Form
             </button>
         </div>
 
@@ -331,8 +414,9 @@
                     <input type="text" id="cfg-step1-text" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">GIF / Image Link</label>
-                    <input type="text" id="cfg-step1-gif" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
+                    <label class="block text-xs text-slate-400 mb-1">GIF ရွေးချယ်ပါ သို့မဟုတ် Link ထည့်ပါ</label>
+                    <div class="flex gap-2 mb-2 overflow-x-auto pb-1" id="preset-gifs-1"></div>
+                    <input type="text" id="cfg-step1-gif" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500" placeholder="Custom GIF URL">
                 </div>
             </div>
 
@@ -347,8 +431,9 @@
                     <input type="text" id="cfg-step2-text" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">GIF / Image Link</label>
-                    <input type="text" id="cfg-step2-gif" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
+                    <label class="block text-xs text-slate-400 mb-1">GIF ရွေးချယ်ပါ သို့မဟုတ် Link ထည့်ပါ</label>
+                    <div class="flex gap-2 mb-2 overflow-x-auto pb-1" id="preset-gifs-2"></div>
+                    <input type="text" id="cfg-step2-gif" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500" placeholder="Custom GIF URL">
                 </div>
             </div>
 
@@ -363,8 +448,9 @@
                     <input type="text" id="cfg-step3-text" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">GIF / Image Link</label>
-                    <input type="text" id="cfg-step3-gif" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
+                    <label class="block text-xs text-slate-400 mb-1">GIF ရွေးချယ်ပါ သို့မဟုတ် Link ထည့်ပါ</label>
+                    <div class="flex gap-2 mb-2 overflow-x-auto pb-1" id="preset-gifs-3"></div>
+                    <input type="text" id="cfg-step3-gif" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500" placeholder="Custom GIF URL">
                 </div>
             </div>
 
@@ -398,7 +484,62 @@
 
         </div>
 
-        <!-- TAB CONTENT 2: SETTINGS & SETUPS -->
+        <!-- TAB CONTENT 2: STYLES & DESIGNS (ENVELOPE & PAPER) -->
+        <div id="tab-design" class="space-y-5 hidden">
+            
+            <!-- Envelope Design Presets -->
+            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
+                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
+                    <i class="fa-solid fa-envelope"></i> Envelope / Card Frame Design
+                </h3>
+                <p class="text-xs text-slate-400">မေးခွန်းကတ်ပြားနှင့် စာအိတ်၏ ဒီဇိုင်းစတိုင်ကို ရွေးပါ</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setEnvelopeStyle('env-glass')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white/80 border border-slate-300 shadow">
+                        ✨ Glassmorphic
+                    </button>
+                    <button onclick="setEnvelopeStyle('env-romantic-red')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 border border-rose-400 shadow">
+                        ❤️ Romantic Red
+                    </button>
+                    <button onclick="setEnvelopeStyle('env-pastel-pink')" class="p-2.5 rounded-xl text-xs font-bold text-pink-900 bg-pink-200 border border-pink-300 shadow">
+                        🌸 Pastel Pink
+                    </button>
+                    <button onclick="setEnvelopeStyle('env-classic-gold')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-200 border border-amber-300 shadow">
+                        👑 Classic Gold
+                    </button>
+                    <button onclick="setEnvelopeStyle('env-dark-velvet')" class="p-2.5 rounded-xl text-xs font-bold text-rose-400 bg-slate-950 border border-rose-900 shadow">
+                        🌙 Dark Velvet
+                    </button>
+                </div>
+            </div>
+
+            <!-- Paper Letter Design Presets -->
+            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
+                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
+                    <i class="fa-solid fa-scroll"></i> Letter Paper Design
+                </h3>
+                <p class="text-xs text-slate-400">အထဲမှ စာလွှာစာရွက်၏ ဒီဇိုင်းနှင့် ကာလာစတိုင်ကို ရွေးပါ</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setPaperStyle('paper-classic')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-amber-50 border border-amber-200 shadow">
+                        📜 Classic Cream
+                    </button>
+                    <button onclick="setPaperStyle('paper-rose')" class="p-2.5 rounded-xl text-xs font-bold text-rose-800 bg-rose-100 border border-rose-300 shadow">
+                        🌹 Soft Rose
+                    </button>
+                    <button onclick="setPaperStyle('paper-vintage')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-yellow-100 border border-yellow-300 shadow">
+                        🏷️ Vintage Gold
+                    </button>
+                    <button onclick="setPaperStyle('paper-grid')" class="p-2.5 rounded-xl text-xs font-bold text-sky-900 bg-white border border-sky-200 shadow">
+                        📐 Love Grid Paper
+                    </button>
+                    <button onclick="setPaperStyle('paper-dark')" class="p-2.5 rounded-xl text-xs font-bold text-pink-300 bg-slate-900 border border-slate-700 shadow">
+                        🖤 Midnight Dark
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- TAB CONTENT 3: SETTINGS & SETUPS -->
         <div id="tab-settings" class="space-y-5 hidden">
             
             <!-- Formspree / Webhook Endpoint Link -->
@@ -480,9 +621,9 @@
             <div class="w-full max-w-[420px] min-h-[500px] flex justify-center items-center relative z-10">
                 
                 <!-- PREVIEW STEP 1 -->
-                <div class="interactive-card step-view active" id="prev-step-1">
+                <div class="interactive-card env-glass step-view active" id="prev-step-1">
                     <img id="prev-img-1" class="gif-box" src="https://media.tenor.com/2Jl1X7xa6UYAAAAi/bubu-dudu-eyes.gif" alt="Gif 1">
-                    <h2 id="prev-text-1" class="text-rose-700 text-lg font-bold leading-relaxed">
+                    <h2 id="prev-text-1" class="text-lg font-bold leading-relaxed">
                         ပြန်ချစ်ပါတော့လား နွေးထွေးပေးချင်ပြီ… 💕
                     </h2>
                     <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative">
@@ -494,9 +635,9 @@
                 </div>
 
                 <!-- PREVIEW STEP 2 -->
-                <div class="interactive-card step-view" id="prev-step-2">
+                <div class="interactive-card env-glass step-view" id="prev-step-2">
                     <img id="prev-img-2" class="gif-box" src="https://media.tenor.com/D6HDHJLAqb4AAAAi/dudu-bubu-dudu.gif" alt="Gif 2">
-                    <h2 id="prev-text-2" class="text-rose-700 text-lg font-bold leading-relaxed">
+                    <h2 id="prev-text-2" class="text-lg font-bold leading-relaxed">
                         တကယ် အမြဲတမ်း ချစ်ပေးမှာလား… 🥺
                     </h2>
                     <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative" id="prev-btn-container-2">
@@ -508,9 +649,9 @@
                 </div>
 
                 <!-- PREVIEW STEP 3 -->
-                <div class="interactive-card step-view" id="prev-step-3">
+                <div class="interactive-card env-glass step-view" id="prev-step-3">
                     <img id="prev-img-3" class="gif-box" src="https://media.tenor.com/Lgr_6-nkvnUAAAAi/casal-dudu.gif" alt="Gif 3">
-                    <h2 id="prev-text-3" class="text-rose-700 text-lg font-bold leading-relaxed">
+                    <h2 id="prev-text-3" class="text-lg font-bold leading-relaxed">
                         တကယ်ကြီး အဖြေပြန်ပေးလိုက်တာလား? 💖
                     </h2>
                     <div class="flex items-center justify-center gap-4 w-full min-h-[110px] pt-2 relative">
@@ -532,16 +673,16 @@
                 <!-- PREVIEW STEP 4: LOVE LETTER -->
                 <div class="step-view w-full" id="prev-step-4">
                     <div class="w-full max-w-[360px] mx-auto p-2 flex justify-center items-center">
-                        <div class="paper-sheet paper-letter-pop">
+                        <div id="prev-paper-container" class="paper-sheet paper-classic paper-letter-pop">
                             <div class="paperclip"></div>
-                            <div class="text-slate-800 text-sm leading-relaxed text-left">
-                                <div id="prev-letter-title" class="text-center text-lg text-rose-700 font-bold mb-3 border-b-2 border-dashed border-rose-300 pb-2">
+                            <div class="text-sm leading-relaxed text-left">
+                                <div id="prev-letter-title" class="paper-title text-center text-lg font-bold mb-3 pb-2">
                                     💌 ချစ်ရပါသော… 💌
                                 </div>
                                 <p id="prev-letter-p1" class="mb-2">ဒီကမ္ဘာပေါ်မှာ လူတွေအများကြီးရှိတဲ့ထဲကမှ မင်းနဲ့ဆုံတွေ့ခွင့်ရခဲ့တာဟာ ငါ့အတွက်တော့ အလှပဆုံးသော ကံကြမ္မာတစ်ခုပါပဲ။</p>
                                 <p id="prev-letter-p2" class="mb-2">အမြဲတမ်း ပျော်ရွှင်အောင်ထားပေးမယ်လို့ ကတိမပေးနိုင်ရင်တောင်မှ မင်းဝမ်းနည်းတဲ့အခါတိုင်း သို့မဟုတ် ခက်ခဲတဲ့အချိန်တိုင်းမှာ အနားမှာ အမြဲရှိနေပေးမယ့်သူတစ်ယောက် ဖြစ်ပါရစေ။</p>
                                 <p id="prev-letter-p3" class="mb-2">အမြဲတမ်း ချစ်နေမှာပါ… 🌹✨</p>
-                                <div id="prev-letter-sig" class="text-right font-bold text-rose-800 text-sm mt-4">
+                                <div id="prev-letter-sig" class="paper-sig text-right font-bold text-sm mt-4">
                                     love you so much❤️
                                 </div>
                             </div>
@@ -586,16 +727,31 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
+        // PRESET GIF LIST (10+ Cute GIFs)
+        const presetGifs = [
+            "https://media.tenor.com/2Jl1X7xa6UYAAAAi/bubu-dudu-eyes.gif",
+            "https://media.tenor.com/D6HDHJLAqb4AAAAi/dudu-bubu-dudu.gif",
+            "https://media.tenor.com/Lgr_6-nkvnUAAAAi/casal-dudu.gif",
+            "https://media.tenor.com/gU21P1O8T7MAAAAi/bear-kiss-bear-hug.gif",
+            "https://media.tenor.com/ef301E06aF8AAAAi/milk-and-mocha-hug.gif",
+            "https://media.tenor.com/f11L14u1h8AAAAAi/tkthao211-bubududu.gif",
+            "https://media.tenor.com/vH4hX_0G56IAAAAi/cat-love.gif",
+            "https://media.tenor.com/39T1Xk71wLIAAAAi/cute-bear.gif",
+            "https://media.tenor.com/2s_mD0B0GgwAAAAi/mocha-bear.gif",
+            "https://media.tenor.com/6cE8m1bT4BMAAAAi/love-you.gif",
+            "https://media.tenor.com/Z4u5J1hE_S4AAAAi/peach-cat-hug.gif"
+        ];
+
         // CONFIG APP STATE
         const appConfig = {
             step1Text: "ပြန်ချစ်ပါတော့လား နွေးထွေးပေးချင်ပြီ… 💕",
-            step1Gif: "https://media.tenor.com/2Jl1X7xa6UYAAAAi/bubu-dudu-eyes.gif",
+            step1Gif: presetGifs[0],
             
             step2Text: "တကယ် အမြဲတမ်း ချစ်ပေးမှာလား… 🥺",
-            step2Gif: "https://media.tenor.com/D6HDHJLAqb4AAAAi/dudu-bubu-dudu.gif",
+            step2Gif: presetGifs[1],
             
             step3Text: "တကယ်ကြီး အဖြေပြန်ပေးလိုက်တာလား? 💖",
-            step3Gif: "https://media.tenor.com/Lgr_6-nkvnUAAAAi/casal-dudu.gif",
+            step3Gif: presetGifs[2],
             
             letterTitle: "💌 ချစ်ရပါသော… 💌",
             letterP1: "ဒီကမ္ဘာပေါ်မှာ လူတွေအများကြီးရှိတဲ့ထဲကမှ မင်းနဲ့ဆုံတွေ့ခွင့်ရခဲ့တာဟာ ငါ့အတွက်တော့ အလှပဆုံးသော ကံကြမ္မာတစ်ခုပါပဲ။",
@@ -603,6 +759,9 @@
             letterP3: "အမြဲတမ်း ချစ်နေမှာပါ… 🌹✨",
             letterSig: "love you so much❤️",
             
+            envelopeStyle: "env-glass",
+            paperStyle: "paper-classic",
+
             formspreeUrl: "",
             warnings: [
                 "⚠️ No နှိပ်လို့ မရပါဘူးနော်!",
@@ -621,8 +780,10 @@
             ocean: "linear-gradient(-45deg, #84fab0, #8fd3f4, #a1c4fd, #c2e9fb)"
         };
 
-        // INITIALIZE INPUT FIELDS
+        // INITIALIZE INPUT FIELDS & GIF SELECTORS
         window.onload = function() {
+            renderGifSelectors();
+
             document.getElementById('cfg-step1-text').value = appConfig.step1Text;
             document.getElementById('cfg-step1-gif').value = appConfig.step1Gif;
             
@@ -644,17 +805,44 @@
             updateConfig();
         };
 
+        function renderGifSelectors() {
+            [1, 2, 3].forEach(stepNum => {
+                const container = document.getElementById(`preset-gifs-${stepNum}`);
+                container.innerHTML = '';
+                presetGifs.forEach((url, index) => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.className = 'gif-thumb';
+                    img.onclick = () => selectPresetGif(stepNum, url, img);
+                    container.appendChild(img);
+                });
+            });
+        }
+
+        function selectPresetGif(stepNum, url, element) {
+            document.getElementById(`cfg-step${stepNum}-gif`).value = url;
+            const parent = element.parentElement;
+            parent.querySelectorAll('.gif-thumb').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            updateConfig();
+        }
+
         // TAB SWITCHER
         function switchTab(tabName) {
             document.getElementById('tab-content').classList.add('hidden');
+            document.getElementById('tab-design').classList.add('hidden');
             document.getElementById('tab-settings').classList.add('hidden');
             
             document.getElementById('tab-btn-content').className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
+            document.getElementById('tab-btn-design').className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
             document.getElementById('tab-btn-settings').className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
 
             if (tabName === 'content') {
                 document.getElementById('tab-content').classList.remove('hidden');
                 document.getElementById('tab-btn-content').className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow";
+            } else if (tabName === 'design') {
+                document.getElementById('tab-design').classList.remove('hidden');
+                document.getElementById('tab-btn-design').className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow";
             } else {
                 document.getElementById('tab-settings').classList.remove('hidden');
                 document.getElementById('tab-btn-settings').className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow";
@@ -698,6 +886,20 @@
             document.getElementById('prev-letter-p2').innerText = appConfig.letterP2;
             document.getElementById('prev-letter-p3').innerText = appConfig.letterP3;
             document.getElementById('prev-letter-sig').innerText = appConfig.letterSig;
+        }
+
+        function setEnvelopeStyle(styleClass) {
+            appConfig.envelopeStyle = styleClass;
+            const cards = document.querySelectorAll('.interactive-card');
+            cards.forEach(card => {
+                card.className = `interactive-card ${styleClass} step-view` + (card.classList.contains('active') ? ' active' : '');
+            });
+        }
+
+        function setPaperStyle(styleClass) {
+            appConfig.paperStyle = styleClass;
+            const paper = document.getElementById('prev-paper-container');
+            paper.className = `paper-sheet ${styleClass} paper-letter-pop`;
         }
 
         function setTheme(themeKey) {
@@ -885,17 +1087,25 @@
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .card-container { width: 100%; max-width: 440px; min-height: 520px; display: flex; justify-content: center; align-items: center; position: relative; }
+        
         .interactive-card {
-            background: rgba(255, 255, 255, 0.75); padding: 35px 25px; border-radius: 30px;
+            padding: 35px 25px; border-radius: 30px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.15), inset 0 0 20px rgba(255,255,255,0.6);
             text-align: center; width: 100%; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 2px solid rgba(255, 255, 255, 0.8); transition: all 0.4s ease;
         }
+
+        .env-glass { background: rgba(255, 255, 255, 0.75); color: #be123c; }
+        .env-romantic-red { background: linear-gradient(135deg, rgba(225, 29, 72, 0.9), rgba(159, 18, 57, 0.95)); color: #ffffff; border-color: rgba(254, 205, 211, 0.5); }
+        .env-pastel-pink { background: rgba(252, 231, 243, 0.92); color: #9d174d; border-color: rgba(244, 114, 182, 0.6); }
+        .env-classic-gold { background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95)); color: #78350f; border-color: rgba(245, 158, 11, 0.5); }
+        .env-dark-velvet { background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95)); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); }
+
         .step { display: none; flex-direction: column; align-items: center; gap: 22px; animation: fadeIn 0.4s ease-in-out forwards; }
         .step.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         img.gif-box { width: 180px; height: 180px; object-fit: cover; border-radius: 22px; box-shadow: 0 10px 25px rgba(220,38,38,0.2); border: 4px solid rgba(255,255,255,0.9); }
-        h2 { color: #be123c; font-size: 1.3rem; line-height: 1.6; font-weight: 700; text-shadow: 0 1px 2px rgba(255,255,255,0.8); }
+        h2 { font-size: 1.3rem; line-height: 1.6; font-weight: 700; text-shadow: 0 1px 2px rgba(255,255,255,0.8); }
         .btn-group { display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; min-height: 110px; position: relative; padding: 10px; }
         button {
             padding: 18px 40px; min-height: 60px; font-size: 1.25rem; font-weight: 800; border: none; border-radius: 50px;
@@ -930,17 +1140,39 @@
         .paper-letter-wrapper { position: relative; width: 100%; max-width: 360px; margin: 0 auto; padding: 10px; display: flex; justify-content: center; align-items: center; z-index: 10; }
         .paper-letter-pop { animation: popInLetter 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes popInLetter { 0% { opacity: 0; transform: scale(0.3) rotate(-12deg); } 70% { transform: scale(1.04) rotate(-2deg); } 100% { opacity: 1; transform: scale(1) rotate(-2deg); } }
-        .paper-sheet { position: relative; background-color: rgba(255, 253, 248, 0.96); backdrop-filter: blur(10px); width: 100%; padding: 32px 22px 28px 22px; border-radius: 16px; box-shadow: -8px 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255, 255, 255, 0.8); }
+        
+        .paper-sheet { position: relative; width: 100%; padding: 32px 22px 28px 22px; border-radius: 16px; box-shadow: -8px 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255, 255, 255, 0.8); }
+        
+        .paper-classic { background-color: rgba(255, 253, 248, 0.96); color: #2b2b2b; }
+        .paper-classic .letter-title { color: #b91c1c; border-bottom: 2px dashed #fca5a5; }
+        .paper-classic .letter-signature { color: #9f1239; }
+
+        .paper-rose { background-color: rgba(255, 241, 242, 0.97); color: #881337; }
+        .paper-rose .letter-title { color: #be123c; border-bottom: 2px dashed #fda4af; }
+        .paper-rose .letter-signature { color: #e11d48; }
+
+        .paper-vintage { background-color: rgba(254, 243, 199, 0.97); color: #451a03; border-color: #fde68a; }
+        .paper-vintage .letter-title { color: #78350f; border-bottom: 2px dashed #fcd34d; }
+        .paper-vintage .letter-signature { color: #92400e; }
+
+        .paper-grid { background-color: rgba(255, 255, 255, 0.97); color: #1e293b; background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px); background-size: 16px 16px; }
+        .paper-grid .letter-title { color: #0284c7; border-bottom: 2px dashed #38bdf8; }
+        .paper-grid .letter-signature { color: #0369a1; }
+
+        .paper-dark { background-color: rgba(15, 23, 42, 0.96); color: #f1f5f9; border-color: #334155; }
+        .paper-dark .letter-title { color: #fb7185; border-bottom: 2px dashed #f43f5e; }
+        .paper-dark .letter-signature { color: #fda4af; }
+
         .paperclip { position: absolute; top: 12px; right: 28px; width: 18px; height: 45px; border: 3px solid #4a4a4a; border-radius: 12px; z-index: 6; transform: rotate(8deg); }
-        .letter-content { font-family: 'Pyidaungsu', sans-serif; color: #2b2b2b; line-height: 1.8; font-size: 0.95rem; text-align: left; }
-        .letter-title { text-align: center; font-size: 1.3rem; color: #b91c1c; font-weight: 700; margin-bottom: 14px; border-bottom: 2px dashed #fca5a5; padding-bottom: 8px; }
-        .letter-signature { text-align: right; margin-top: 18px; font-weight: 700; color: #9f1239; font-size: 1rem; }
+        .letter-content { font-family: 'Pyidaungsu', sans-serif; line-height: 1.8; font-size: 0.95rem; text-align: left; }
+        .letter-title { text-align: center; font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; padding-bottom: 8px; }
+        .letter-signature { text-align: right; margin-top: 18px; font-weight: 700; font-size: 1rem; }
     </style>
 </head>
 <body>
     <div class="card-container">
         <!-- STEP 1 -->
-        <div class="interactive-card step active" id="step-1">
+        <div class="interactive-card ${appConfig.envelopeStyle} step active" id="step-1">
             <img class="gif-box" src="${appConfig.step1Gif}" alt="Gif 1">
             <h2><b>${appConfig.step1Text}</b></h2>
             <div class="btn-group">
@@ -952,7 +1184,7 @@
         </div>
 
         <!-- STEP 2 -->
-        <div class="interactive-card step" id="step-2">
+        <div class="interactive-card ${appConfig.envelopeStyle} step" id="step-2">
             <img class="gif-box" src="${appConfig.step2Gif}" alt="Gif 2">
             <h2><b>${appConfig.step2Text}</b></h2>
             <div class="btn-group" id="btn-container-2">
@@ -964,7 +1196,7 @@
         </div>
 
         <!-- STEP 3 -->
-        <div class="interactive-card step" id="step-3">
+        <div class="interactive-card ${appConfig.envelopeStyle} step" id="step-3">
             <img class="gif-box" src="${appConfig.step3Gif}" alt="Gif 3">
             <h2><b>${appConfig.step3Text}</b></h2>
             <div class="btn-group">
@@ -986,7 +1218,7 @@
         <!-- STEP 4 -->
         <div class="step" id="step-4" style="width: 100%;">
             <div class="paper-letter-wrapper paper-letter-pop">
-                <div class="paper-sheet">
+                <div class="paper-sheet ${appConfig.paperStyle}">
                     <div class="paperclip"></div>
                     <div class="letter-content">
                         <div class="letter-title">${appConfig.letterTitle}</div>
