@@ -44,7 +44,7 @@
             transition: all 0.4s ease;
         }
 
-        /* Envelope Styles */
+        /* Envelope / Card Styles */
         .env-glass {
             background: rgba(255, 255, 255, 0.82);
             color: #be123c;
@@ -184,7 +184,7 @@
             transition: top 0.2s ease-out, left 0.2s ease-out;
         }
 
-        /* Falling Envelope Animation */
+        /* Falling Envelope / Bouquet Animation */
         .falling-envelope-container {
             display: flex;
             flex-direction: column;
@@ -260,7 +260,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Paper Letter Themes */
         .paper-classic {
             background-color: rgba(255, 253, 248, 0.97);
             color: #2b2b2b;
@@ -317,7 +316,7 @@
             box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.25);
         }
 
-        /* Preset Gif Thumbnails */
+        /* Preset Thumbnails */
         .gif-thumb {
             width: 52px;
             height: 52px;
@@ -331,6 +330,23 @@
             border-color: #ec4899;
             transform: scale(1.08);
             box-shadow: 0 4px 10px rgba(236, 72, 153, 0.4);
+        }
+
+        .env-thumb {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            padding: 4px;
+            transition: all 0.2s;
+        }
+        .env-thumb:hover, .env-thumb.selected {
+            border-color: #ec4899;
+            transform: scale(1.06);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /* Custom Scrollbar for sidebar editor */
@@ -362,7 +378,7 @@
                 </div>
                 <div>
                     <h1 class="font-bold text-lg text-white leading-tight">Love Surprise Builder</h1>
-                    <p class="text-xs text-pink-400">GIF, Paper & Envelope Design များ စိတ်ကြိုက်ပြင်ပါ</p>
+                    <p class="text-xs text-pink-400">GIF, Bouquet & Paper Design များ စိတ်ကြိုက်ပြင်ပါ</p>
                 </div>
             </div>
             
@@ -377,7 +393,7 @@
                 <i class="fa-solid fa-pen-to-square mr-1"></i> စာသား & GIFs
             </button>
             <button onclick="switchTab('design')" id="tab-btn-design" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
-                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Card & Paper Style
+                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Bouquet & Paper
             </button>
             <button onclick="switchTab('settings')" id="tab-btn-settings" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
                 <i class="fa-solid fa-sliders mr-1"></i> Theme & Form
@@ -396,7 +412,7 @@
                     <button onclick="previewStep(1)" class="py-1.5 text-xs font-bold bg-slate-700 hover:bg-pink-600 text-white rounded-lg transition text-center step-nav-btn" id="nav-step-1">Step 1</button>
                     <button onclick="previewStep(2)" class="py-1.5 text-xs font-bold bg-slate-700 hover:bg-pink-600 text-white rounded-lg transition text-center step-nav-btn" id="nav-step-2">Step 2</button>
                     <button onclick="previewStep(3)" class="py-1.5 text-xs font-bold bg-slate-700 hover:bg-pink-600 text-white rounded-lg transition text-center step-nav-btn" id="nav-step-3">Step 3</button>
-                    <button onclick="previewStep('falling')" class="py-1.5 text-xs font-bold bg-slate-700 hover:bg-pink-600 text-white rounded-lg transition text-center step-nav-btn" id="nav-step-falling">Envelope</button>
+                    <button onclick="previewStep('falling')" class="py-1.5 text-xs font-bold bg-slate-700 hover:bg-pink-600 text-white rounded-lg transition text-center step-nav-btn" id="nav-step-falling">Bouquet</button>
                     <button onclick="previewStep(4)" class="py-1.5 text-xs font-bold bg-slate-700 hover:bg-pink-600 text-white rounded-lg transition text-center step-nav-btn" id="nav-step-4">Letter</button>
                 </div>
             </div>
@@ -484,29 +500,47 @@
 
         </div>
 
-        <!-- TAB CONTENT 2: STYLES & DESIGNS (ENVELOPE & PAPER) -->
+        <!-- TAB CONTENT 2: STYLES & DESIGNS (BOUQUET & PAPER) -->
         <div id="tab-design" class="space-y-5 hidden">
             
-            <!-- Envelope Design Presets -->
+            <!-- Falling Envelope / Bouquet Choice -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-envelope"></i> Envelope / Card Frame Design
+                    <i class="fa-solid fa-gift"></i> Falling Envelope / Bouquet Image
                 </h3>
-                <p class="text-xs text-slate-400">မေးခွန်းကတ်ပြားနှင့် စာအိတ်၏ ဒီဇိုင်းစတိုင်ကို ရွေးပါ</p>
+                <p class="text-xs text-slate-400">ကျလာမည့် ပုံစံ (Envelope သို့မဟုတ် Bouquet ၃ မျိုး) ကို ရွေးပါ</p>
+                <div class="flex gap-2 flex-wrap items-center">
+                    <img src="https://i.ibb.co/JWycnnh9/pngegg.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/JWycnnh9/pngegg.png', this)" title="Envelope">
+                    <img src="https://i.ibb.co/8DvMS7jx/Bouquet-2.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/8DvMS7jx/Bouquet-2.png', this)" title="Bouquet 2">
+                    <img src="https://i.ibb.co/wFdWQPkx/Bouquet-3.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/wFdWQPkx/Bouquet-3.png', this)" title="Bouquet 3">
+                    <img src="https://i.ibb.co/pvzHgNLR/Bouquet.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/pvzHgNLR/Bouquet.png', this)" title="Bouquet">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1 mt-2">Custom Image Link ထည့်ရန်</label>
+                    <input type="text" id="cfg-envelope-img" oninput="updateEnvelopeCustomImg()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500" value="https://i.ibb.co/JWycnnh9/pngegg.png">
+                </div>
+            </div>
+
+            <!-- Card Frame Design Styles -->
+            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
+                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
+                    <i class="fa-solid fa-envelope"></i> Card Frame Design
+                </h3>
+                <p class="text-xs text-slate-400">မေးခွန်းကတ်ပြား၏ ဒီဇိုင်းစတိုင်ကို ရွေးပါ</p>
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setEnvelopeStyle('env-glass')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white/80 border border-slate-300 shadow">
+                    <button onclick="setCardStyle('env-glass')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white/80 border border-slate-300 shadow">
                         ✨ Glassmorphic
                     </button>
-                    <button onclick="setEnvelopeStyle('env-romantic-red')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 border border-rose-400 shadow">
+                    <button onclick="setCardStyle('env-romantic-red')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 border border-rose-400 shadow">
                         ❤️ Romantic Red
                     </button>
-                    <button onclick="setEnvelopeStyle('env-pastel-pink')" class="p-2.5 rounded-xl text-xs font-bold text-pink-900 bg-pink-200 border border-pink-300 shadow">
+                    <button onclick="setCardStyle('env-pastel-pink')" class="p-2.5 rounded-xl text-xs font-bold text-pink-900 bg-pink-200 border border-pink-300 shadow">
                         🌸 Pastel Pink
                     </button>
-                    <button onclick="setEnvelopeStyle('env-classic-gold')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-200 border border-amber-300 shadow">
+                    <button onclick="setCardStyle('env-classic-gold')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-200 border border-amber-300 shadow">
                         👑 Classic Gold
                     </button>
-                    <button onclick="setEnvelopeStyle('env-dark-velvet')" class="p-2.5 rounded-xl text-xs font-bold text-rose-400 bg-slate-950 border border-rose-900 shadow">
+                    <button onclick="setCardStyle('env-dark-velvet')" class="p-2.5 rounded-xl text-xs font-bold text-rose-400 bg-slate-950 border border-rose-900 shadow">
                         🌙 Dark Velvet
                     </button>
                 </div>
@@ -548,7 +582,7 @@
                     <i class="fa-solid fa-paper-plane"></i> Formspree / Webhook Link
                 </h3>
                 <p class="text-xs text-slate-400 leading-relaxed">
-                    သူများ အဖြေပေးလိုက်သည့်အခါ သင့် Gmail သို့ အကြောင်းကြားချက် ရောက်ရှိစေရန် Formspree Endpoint လင့်ခ် ထည့်ပါ (မထည့်ပါကလည်း အလုပ်လုပ်ပါသည်)။
+                    သူများ အဖြေပေးလိုက်သည့်အခါ သင့် Gmail သို့ အကြောင်းကြားချက် ရောက်ရှိစေရန် Formspree Endpoint လင့်ခ် ထည့်ပါ (မထည့်ပါကလည်း အလုပ်လုပ်ပါသည်)।
                 </p>
                 <input type="text" id="cfg-formspree-url" placeholder="https://formspree.io/f/your_form_id" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
             </div>
@@ -662,11 +696,11 @@
                     </div>
                 </div>
 
-                <!-- PREVIEW STEP 3.5: FALLING ENVELOPE -->
+                <!-- PREVIEW STEP 3.5: FALLING ENVELOPE / BOUQUET -->
                 <div class="step-view w-full" id="prev-step-falling">
                     <div class="falling-envelope-container" onclick="openLetterPrev()">
-                        <img class="no-frame-gif" src="https://i.ibb.co/JWycnnh9/pngegg.png" alt="Envelope">
-                        <div class="tap-hint-badge">✉️ ePostcard For You ✨</div>
+                        <img id="prev-envelope-img" class="no-frame-gif" src="https://i.ibb.co/JWycnnh9/pngegg.png" alt="Envelope/Bouquet">
+                        <div class="tap-hint-badge">✨ Tap to Open ✨</div>
                     </div>
                 </div>
 
@@ -759,7 +793,8 @@
             letterP3: "အမြဲတမ်း ချစ်နေမှာပါ… 🌹✨",
             letterSig: "love you so much❤️",
             
-            envelopeStyle: "env-glass",
+            envelopeImg: "https://i.ibb.co/JWycnnh9/pngegg.png",
+            cardStyle: "env-glass",
             paperStyle: "paper-classic",
 
             formspreeUrl: "",
@@ -799,6 +834,7 @@
             document.getElementById('cfg-letter-p3').value = appConfig.letterP3;
             document.getElementById('cfg-letter-sig').value = appConfig.letterSig;
             
+            document.getElementById('cfg-envelope-img').value = appConfig.envelopeImg;
             document.getElementById('cfg-formspree-url').value = appConfig.formspreeUrl;
             document.getElementById('cfg-warnings').value = appConfig.warnings.join('\n');
 
@@ -866,6 +902,7 @@
             appConfig.letterP3 = document.getElementById('cfg-letter-p3').value;
             appConfig.letterSig = document.getElementById('cfg-letter-sig').value;
             
+            appConfig.envelopeImg = document.getElementById('cfg-envelope-img').value;
             appConfig.formspreeUrl = document.getElementById('cfg-formspree-url').value;
             
             const rawWarnings = document.getElementById('cfg-warnings').value;
@@ -881,6 +918,8 @@
             document.getElementById('prev-text-3').innerText = appConfig.step3Text;
             document.getElementById('prev-img-3').src = appConfig.step3Gif;
 
+            document.getElementById('prev-envelope-img').src = appConfig.envelopeImg;
+
             document.getElementById('prev-letter-title').innerText = appConfig.letterTitle;
             document.getElementById('prev-letter-p1').innerText = appConfig.letterP1;
             document.getElementById('prev-letter-p2').innerText = appConfig.letterP2;
@@ -888,8 +927,21 @@
             document.getElementById('prev-letter-sig').innerText = appConfig.letterSig;
         }
 
-        function setEnvelopeStyle(styleClass) {
-            appConfig.envelopeStyle = styleClass;
+        function setEnvelopeImg(url, element) {
+            document.getElementById('cfg-envelope-img').value = url;
+            if (element) {
+                document.querySelectorAll('.env-thumb').forEach(el => el.classList.remove('selected'));
+                element.classList.add('selected');
+            }
+            updateConfig();
+        }
+
+        function updateEnvelopeCustomImg() {
+            updateConfig();
+        }
+
+        function setCardStyle(styleClass) {
+            appConfig.cardStyle = styleClass;
             const cards = document.querySelectorAll('.interactive-card');
             cards.forEach(card => {
                 card.className = `interactive-card ${styleClass} step-view` + (card.classList.contains('active') ? ' active' : '');
@@ -1172,7 +1224,7 @@
 <body>
     <div class="card-container">
         <!-- STEP 1 -->
-        <div class="interactive-card ${appConfig.envelopeStyle} step active" id="step-1">
+        <div class="interactive-card ${appConfig.cardStyle} step active" id="step-1">
             <img class="gif-box" src="${appConfig.step1Gif}" alt="Gif 1">
             <h2><b>${appConfig.step1Text}</b></h2>
             <div class="btn-group">
@@ -1184,7 +1236,7 @@
         </div>
 
         <!-- STEP 2 -->
-        <div class="interactive-card ${appConfig.envelopeStyle} step" id="step-2">
+        <div class="interactive-card ${appConfig.cardStyle} step" id="step-2">
             <img class="gif-box" src="${appConfig.step2Gif}" alt="Gif 2">
             <h2><b>${appConfig.step2Text}</b></h2>
             <div class="btn-group" id="btn-container-2">
@@ -1196,7 +1248,7 @@
         </div>
 
         <!-- STEP 3 -->
-        <div class="interactive-card ${appConfig.envelopeStyle} step" id="step-3">
+        <div class="interactive-card ${appConfig.cardStyle} step" id="step-3">
             <img class="gif-box" src="${appConfig.step3Gif}" alt="Gif 3">
             <h2><b>${appConfig.step3Text}</b></h2>
             <div class="btn-group">
@@ -1207,11 +1259,11 @@
             </div>
         </div>
 
-        <!-- STEP 3.5: FALLING GIF -->
+        <!-- STEP 3.5: FALLING BOUQUET -->
         <div class="step" id="step-falling" style="width: 100%;">
             <div class="falling-envelope-container" onclick="openLetter()">
-                <img class="no-frame-gif" src="https://i.ibb.co/JWycnnh9/pngegg.png" alt="Envelope">
-                <div class="tap-hint-badge">✉️ ePostcard For You ✨</div>
+                <img class="no-frame-gif" src="${appConfig.envelopeImg}" alt="Bouquet/Envelope">
+                <div class="tap-hint-badge">✨ Tap to Open ✨</div>
             </div>
         </div>
 
