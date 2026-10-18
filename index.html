@@ -1141,30 +1141,30 @@
     <div class="card-container" id="app-card-container"></div>
 
     <script>
-        const formspreeUrl = "${appConfig.formspreeUrl}";
+        const formspreeUrl = ${JSON.stringify(appConfig.formspreeUrl)};
         const warnings = ${warningsArrayJSON};
         const steps = ${stepsDataJSON};
         
-        const yesText = "${appConfig.yesText}";
-        const yesBg = "${appConfig.yesBg}";
-        const yesColor = "${appConfig.yesColor}";
-        const yesFontSize = "${appConfig.yesFontSize}";
+        const yesText = ${JSON.stringify(appConfig.yesText)};
+        const yesBg = ${JSON.stringify(appConfig.yesBg)};
+        const yesColor = ${JSON.stringify(appConfig.yesColor)};
+        const yesFontSize = ${JSON.stringify(appConfig.yesFontSize)};
 
-        const noText = "${appConfig.noText}";
-        const noBg = "${appConfig.noBg}";
-        const noColor = "${appConfig.noColor}";
-        const noFontSize = "${appConfig.noFontSize}";
+        const noText = ${JSON.stringify(appConfig.noText)};
+        const noBg = ${JSON.stringify(appConfig.noBg)};
+        const noColor = ${JSON.stringify(appConfig.noColor)};
+        const noFontSize = ${JSON.stringify(appConfig.noFontSize)};
 
-        const questionFontSize = "${appConfig.questionFontSize}";
-        const cardStyle = "${appConfig.cardStyle}";
-        const paperStyle = "${appConfig.paperStyle}";
-        const envelopeImg = "${appConfig.envelopeImg}";
+        const questionFontSize = ${JSON.stringify(appConfig.questionFontSize)};
+        const cardStyle = ${JSON.stringify(appConfig.cardStyle)};
+        const paperStyle = ${JSON.stringify(appConfig.paperStyle)};
+        const envelopeImg = ${JSON.stringify(appConfig.envelopeImg)};
 
-        const letterTitle = "${appConfig.letterTitle}";
-        const letterP1 = "${appConfig.letterP1}";
-        const letterP2 = "${appConfig.letterP2}";
-        const letterP3 = "${appConfig.letterP3}";
-        const letterSig = "${appConfig.letterSig}";
+        const letterTitle = ${JSON.stringify(appConfig.letterTitle)};
+        const letterP1 = ${JSON.stringify(appConfig.letterP1)};
+        const letterP2 = ${JSON.stringify(appConfig.letterP2)};
+        const letterP3 = ${JSON.stringify(appConfig.letterP3)};
+        const letterSig = ${JSON.stringify(appConfig.letterSig)};
 
         function getRandomWarning() {
             if(!warnings || warnings.length === 0) return "⚠️ No နှိပ်လို့ မရပါဘူးနော်!";
@@ -1196,6 +1196,7 @@
 
         function renderApp() {
             const container = document.getElementById('app-card-container');
+            if (!container) return;
             container.innerHTML = '';
 
             steps.forEach((step, idx) => {
@@ -1208,16 +1209,16 @@
                 const yesStyle = "background-color: " + yesBg + "; color: " + yesColor + "; font-size: " + yesFontSize + "px;";
                 const noStyle = "background-color: " + noBg + "; color: " + noColor + "; font-size: " + noFontSize + "px;";
 
-                card.innerHTML = \`
-                    <img class="gif-box" src="\${step.gif}" alt="Gif \${stepNum}">
-                    <h2 class="font-bold leading-relaxed" style="font-size: \${questionFontSize}px;">\${step.text}</h2>
-                    <div class="btn-group">
-                        <button class="btn-custom-yes" style="\${yesStyle}" id="btn-yes-\${stepNum}" onclick="nextStep(\${typeof nextTarget === 'number' ? nextTarget : '\'' + nextTarget + '\''})">\${yesText}</button>
-                        <div class="btn-no-wrapper" id="btn-no-wrapper-\${stepNum}">
-                            <button class="btn-custom-no \${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="\${noStyle}" id="btn-no-\${stepNum}">\${noText}</button>
-                        </div>
-                    </div>
-                \`;
+                card.innerHTML = '\\
+                    <img class="gif-box" src="' + step.gif + '" alt="Gif ' + stepNum + '">\\
+                    <h2 class="font-bold leading-relaxed" style="font-size: ' + questionFontSize + 'px;">' + step.text + '</h2>\\
+                    <div class="btn-group">\\
+                        <button class="btn-custom-yes" style="' + yesStyle + '" id="btn-yes-' + stepNum + '" onclick="nextStep(' + (typeof nextTarget === 'number' ? nextTarget : "'" + nextTarget + "'") + ')">' + yesText + '</button>\\
+                        <div class="btn-no-wrapper" id="btn-no-wrapper-' + stepNum + '">\\
+                            <button class="btn-custom-no ' + (step.behavior === 'orbiting' ? 'orbiting-btn' : '') + '" style="' + noStyle + '" id="btn-no-' + stepNum + '">' + noText + '</button>\\
+                        </div>\\
+                    </div>\\
+                ';
                 container.appendChild(card);
                 setTimeout(() => attachBehaviorEventsApp(stepNum, step.behavior, nextTarget), 50);
             });
@@ -1226,32 +1227,32 @@
             fallingCard.className = 'step';
             fallingCard.id = 'step-falling';
             fallingCard.style.width = '100%';
-            fallingCard.innerHTML = \`
-                <div class="falling-envelope-container" onclick="openLetter()">
-                    <img class="no-frame-gif" src="\${envelopeImg}" alt="Bouquet/Envelope">
-                    <div class="tap-hint-badge">✨ Tap to Open ✨</div>
-                </div>
-            \`;
+            fallingCard.innerHTML = '\\
+                <div class="falling-envelope-container" onclick="openLetter()">\\
+                    <img class="no-frame-gif" src="' + envelopeImg + '" alt="Bouquet/Envelope">\\
+                    <div class="tap-hint-badge">✨ Tap to Open ✨</div>\\
+                </div>\\
+            ';
             container.appendChild(fallingCard);
 
             const letterCard = document.createElement('div');
             letterCard.className = 'step';
             letterCard.id = 'step-letter';
             letterCard.style.width = '100%';
-            letterCard.innerHTML = \`
-                <div class="paper-letter-wrapper paper-letter-pop">
-                    <div class="paper-sheet \${paperStyle}">
-                        <div class="paperclip"></div>
-                        <div class="letter-content">
-                            <div class="letter-title">\${letterTitle}</div>
-                            <p>\${letterP1}</p><br>
-                            <p>\${letterP2}</p><br>
-                            <p>\${letterP3}</p>
-                            <div class="letter-signature">\${letterSig}</div>
-                        </div>
-                    </div>
-                </div>
-            \`;
+            letterCard.innerHTML = '\\
+                <div class="paper-letter-wrapper paper-letter-pop">\\
+                    <div class="paper-sheet ' + paperStyle + '">\\
+                        <div class="paperclip"></div>\\
+                        <div class="letter-content">\\
+                            <div class="letter-title">' + letterTitle + '</div>\\
+                            <p>' + letterP1 + '</p><br>\\
+                            <p>' + letterP2 + '</p><br>\\
+                            <p>' + letterP3 + '</p>\\
+                            <div class="letter-signature">' + letterSig + '</div>\\
+                        </div>\\
+                    </div>\\
+                </div>\\
+            ';
             container.appendChild(letterCard);
         }
 
@@ -1407,34 +1408,3 @@
 </body>
 </html>`;
         }
-
-        function exportHTML() {
-            const htmlCode = generateCompleteHTML();
-            document.getElementById('export-code-area').value = htmlCode;
-            document.getElementById('export-modal').classList.remove('hidden');
-        }
-
-        function closeExportModal() { document.getElementById('export-modal').classList.add('hidden'); }
-
-        function copyGeneratedCode() {
-            const codeArea = document.getElementById('export-code-area');
-            codeArea.select();
-            document.execCommand('copy');
-            alert('Code များကို Clipboard သို့ ကူးယူပြီးပါပြီ!');
-        }
-
-        function downloadHTMLFile() {
-            const htmlCode = generateCompleteHTML();
-            const blob = new Blob([htmlCode], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Interactive_Love_Surprise.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-    </script>
-</body>
-</html>
