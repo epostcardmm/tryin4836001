@@ -679,11 +679,13 @@
             document.getElementById('cfg-formspree-url').value = appConfig.formspreeUrl;
             document.getElementById('cfg-warnings').value = appConfig.warnings.join('\n');
             updateConfigOnly();
+            previewStep(1);
         };
 
         function renderStepsEditor() {
             const stepsContainer = document.getElementById('steps-container');
             const stepNavBar = document.getElementById('step-nav-bar');
+            if (!stepsContainer || !stepNavBar) return;
             stepsContainer.innerHTML = '';
             stepNavBar.innerHTML = '';
 
@@ -760,11 +762,15 @@
 
         function switchTab(tabName) {
             ['content', 'buttons', 'design', 'settings'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
+                const tabEl = document.getElementById(`tab-${t}`);
+                const btnEl = document.getElementById(`tab-btn-${t}`);
+                if (tabEl) tabEl.classList.add('hidden');
+                if (btnEl) btnEl.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
             });
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabName}`).className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow";
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            if (activeTab) activeTab.classList.remove('hidden');
+            if (activeBtn) activeBtn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow";
         }
 
         function updateConfigOnly() {
@@ -791,6 +797,7 @@
 
         function renderPreviewCardsDOM() {
             const cardHolder = document.getElementById('preview-card-holder');
+            if (!cardHolder) return;
             cardHolder.innerHTML = '';
 
             appConfig.steps.forEach((step, index) => {
@@ -1036,6 +1043,36 @@
 
         function handleYesClick(targetStep) { previewStep(targetStep); }
         function openLetterPrev() { previewStep('letter'); }
+
+        function exportHTML() {
+            const code = generateCompleteHTML();
+            document.getElementById('export-code-area').value = code;
+            document.getElementById('export-modal').classList.remove('hidden');
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.add('hidden');
+        }
+
+        function copyGeneratedCode() {
+            const area = document.getElementById('export-code-area');
+            area.select();
+            navigator.clipboard.writeText(area.value);
+            alert("Code ကူးယူပြီးပါပြီ!");
+        }
+
+        function downloadHTMLFile() {
+            const code = document.getElementById('export-code-area').value;
+            const blob = new Blob([code], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'love-surprise.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
 
         function generateCompleteHTML() {
             const warningsArrayJSON = JSON.stringify(appConfig.warnings);
@@ -1412,3 +1449,6 @@
 </body>
 </html>`;
         }
+    </script>
+</body>
+</html>
