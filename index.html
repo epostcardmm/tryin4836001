@@ -19,7 +19,6 @@
             font-family: 'Pyidaungsu', 'Padauk', sans-serif;
         }
 
-        /* Dynamic Custom Gradient Background for Preview */
         .preview-bg {
             background-size: 400% 400%;
             animation: gradientBG 12s ease infinite;
@@ -31,7 +30,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Card Style */
         .interactive-card {
             padding: 30px 20px;
             border-radius: 28px;
@@ -45,31 +43,11 @@
             position: relative;
         }
 
-        /* Envelope / Card Styles */
-        .env-glass {
-            background: rgba(255, 255, 255, 0.82);
-            color: #be123c;
-        }
-        .env-romantic-red {
-            background: linear-gradient(135deg, rgba(225, 29, 72, 0.9), rgba(159, 18, 57, 0.95));
-            color: #ffffff;
-            border-color: rgba(254, 205, 211, 0.5);
-        }
-        .env-pastel-pink {
-            background: rgba(252, 231, 243, 0.92);
-            color: #9d174d;
-            border-color: rgba(244, 114, 182, 0.6);
-        }
-        .env-classic-gold {
-            background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95));
-            color: #78350f;
-            border-color: rgba(245, 158, 11, 0.5);
-        }
-        .env-dark-velvet {
-            background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95));
-            color: #f43f5e;
-            border-color: rgba(244, 63, 94, 0.4);
-        }
+        .env-glass { background: rgba(255, 255, 255, 0.82); color: #be123c; }
+        .env-romantic-red { background: linear-gradient(135deg, rgba(225, 29, 72, 0.9), rgba(159, 18, 57, 0.95)); color: #ffffff; border-color: rgba(254, 205, 211, 0.5); }
+        .env-pastel-pink { background: rgba(252, 231, 243, 0.92); color: #9d174d; border-color: rgba(244, 114, 182, 0.6); }
+        .env-classic-gold { background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95)); color: #78350f; border-color: rgba(245, 158, 11, 0.5); }
+        .env-dark-velvet { background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95)); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); }
 
         .step-view {
             display: none;
@@ -79,9 +57,7 @@
             animation: fadeIn 0.4s ease-in-out forwards;
         }
 
-        .step-view.active {
-            display: flex;
-        }
+        .step-view.active { display: flex; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
@@ -97,7 +73,6 @@
             border: 4px solid rgba(255, 255, 255, 0.9);
         }
 
-        /* Base Buttons Styles for Customizers */
         .btn-custom-yes {
             font-weight: 800;
             border-radius: 50px;
@@ -112,9 +87,7 @@
             user-select: none;
             z-index: 5;
         }
-        .btn-custom-yes:hover {
-            transform: translateY(-2px) scale(1.05);
-        }
+        .btn-custom-yes:hover { transform: translateY(-2px) scale(1.05); }
 
         .btn-custom-no {
             font-weight: 800;
@@ -138,7 +111,6 @@
             align-items: center;
         }
 
-        /* Popup Warning Window */
         .popup-warning-preview {
             position: absolute;
             bottom: 115%;
@@ -181,25 +153,18 @@
             transition: top 0.2s ease-out, left 0.2s ease-out;
         }
 
-        /* Orbiting Animation */
         @keyframes orbitAnimation {
             0% { transform: rotate(0deg) translateX(70px) rotate(0deg); }
             100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); }
         }
-        .orbiting-btn {
-            animation: orbitAnimation 2.2s linear infinite;
-        }
+        .orbiting-btn { animation: orbitAnimation 2.2s linear infinite; }
 
-        /* Gravity Fall Animation */
         @keyframes gravityFallAnim {
             0% { transform: translateY(0) rotate(0deg); opacity: 1; }
             100% { transform: translateY(600px) rotate(180deg); opacity: 0; }
         }
-        .falling-btn {
-            animation: gravityFallAnim 1.2s ease-in forwards !important;
-        }
+        .falling-btn { animation: gravityFallAnim 1.2s ease-in forwards !important; }
 
-        /* Flying Split Text Particles */
         .split-letter-particle {
             position: absolute;
             font-weight: 900;
@@ -210,7 +175,6 @@
             transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Falling Envelope / Bouquet Animation */
         .falling-envelope-container {
             display: flex;
             flex-direction: column;
@@ -243,9 +207,7 @@
             transition: transform 0.3s ease;
         }
 
-        .falling-envelope-container:hover .no-frame-gif {
-            transform: scale(1.08);
-        }
+        .falling-envelope-container:hover .no-frame-gif { transform: scale(1.08); }
 
         .tap-hint-badge {
             margin-top: 14px;
@@ -265,7 +227,6 @@
             50% { transform: scale(1.05); opacity: 1; }
         }
 
-        /* Paper Letter Styles */
         .paper-letter-pop {
             animation: popInLetter 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
@@ -286,46 +247,23 @@
             transition: all 0.3s ease;
         }
 
-        .paper-classic {
-            background-color: rgba(255, 253, 248, 0.97);
-            color: #2b2b2b;
-            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0);
-            background-size: 12px 12px;
-        }
+        .paper-classic { background-color: rgba(255, 253, 248, 0.97); color: #2b2b2b; background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0); background-size: 12px 12px; }
         .paper-classic .paper-title { color: #b91c1c; border-bottom: 2px dashed #fca5a5; }
         .paper-classic .paper-sig { color: #9f1239; }
 
-        .paper-rose {
-            background-color: rgba(255, 241, 242, 0.97);
-            color: #881337;
-            background-image: radial-gradient(rgba(244, 63, 94, 0.1) 1px, transparent 0);
-            background-size: 14px 14px;
-        }
+        .paper-rose { background-color: rgba(255, 241, 242, 0.97); color: #881337; background-image: radial-gradient(rgba(244, 63, 94, 0.1) 1px, transparent 0); background-size: 14px 14px; }
         .paper-rose .paper-title { color: #be123c; border-bottom: 2px dashed #fda4af; }
         .paper-rose .paper-sig { color: #e11d48; }
 
-        .paper-vintage {
-            background-color: rgba(254, 243, 199, 0.97);
-            color: #451a03;
-            border-color: #fde68a;
-        }
+        .paper-vintage { background-color: rgba(254, 243, 199, 0.97); color: #451a03; border-color: #fde68a; }
         .paper-vintage .paper-title { color: #78350f; border-bottom: 2px dashed #fcd34d; }
         .paper-vintage .paper-sig { color: #92400e; }
 
-        .paper-grid {
-            background-color: rgba(255, 255, 255, 0.97);
-            color: #1e293b;
-            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
-            background-size: 16px 16px;
-        }
+        .paper-grid { background-color: rgba(255, 255, 255, 0.97); color: #1e293b; background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px); background-size: 16px 16px; }
         .paper-grid .paper-title { color: #0284c7; border-bottom: 2px dashed #38bdf8; }
         .paper-grid .paper-sig { color: #0369a1; }
 
-        .paper-dark {
-            background-color: rgba(15, 23, 42, 0.96);
-            color: #f1f5f9;
-            border-color: #334155;
-        }
+        .paper-dark { background-color: rgba(15, 23, 42, 0.96); color: #f1f5f9; border-color: #334155; }
         .paper-dark .paper-title { color: #fb7185; border-bottom: 2px dashed #f43f5e; }
         .paper-dark .paper-sig { color: #fda4af; }
 
@@ -342,7 +280,6 @@
             box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.25);
         }
 
-        /* Preset Thumbnails */
         .gif-thumb {
             width: 48px;
             height: 48px;
@@ -376,28 +313,16 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
-        /* Custom Scrollbar for sidebar editor */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-800 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
 
-    <!-- LEFT SIDEBAR: CUSTOMIZER / APP BUILDER CONTROLS -->
     <div class="w-full md:w-1/2 lg:w-5/12 bg-slate-900 text-slate-100 p-4 md:p-6 flex flex-col h-auto md:h-screen overflow-y-auto border-r border-slate-800 shadow-2xl z-20">
         
-        <!-- Header -->
         <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
             <div class="flex items-center space-x-3">
                 <div class="p-2.5 bg-gradient-to-tr from-pink-500 to-rose-600 rounded-2xl text-white shadow-lg shadow-pink-500/30">
@@ -414,7 +339,6 @@
             </button>
         </div>
 
-        <!-- Tab Controls for Builder -->
         <div class="flex gap-2 mb-4 p-1 bg-slate-800/80 rounded-xl border border-slate-700/60">
             <button onclick="switchTab('content')" id="tab-btn-content" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow">
                 <i class="fa-solid fa-list-check mr-1"></i> Steps များ
@@ -430,10 +354,7 @@
             </button>
         </div>
 
-        <!-- TAB CONTENT 1: DYNAMIC STEPS CONFIG -->
         <div id="tab-content" class="space-y-4">
-            
-            <!-- Quick Step Selector for Live Preview View -->
             <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
                 <div class="flex justify-between items-center mb-2">
                     <label class="text-xs font-semibold text-slate-300">
@@ -445,17 +366,11 @@
                         </button>
                     </div>
                 </div>
-                <div class="flex gap-1.5 overflow-x-auto pb-1" id="step-nav-bar">
-                    <!-- Dynamic Step Nav Buttons will be generated here -->
-                </div>
+                <div class="flex gap-1.5 overflow-x-auto pb-1" id="step-nav-bar"></div>
             </div>
 
-            <!-- Dynamic Steps Accordion Container -->
-            <div id="steps-container" class="space-y-4">
-                <!-- Step config cards will be injected by JS -->
-            </div>
+            <div id="steps-container" class="space-y-4"></div>
 
-            <!-- STEP 4 (LOVE LETTER CONFIG) -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3 mt-4">
                 <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-envelope-open-text"></i> အဆုံးသတ် ချစ်စာလွှာ (Love Letter)
@@ -481,13 +396,9 @@
                     <input type="text" id="cfg-letter-sig" oninput="updateConfigOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
                 </div>
             </div>
-
         </div>
 
-        <!-- TAB CONTENT 2: BUTTON STYLES & FONTS CUSTOMIZATION -->
         <div id="tab-buttons" class="space-y-4 hidden">
-            
-            <!-- YES Button Customization -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
                     <i class="fa-solid fa-thumbs-up"></i> "YES" ခလုတ် ဒီဇိုင်း
@@ -514,7 +425,6 @@
                 </div>
             </div>
 
-            <!-- NO Button Customization -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-rose-400 flex items-center gap-2">
                     <i class="fa-solid fa-thumbs-down"></i> "NO" ခလုတ် ဒီဇိုင်း
@@ -541,28 +451,23 @@
                 </div>
             </div>
 
-            <!-- Question Font Size Global Slider -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-amber-400 flex items-center gap-2">
-                    <i class="fa-solid fa-font"></i> မေးခွန်း စာသား Font Size (Global Question Size)
+                    <i class="fa-solid fa-font"></i> မေးခွန်း စာသား Font Size
                 </h3>
                 <div class="flex items-center gap-3">
                     <input type="range" id="cfg-question-fontsize" min="14" max="32" value="20" oninput="updateConfigOnly()" class="w-full accent-pink-500">
                     <span id="cfg-question-fontsize-val" class="text-xs font-bold text-pink-400 w-8">20px</span>
                 </div>
             </div>
-
         </div>
 
-        <!-- TAB CONTENT 3: STYLES & DESIGNS (BOUQUET & PAPER) -->
         <div id="tab-design" class="space-y-4 hidden">
-            
-            <!-- Falling Envelope / Bouquet Choice -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-gift"></i> Falling Envelope / Bouquet Image
                 </h3>
-                <p class="text-xs text-slate-400">ကျလာမည့် ပုံစံ (Envelope သို့မဟုတ် Bouquet ၃ မျိုး) ကို ရွေးပါ</p>
+                <p class="text-xs text-slate-400">ကျလာမည့် ပုံစံကို ရွေးပါ</p>
                 <div class="flex gap-2 flex-wrap items-center">
                     <img src="https://i.ibb.co/JWycnnh9/pngegg.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/JWycnnh9/pngegg.png', this)" title="Envelope">
                     <img src="https://i.ibb.co/8DvMS7jx/Bouquet-2.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/8DvMS7jx/Bouquet-2.png', this)" title="Bouquet 2">
@@ -570,120 +475,72 @@
                     <img src="https://i.ibb.co/pvzHgNLR/Bouquet.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/pvzHgNLR/Bouquet.png', this)" title="Bouquet">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1 mt-2">Custom Image Link ထည့်ရန်</label>
-                    <input type="text" id="cfg-envelope-img" oninput="updateEnvelopeCustomImg()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500" value="https://i.ibb.co/JWycnnh9/pngegg.png">
+                    <label class="block text-xs text-slate-400 mb-1 mt-2">Custom Image Link</label>
+                    <input type="text" id="cfg-envelope-img" oninput="updateConfigOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
                 </div>
             </div>
 
-            <!-- Card Frame Design Styles -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-envelope"></i> Card Frame Design
                 </h3>
-                <p class="text-xs text-slate-400">မေးခွန်းကတ်ပြား၏ ဒီဇိုင်းစတိုင်ကို ရွေးပါ</p>
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setCardStyle('env-glass')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white/80 border border-slate-300 shadow">
-                        ✨ Glassmorphic
-                    </button>
-                    <button onclick="setCardStyle('env-romantic-red')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 border border-rose-400 shadow">
-                        ❤️ Romantic Red
-                    </button>
-                    <button onclick="setCardStyle('env-pastel-pink')" class="p-2.5 rounded-xl text-xs font-bold text-pink-900 bg-pink-200 border border-pink-300 shadow">
-                        🌸 Pastel Pink
-                    </button>
-                    <button onclick="setCardStyle('env-classic-gold')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-200 border border-amber-300 shadow">
-                        👑 Classic Gold
-                    </button>
-                    <button onclick="setCardStyle('env-dark-velvet')" class="p-2.5 rounded-xl text-xs font-bold text-rose-400 bg-slate-950 border border-rose-900 shadow">
-                        🌙 Dark Velvet
-                    </button>
+                    <button onclick="setCardStyle('env-glass')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white/80 border border-slate-300 shadow">✨ Glassmorphic</button>
+                    <button onclick="setCardStyle('env-romantic-red')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 border border-rose-400 shadow">❤️ Romantic Red</button>
+                    <button onclick="setCardStyle('env-pastel-pink')" class="p-2.5 rounded-xl text-xs font-bold text-pink-900 bg-pink-200 border border-pink-300 shadow">🌸 Pastel Pink</button>
+                    <button onclick="setCardStyle('env-classic-gold')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-200 border border-amber-300 shadow">👑 Classic Gold</button>
+                    <button onclick="setCardStyle('env-dark-velvet')" class="p-2.5 rounded-xl text-xs font-bold text-rose-400 bg-slate-950 border border-rose-900 shadow">🌙 Dark Velvet</button>
                 </div>
             </div>
 
-            <!-- Paper Letter Design Presets -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-scroll"></i> Letter Paper Design
                 </h3>
-                <p class="text-xs text-slate-400">အထဲမှ စာလွှာစာရွက်၏ ဒီဇိုင်းနှင့် ကာလာစတိုင်ကို ရွေးပါ</p>
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setPaperStyle('paper-classic')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-amber-50 border border-amber-200 shadow">
-                        📜 Classic Cream
-                    </button>
-                    <button onclick="setPaperStyle('paper-rose')" class="p-2.5 rounded-xl text-xs font-bold text-rose-800 bg-rose-100 border border-rose-300 shadow">
-                        🌹 Soft Rose
-                    </button>
-                    <button onclick="setPaperStyle('paper-vintage')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-yellow-100 border border-yellow-300 shadow">
-                        🏷️ Vintage Gold
-                    </button>
-                    <button onclick="setPaperStyle('paper-grid')" class="p-2.5 rounded-xl text-xs font-bold text-sky-900 bg-white border border-sky-200 shadow">
-                        📐 Love Grid Paper
-                    </button>
-                    <button onclick="setPaperStyle('paper-dark')" class="p-2.5 rounded-xl text-xs font-bold text-pink-300 bg-slate-900 border border-slate-700 shadow">
-                        🖤 Midnight Dark
-                    </button>
+                    <button onclick="setPaperStyle('paper-classic')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-amber-50 border border-amber-200 shadow">📜 Classic Cream</button>
+                    <button onclick="setPaperStyle('paper-rose')" class="p-2.5 rounded-xl text-xs font-bold text-rose-800 bg-rose-100 border border-rose-300 shadow">🌹 Soft Rose</button>
+                    <button onclick="setPaperStyle('paper-vintage')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-yellow-100 border border-yellow-300 shadow">🏷️ Vintage Gold</button>
+                    <button onclick="setPaperStyle('paper-grid')" class="p-2.5 rounded-xl text-xs font-bold text-sky-900 bg-white border border-sky-200 shadow">📐 Love Grid Paper</button>
+                    <button onclick="setPaperStyle('paper-dark')" class="p-2.5 rounded-xl text-xs font-bold text-pink-300 bg-slate-900 border border-slate-700 shadow">🖤 Midnight Dark</button>
                 </div>
             </div>
-
         </div>
 
-        <!-- TAB CONTENT 4: SETTINGS & SETUPS -->
         <div id="tab-settings" class="space-y-4 hidden">
-            
-            <!-- Formspree / Webhook Endpoint Link -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-paper-plane"></i> Formspree / Webhook Link
                 </h3>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    သူများ အဖြေပေးလိုက်သည့်အခါ သင့် Gmail သို့ အကြောင်းကြားချက် ရောက်ရှိစေရန် Formspree Endpoint လင့်ခ် ထည့်ပါ (မထည့်ပါကလည်း အလုပ်လုပ်ပါသည်)။
-                </p>
                 <input type="text" id="cfg-formspree-url" placeholder="https://formspree.io/f/your_form_id" oninput="updateConfigOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
             </div>
 
-            <!-- Popup Warning Messages -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-triangle-exclamation"></i> 'No' ခလုတ် သတိပေးစာသားများ
                 </h3>
-                <p class="text-xs text-slate-400">No ခလုတ် နှိပ်သည့်အခါ အလှည့်ကျ ပေါ်လာမည့် သတိပေးစာများ (တစ်ကြောင်းလျှင် တစ်ခု ရေးပါ)</p>
                 <textarea id="cfg-warnings" rows="4" oninput="updateConfigOnly()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500"></textarea>
             </div>
 
-            <!-- Background Gradient Theme -->
             <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
                 <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-palette"></i> Background Color Gradient
                 </h3>
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setTheme('romantic')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300 border border-white/20">
-                        Romantic Pink
-                    </button>
-                    <button onclick="setTheme('purple')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-400 border border-white/20">
-                        Sweet Purple
-                    </button>
-                    <button onclick="setTheme('sunset')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-red-500 via-orange-400 to-yellow-300 border border-white/20">
-                        Sunset Glow
-                    </button>
-                    <button onclick="setTheme('ocean')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-teal-400 via-sky-400 to-indigo-400 border border-white/20">
-                        Ocean Sky
-                    </button>
+                    <button onclick="setTheme('romantic')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300 border border-white/20">Romantic Pink</button>
+                    <button onclick="setTheme('purple')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-400 border border-white/20">Sweet Purple</button>
+                    <button onclick="setTheme('sunset')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-red-500 via-orange-400 to-yellow-300 border border-white/20">Sunset Glow</button>
+                    <button onclick="setTheme('ocean')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-teal-400 via-sky-400 to-indigo-400 border border-white/20">Ocean Sky</button>
                 </div>
             </div>
-
         </div>
 
-        <!-- Footer Info -->
         <div class="mt-auto pt-4 text-center text-xs text-slate-500 border-t border-slate-800">
             Preview ထဲတွင် Interactive စမ်းသပ်ကြည့်ရှုနိုင်ပါသည်။
         </div>
-
     </div>
 
-    <!-- RIGHT DISPLAY: LIVE APP PREVIEW PANEL -->
     <div class="w-full md:w-1/2 lg:w-7/12 min-h-[550px] md:h-screen flex flex-col bg-slate-950 relative overflow-hidden">
-        
-        <!-- Preview Top Bar -->
         <div class="bg-slate-900/90 backdrop-blur-md px-4 py-2.5 border-b border-slate-800 flex items-center justify-between z-30">
             <div class="flex items-center space-x-2">
                 <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
@@ -702,34 +559,21 @@
             </div>
         </div>
 
-        <!-- PREVIEW CONTAINER BODY -->
         <div id="preview-body" class="preview-bg flex-1 flex justify-center items-center p-4 relative overflow-hidden transition-all duration-500" style="background: linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb);">
-            
-            <div class="w-full max-w-[440px] min-h-[500px] flex justify-center items-center relative z-10" id="preview-card-holder">
-                
-                <!-- Dynamic Step Cards will be generated dynamically in Preview -->
-
-            </div>
-
+            <div class="w-full max-w-[440px] min-h-[500px] flex justify-center items-center relative z-10" id="preview-card-holder"></div>
         </div>
-
     </div>
 
-    <!-- CODE EXPORT MODAL -->
     <div id="export-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex justify-center items-center p-4 z-50 hidden">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl p-6 space-y-4 shadow-2xl text-slate-100">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 class="font-bold text-lg text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-code"></i> Standalone HTML App Code
                 </h3>
-                <button onclick="closeExportModal()" class="text-slate-400 hover:text-white text-lg">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
+                <button onclick="closeExportModal()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
-            <p class="text-xs text-slate-400">
-                အောက်ပါ Code အား ကူးယူ၍ HTML File အဖြစ် သိမ်းဆည်းနိုင်သလို သီးသန့် Standalone file အဖြစ်လည်း Download ရယူနိုင်ပါသည်။
-            </p>
+            <p class="text-xs text-slate-400">အောက်ပါ Code အား ကူးယူ၍ HTML File အဖြစ် သိမ်းဆည်းနိုင်သလို သီးသန့် Standalone file အဖြစ်လည်း Download ရယူနိုင်ပါသည်။</p>
 
             <textarea id="export-code-area" rows="10" readonly class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs font-mono text-emerald-400 focus:outline-none select-all"></textarea>
 
@@ -737,16 +581,14 @@
                 <button onclick="copyGeneratedCode()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5">
                     <i class="fa-regular fa-copy"></i> Code ကူးယူမည်
                 </button>
-                <button onclick="downloadHTMLFile()" class="px-5 py-2 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-xl text-xs font-bold shadow-lg shadow-pink-900/40 transition flex items-center gap-1.5">
+                <button onclick="downloadHTMLFile()" class="px-5 py-2 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-xl text-xs font-bold shadow-lg shadow-emerald-900/40 transition flex items-center gap-1.5">
                     <i class="fa-solid fa-file-arrow-down"></i> Standalone File Download
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // PRESET GIF LIST (10+ Cute GIFs)
         const presetGifs = [
             "https://media.tenor.com/Zrr4L_Wd4JkAAAAi/bubu-rub-bubu-love-dudu.gif",
             "https://media.tenor.com/nA5iSpAftHAAAAAi/bubu-dudu.gif",
@@ -761,7 +603,6 @@
             "https://media.tenor.com/Nes9mNbHJmYAAAAi/dudu-bubu-dudu-ride-bubu.gif"
         ];
 
-        // 10 BEHAVIOR DEFINITIONS
         const behaviorOptions = [
             { id: "fleeing", name: "1. The Fleeing Button (ထွက်ပြေးသွားသော ခလုတ်)" },
             { id: "shrinking", name: "2. The Shrinking Button (သေးသွားသော ခလုတ်)" },
@@ -775,53 +616,29 @@
             { id: "split", name: "10. Dissecting / Split Button (အစိတ်စိတ်အမွှာမွှာ ကွဲသွားခြင်း)" }
         ];
 
-        // CONFIG APP STATE
         const appConfig = {
             steps: [
-                {
-                    id: 1,
-                    text: "ပြန်ချစ်ပါတော့လား နွေးထွေးပေးချင်ပြီ… 💕",
-                    gif: presetGifs[0],
-                    behavior: "guilttrip"
-                },
-                {
-                    id: 2,
-                    text: "တကယ် အမြဲတမ်း ချစ်ပေးမှာလား… 🥺",
-                    gif: presetGifs[1],
-                    behavior: "fleeing"
-                },
-                {
-                    id: 3,
-                    text: "တကယ်ကြီး အဖြေပြန်ပေးလိုက်တာလား? 💖",
-                    gif: presetGifs[2],
-                    behavior: "shrinking"
-                }
+                { id: 1, text: "ပြန်ချစ်ပါတော့လား နွေးထွေးပေးချင်ပြီ… 💕", gif: presetGifs[0], behavior: "guilttrip" },
+                { id: 2, text: "တကယ် အမြဲတမ်း ချစ်ပေးမှာလား… 🥺", gif: presetGifs[1], behavior: "fleeing" },
+                { id: 3, text: "တကယ်ကြီး အဖြေပြန်ပေးလိုက်တာလား? 💖", gif: presetGifs[2], behavior: "shrinking" }
             ],
-            
-            // Button Styles
             yesText: "Yes",
             yesFontSize: "18",
             yesBg: "#ff416c",
             yesColor: "#ffffff",
-
             noText: "No",
             noFontSize: "18",
             noBg: "#6a11cb",
             noColor: "#ffffff",
-
             questionFontSize: "20",
-
-            // Letter Data
             letterTitle: "💌 ချစ်ရပါသော… 💌",
             letterP1: "ဒီကမ္ဘာပေါ်မှာ လူတွေအများကြီးရှိတဲ့ထဲကမှ မင်းနဲ့ဆုံတွေ့ခွင့်ရခဲ့တာဟာ ငါ့အတွက်တော့ အလှပဆုံးသော ကံကြမ္မာတစ်ခုပါပဲ။",
             letterP2: "အမြဲတမ်း ပျော်ရွှင်အောင်ထားပေးမယ်လို့ ကတိမပေးနိုင်ရင်တောင်မှ မင်းဝမ်းနည်းတဲ့အခါတိုင်း သို့မဟုတ် ခက်ခဲတဲ့အချိန်တိုင်းမှာ အနားမှာ အမြဲရှိနေပေးမယ့်သူတစ်ယောက် ဖြစ်ပါရစေ။",
             letterP3: "အမြဲတမ်း ချစ်နေမှာပါ… 🌹✨",
             letterSig: "love you so much❤️",
-            
             envelopeImg: "https://i.ibb.co/JWycnnh9/pngegg.png",
             cardStyle: "env-glass",
             paperStyle: "paper-classic",
-
             formspreeUrl: "",
             warnings: [
                 "⚠️ No နှိပ်လို့ မရပါဘူးနော်!",
@@ -832,7 +649,6 @@
             bgGradient: "linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb)"
         };
 
-        // Theme Definitions
         const themes = {
             romantic: "linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb)",
             purple: "linear-gradient(-45deg, #8ec5fc, #e0c3fc, #fbc2eb, #a6c1ee)",
@@ -842,49 +658,37 @@
 
         let currentActiveStepView = 1;
 
-        // INITIALIZE APP BUILDER
         window.onload = function() {
             renderStepsEditor();
-            
-            // Fill static inputs
             document.getElementById('cfg-yes-text').value = appConfig.yesText;
             document.getElementById('cfg-yes-fontsize').value = appConfig.yesFontSize;
             document.getElementById('cfg-yes-bg').value = appConfig.yesBg;
             document.getElementById('cfg-yes-color').value = appConfig.yesColor;
-
             document.getElementById('cfg-no-text').value = appConfig.noText;
             document.getElementById('cfg-no-fontsize').value = appConfig.noFontSize;
             document.getElementById('cfg-no-bg').value = appConfig.noBg;
             document.getElementById('cfg-no-color').value = appConfig.noColor;
-
             document.getElementById('cfg-question-fontsize').value = appConfig.questionFontSize;
             document.getElementById('cfg-question-fontsize-val').innerText = appConfig.questionFontSize + 'px';
-
             document.getElementById('cfg-letter-title').value = appConfig.letterTitle;
             document.getElementById('cfg-letter-p1').value = appConfig.letterP1;
             document.getElementById('cfg-letter-p2').value = appConfig.letterP2;
             document.getElementById('cfg-letter-p3').value = appConfig.letterP3;
             document.getElementById('cfg-letter-sig').value = appConfig.letterSig;
-            
             document.getElementById('cfg-envelope-img').value = appConfig.envelopeImg;
             document.getElementById('cfg-formspree-url').value = appConfig.formspreeUrl;
             document.getElementById('cfg-warnings').value = appConfig.warnings.join('\n');
-
             updateConfigOnly();
         };
 
-        // RENDER SIDEBAR STEP CONFIGURATORS & PREVIEW CARDS
         function renderStepsEditor() {
             const stepsContainer = document.getElementById('steps-container');
             const stepNavBar = document.getElementById('step-nav-bar');
-            
             stepsContainer.innerHTML = '';
             stepNavBar.innerHTML = '';
 
             appConfig.steps.forEach((step, index) => {
                 const stepNum = index + 1;
-
-                // Build Sidebar Config Card
                 const card = document.createElement('div');
                 card.className = "bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3 relative";
                 card.innerHTML = `
@@ -893,38 +697,28 @@
                             <span class="w-5 h-5 rounded-full bg-pink-500/20 text-pink-400 text-xs flex items-center justify-center">${stepNum}</span>
                             Step ${stepNum} မေးခွန်း Config
                         </h3>
-                        ${appConfig.steps.length > 2 ? `
-                            <button onclick="removeStep(${index})" class="text-xs text-rose-400 hover:text-rose-300 font-bold px-2 py-1 bg-rose-950/50 rounded-lg">
-                                <i class="fa-solid fa-trash mr-1"></i> ဖျက်မည်
-                            </button>
-                        ` : ''}
+                        ${appConfig.steps.length > 2 ? `<button onclick="removeStep(${index})" class="text-xs text-rose-400 hover:text-rose-300 font-bold px-2 py-1 bg-rose-950/50 rounded-lg"><i class="fa-solid fa-trash mr-1"></i> ဖျက်မည်</button>` : ''}
                     </div>
-
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">စာသား (Question Text)</label>
                         <input type="text" value="${step.text}" oninput="updateStepDataDirect(${index}, 'text', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
                     </div>
-
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">No ခလုတ် ၏ Interactive Behavior (ခလုတ် ပြုမူပုံ ၁၀ မျိုး)</label>
+                        <label class="block text-xs text-slate-400 mb-1">No ခလုတ် ၏ Interactive Behavior</label>
                         <select onchange="updateStepDataDirect(${index}, 'behavior', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-pink-300 font-bold focus:outline-none focus:border-pink-500">
                             ${behaviorOptions.map(opt => `<option value="${opt.id}" ${step.behavior === opt.id ? 'selected' : ''}>${opt.name}</option>`).join('')}
                         </select>
                     </div>
-
                     <div>
                         <label class="block text-xs text-slate-400 mb-1">GIF ရွေးချယ်ပါ သို့မဟုတ် Link ထည့်ပါ</label>
                         <div class="flex gap-1.5 overflow-x-auto pb-1 mb-2">
-                            ${presetGifs.map(gifUrl => `
-                                <img src="${gifUrl}" class="gif-thumb ${step.gif === gifUrl ? 'selected' : ''}" onclick="updateStepData(${index}, 'gif', '${gifUrl}')">
-                            `).join('')}
+                            ${presetGifs.map(gifUrl => `<img src="${gifUrl}" class="gif-thumb ${step.gif === gifUrl ? 'selected' : ''}" onclick="updateStepData(${index}, 'gif', '${gifUrl}')">`).join('')}
                         </div>
-                        <input type="text" value="${step.gif}" oninput="updateStepDataDirect(${index}, 'gif', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500" placeholder="Custom GIF URL">
+                        <input type="text" value="${step.gif}" oninput="updateStepDataDirect(${index}, 'gif', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
                     </div>
                 `;
                 stepsContainer.appendChild(card);
 
-                // Build Step Nav Button for Preview
                 const navBtn = document.createElement('button');
                 navBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition text-center whitespace-nowrap ${currentActiveStepView === stepNum ? 'bg-pink-600 text-white shadow' : 'bg-slate-700 hover:bg-pink-600 text-white'}`;
                 navBtn.innerText = `Step ${stepNum}`;
@@ -932,7 +726,6 @@
                 stepNavBar.appendChild(navBtn);
             });
 
-            // Add Bouquet & Letter Nav Buttons to Preview Bar
             const bouquetNav = document.createElement('button');
             bouquetNav.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition text-center whitespace-nowrap ${currentActiveStepView === 'falling' ? 'bg-pink-600 text-white shadow' : 'bg-slate-700 hover:bg-pink-600 text-white'}`;
             bouquetNav.innerText = `Bouquet`;
@@ -950,95 +743,59 @@
 
         function addNewStep() {
             const nextIndex = appConfig.steps.length + 1;
-            appConfig.steps.push({
-                id: nextIndex,
-                text: `မေးခွန်းအသစ် ${nextIndex}… 💕`,
-                gif: presetGifs[nextIndex % presetGifs.length],
-                behavior: "fleeing"
-            });
+            appConfig.steps.push({ id: nextIndex, text: `မေးခွန်းအသစ် ${nextIndex}… 💕`, gif: presetGifs[nextIndex % presetGifs.length], behavior: "fleeing" });
             renderStepsEditor();
             previewStep(nextIndex);
         }
 
         function removeStep(index) {
-            if (appConfig.steps.length <= 2) {
-                alert("အနည်းဆုံး Step ၂ ခု ရှိရပါမည်!");
-                return;
-            }
+            if (appConfig.steps.length <= 2) { alert("အနည်းဆုံး Step ၂ ခု ရှိရပါမည်!"); return; }
             appConfig.steps.splice(index, 1);
             renderStepsEditor();
             previewStep(1);
         }
 
-        function updateStepDataDirect(index, key, val) {
-            appConfig.steps[index][key] = val;
-            updateConfigOnly();
-        }
+        function updateStepDataDirect(index, key, val) { appConfig.steps[index][key] = val; updateConfigOnly(); }
+        function updateStepData(index, key, val) { appConfig.steps[index][key] = val; renderStepsEditor(); updateConfigOnly(); }
 
-        function updateStepData(index, key, val) {
-            appConfig.steps[index][key] = val;
-            renderStepsEditor();
-            updateConfigOnly();
-        }
-
-        // TAB SWITCHER
         function switchTab(tabName) {
-            document.getElementById('tab-content').classList.add('hidden');
-            document.getElementById('tab-buttons').classList.add('hidden');
-            document.getElementById('tab-design').classList.add('hidden');
-            document.getElementById('tab-settings').classList.add('hidden');
-            
             ['content', 'buttons', 'design', 'settings'].forEach(t => {
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if (btn) btn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
+                document.getElementById(`tab-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
             });
-
             document.getElementById(`tab-${tabName}`).classList.remove('hidden');
             document.getElementById(`tab-btn-${tabName}`).className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow";
         }
 
-        // UPDATE CONFIG WITHOUT RE-RENDERING SIDEBAR (KEEPS CURSOR / FOCUS INTACT)
         function updateConfigOnly() {
-            // Button Styles
             appConfig.yesText = document.getElementById('cfg-yes-text').value;
             appConfig.yesFontSize = document.getElementById('cfg-yes-fontsize').value;
             appConfig.yesBg = document.getElementById('cfg-yes-bg').value;
             appConfig.yesColor = document.getElementById('cfg-yes-color').value;
-
             appConfig.noText = document.getElementById('cfg-no-text').value;
             appConfig.noFontSize = document.getElementById('cfg-no-fontsize').value;
             appConfig.noBg = document.getElementById('cfg-no-bg').value;
             appConfig.noColor = document.getElementById('cfg-no-color').value;
-
             appConfig.questionFontSize = document.getElementById('cfg-question-fontsize').value;
             document.getElementById('cfg-question-fontsize-val').innerText = appConfig.questionFontSize + 'px';
-
-            // Letter Config
             appConfig.letterTitle = document.getElementById('cfg-letter-title').value;
             appConfig.letterP1 = document.getElementById('cfg-letter-p1').value;
             appConfig.letterP2 = document.getElementById('cfg-letter-p2').value;
             appConfig.letterP3 = document.getElementById('cfg-letter-p3').value;
             appConfig.letterSig = document.getElementById('cfg-letter-sig').value;
-            
             appConfig.envelopeImg = document.getElementById('cfg-envelope-img').value;
             appConfig.formspreeUrl = document.getElementById('cfg-formspree-url').value;
-            
-            const rawWarnings = document.getElementById('cfg-warnings').value;
-            appConfig.warnings = rawWarnings.split('\n').filter(w => w.trim() !== '');
-
+            appConfig.warnings = document.getElementById('cfg-warnings').value.split('\n').filter(w => w.trim() !== '');
             renderPreviewCardsDOM();
         }
 
-        // RENDER DYNAMIC PREVIEW DOM CARDS
         function renderPreviewCardsDOM() {
             const cardHolder = document.getElementById('preview-card-holder');
             cardHolder.innerHTML = '';
 
-            // Render Questions Steps
             appConfig.steps.forEach((step, index) => {
                 const stepNum = index + 1;
                 const nextTarget = stepNum < appConfig.steps.length ? (stepNum + 1) : 'falling';
-
                 const card = document.createElement('div');
                 card.className = `interactive-card ${appConfig.cardStyle} step-view ${currentActiveStepView === stepNum ? 'active' : ''}`;
                 card.id = `prev-step-${stepNum}`;
@@ -1048,9 +805,7 @@
 
                 card.innerHTML = `
                     <img class="gif-box" src="${step.gif}" alt="Gif ${stepNum}">
-                    <h2 class="font-bold leading-relaxed" style="font-size: ${appConfig.questionFontSize}px;">
-                        ${step.text}
-                    </h2>
+                    <h2 class="font-bold leading-relaxed" style="font-size: ${appConfig.questionFontSize}px;">${step.text}</h2>
                     <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative btn-container-step">
                         <button class="btn-custom-yes" style="${yesStyle}" id="btn-yes-prev-${stepNum}" onclick="handleYesClick(${typeof nextTarget === 'number' ? nextTarget : '\'' + nextTarget + '\''})">${appConfig.yesText}</button>
                         <div class="btn-no-wrapper-preview" id="btn-no-wrapper-prev-${stepNum}">
@@ -1058,14 +813,10 @@
                         </div>
                     </div>
                 `;
-
                 cardHolder.appendChild(card);
-
-                // Attach Behavior Event Listeners
                 setTimeout(() => attachBehaviorEvents(stepNum, step.behavior, nextTarget), 50);
             });
 
-            // STEP 3.5: FALLING BOUQUET CARD
             const fallingCard = document.createElement('div');
             fallingCard.className = `step-view w-full ${currentActiveStepView === 'falling' ? 'active' : ''}`;
             fallingCard.id = `prev-step-falling`;
@@ -1077,7 +828,6 @@
             `;
             cardHolder.appendChild(fallingCard);
 
-            // STEP 4: LOVE LETTER CARD
             const letterCard = document.createElement('div');
             letterCard.className = `step-view w-full ${currentActiveStepView === 'letter' ? 'active' : ''}`;
             letterCard.id = `prev-step-letter`;
@@ -1086,15 +836,11 @@
                     <div id="prev-paper-container" class="paper-sheet ${appConfig.paperStyle} paper-letter-pop">
                         <div class="paperclip"></div>
                         <div class="text-sm leading-relaxed text-left">
-                            <div id="prev-letter-title" class="paper-title text-center text-lg font-bold mb-3 pb-2">
-                                ${appConfig.letterTitle}
-                            </div>
+                            <div id="prev-letter-title" class="paper-title text-center text-lg font-bold mb-3 pb-2">${appConfig.letterTitle}</div>
                             <p class="mb-2">${appConfig.letterP1}</p>
                             <p class="mb-2">${appConfig.letterP2}</p>
                             <p class="mb-2">${appConfig.letterP3}</p>
-                            <div class="paper-sig text-right font-bold text-sm mt-4">
-                                ${appConfig.letterSig}
-                            </div>
+                            <div class="paper-sig text-right font-bold text-sm mt-4">${appConfig.letterSig}</div>
                         </div>
                     </div>
                 </div>
@@ -1102,7 +848,6 @@
             cardHolder.appendChild(letterCard);
         }
 
-        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS
         let stateNoScales = {};
         let stateGuiltIndices = {};
         let stateTeleportCounts = {};
@@ -1111,14 +856,11 @@
             const noBtn = document.getElementById(`btn-no-prev-${stepNum}`);
             const noWrapper = document.getElementById(`btn-no-wrapper-prev-${stepNum}`);
             const yesBtn = document.getElementById(`btn-yes-prev-${stepNum}`);
-
             if (!noBtn || !noWrapper) return;
 
-            // Remove existing listeners
             const newNoBtn = noBtn.cloneNode(true);
             noBtn.parentNode.replaceChild(newNoBtn, noBtn);
 
-            // 1. FLEEING
             if (behavior === 'fleeing') {
                 const triggerFlee = (e) => {
                     if (e && e.type === 'touchstart') e.preventDefault();
@@ -1128,55 +870,35 @@
                 newNoBtn.addEventListener('mouseenter', triggerFlee);
                 newNoBtn.addEventListener('touchstart', triggerFlee);
                 newNoBtn.onclick = triggerFlee;
-            }
-
-            // 2. SHRINKING
-            else if (behavior === 'shrinking') {
+            } else if (behavior === 'shrinking') {
                 stateNoScales[stepNum] = { yesScale: 1, noScale: 1 };
                 newNoBtn.onclick = () => {
                     showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                     stateNoScales[stepNum].yesScale += 0.35;
                     stateNoScales[stepNum].noScale -= 0.22;
-
                     yesBtn.style.transform = `scale(${stateNoScales[stepNum].yesScale})`;
-                    if (stateNoScales[stepNum].noScale <= 0.1) {
-                        newNoBtn.style.display = 'none';
-                    } else {
-                        newNoBtn.style.transform = `scale(${stateNoScales[stepNum].noScale})`;
-                    }
+                    if (stateNoScales[stepNum].noScale <= 0.1) newNoBtn.style.display = 'none';
+                    else newNoBtn.style.transform = `scale(${stateNoScales[stepNum].noScale})`;
                 };
-            }
-
-            // 3. SWAP PLACES
-            else if (behavior === 'swap') {
+            } else if (behavior === 'swap') {
                 const swapFunc = () => {
                     showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                     const parent = yesBtn.parentNode;
-                    if (parent.children[0] === yesBtn) {
-                        parent.appendChild(yesBtn);
-                    } else {
-                        parent.insertBefore(yesBtn, parent.children[0]);
-                    }
+                    if (parent.children[0] === yesBtn) parent.appendChild(yesBtn);
+                    else parent.insertBefore(yesBtn, parent.children[0]);
                 };
                 newNoBtn.addEventListener('mouseenter', swapFunc);
                 newNoBtn.onclick = () => { handleYesClick(nextTarget); };
-            }
-
-            // 4. TELEPORT / REAPPEARING
-            else if (behavior === 'teleport') {
+            } else if (behavior === 'teleport') {
                 stateTeleportCounts[stepNum] = 0;
                 const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!", "Nice try!"];
                 newNoBtn.onclick = () => {
                     showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                     stateTeleportCounts[stepNum]++;
-                    const text = teleTexts[stateTeleportCounts[stepNum] % teleTexts.length];
-                    newNoBtn.innerText = text;
+                    newNoBtn.innerText = teleTexts[stateTeleportCounts[stepNum] % teleTexts.length];
                     moveButtonRandomly(newNoBtn);
                 };
-            }
-
-            // 5. FAKE LOADING / DISABLED
-            else if (behavior === 'loading') {
+            } else if (behavior === 'loading') {
                 newNoBtn.onclick = () => {
                     newNoBtn.disabled = true;
                     newNoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...`;
@@ -1187,17 +909,9 @@
                         newNoBtn.disabled = false;
                     }, 1200);
                 };
-            }
-
-            // 6. ORBITING
-            else if (behavior === 'orbiting') {
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                };
-            }
-
-            // 7. GUILT-TRIP
-            else if (behavior === 'guilttrip') {
+            } else if (behavior === 'orbiting') {
+                newNoBtn.onclick = () => { showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`); };
+            } else if (behavior === 'guilttrip') {
                 stateGuiltIndices[stepNum] = 0;
                 const guiltTexts = ["Are you sure?", "Really?", "Think of us!", "Click Yes instead!"];
                 const guiltHover = () => {
@@ -1214,37 +928,25 @@
                 };
                 newNoBtn.addEventListener('mouseenter', guiltHover);
                 newNoBtn.onclick = guiltHover;
-            }
-
-            // 8. POP-UP TRAP
-            else if (behavior === 'popuptrap') {
+            } else if (behavior === 'popuptrap') {
                 newNoBtn.onclick = () => {
                     alert("Alert 1: Really?");
                     alert("Alert 2: Are you strictly sure?");
                     alert("Alert 3: Okay, fine! Re-directing to YES...");
                     handleYesClick(nextTarget);
                 };
-            }
-
-            // 9. GRAVITY FALL
-            else if (behavior === 'gravity') {
+            } else if (behavior === 'gravity') {
                 const gravDrop = () => {
                     newNoBtn.classList.add('falling-btn');
-                    setTimeout(() => {
-                        newNoBtn.style.display = 'none';
-                    }, 1200);
+                    setTimeout(() => { newNoBtn.style.display = 'none'; }, 1200);
                 };
                 newNoBtn.addEventListener('mouseenter', gravDrop);
                 newNoBtn.onclick = gravDrop;
-            }
-
-            // 10. SPLIT / DISSECTING BUTTON
-            else if (behavior === 'split') {
+            } else if (behavior === 'split') {
                 const triggerSplit = () => {
                     const letters = ["Y", "E", "S"];
                     const rect = newNoBtn.getBoundingClientRect();
                     const targetRect = yesBtn.getBoundingClientRect();
-
                     letters.forEach((char, i) => {
                         const particle = document.createElement('div');
                         particle.className = 'split-letter-particle';
@@ -1252,17 +954,14 @@
                         particle.style.left = `${rect.left + (i * 20)}px`;
                         particle.style.top = `${rect.top}px`;
                         document.body.appendChild(particle);
-
                         setTimeout(() => {
                             particle.style.left = `${targetRect.left + 20}px`;
                             particle.style.top = `${targetRect.top}px`;
                             particle.style.transform = 'scale(1.5)';
                             particle.style.opacity = '0';
                         }, 50);
-
                         setTimeout(() => particle.remove(), 700);
                     });
-
                     newNoBtn.style.opacity = '0';
                     setTimeout(() => newNoBtn.style.display = 'none', 300);
                 };
@@ -1272,18 +971,12 @@
         }
 
         function moveButtonRandomly(btnEl) {
-            if (!btnEl.classList.contains('escaped-btn')) {
-                btnEl.classList.add('escaped-btn');
-            }
+            if (!btnEl.classList.contains('escaped-btn')) btnEl.classList.add('escaped-btn');
             const padding = 30;
             const maxX = Math.max(padding, window.innerWidth - btnEl.offsetWidth - padding);
             const maxY = Math.max(padding, window.innerHeight - btnEl.offsetHeight - padding);
-
-            const randomX = Math.min(Math.max(padding, Math.floor(Math.random() * maxX)), maxX);
-            const randomY = Math.min(Math.max(padding, Math.floor(Math.random() * maxY)), maxY);
-
-            btnEl.style.left = `${randomX}px`;
-            btnEl.style.top = `${randomY}px`;
+            btnEl.style.left = `${Math.min(Math.max(padding, Math.floor(Math.random() * maxX)), maxX)}px`;
+            btnEl.style.top = `${Math.min(Math.max(padding, Math.floor(Math.random() * maxY)), maxY)}px`;
         }
 
         function setEnvelopeImg(url, element) {
@@ -1295,20 +988,8 @@
             updateConfigOnly();
         }
 
-        function updateEnvelopeCustomImg() {
-            updateConfigOnly();
-        }
-
-        function setCardStyle(styleClass) {
-            appConfig.cardStyle = styleClass;
-            updateConfigOnly();
-        }
-
-        function setPaperStyle(styleClass) {
-            appConfig.paperStyle = styleClass;
-            updateConfigOnly();
-        }
-
+        function setCardStyle(styleClass) { appConfig.cardStyle = styleClass; updateConfigOnly(); }
+        function setPaperStyle(styleClass) { appConfig.paperStyle = styleClass; updateConfigOnly(); }
         function setTheme(themeKey) {
             if (themes[themeKey]) {
                 appConfig.bgGradient = themes[themeKey];
@@ -1316,15 +997,12 @@
             }
         }
 
-        // PREVIEW STEP SWITCHER
         function previewStep(stepTarget) {
             currentActiveStepView = stepTarget;
             document.querySelectorAll('.step-view').forEach(s => s.classList.remove('active'));
-            
             const targetEl = document.getElementById(`prev-step-${stepTarget}`);
             if (targetEl) targetEl.classList.add('active');
 
-            // Update Nav Bar highlights without re-building inputs
             const stepNavBar = document.getElementById('step-nav-bar');
             if (stepNavBar) {
                 Array.from(stepNavBar.children).forEach((btn, idx) => {
@@ -1334,55 +1012,29 @@
             }
         }
 
-        // PREVIEW INTERACTIVE ACTIONS
-        let isTestMode = false;
         function toggleTestMode(enable) {
-            isTestMode = enable;
-            const testBtn = document.getElementById('mode-test-btn');
-            const editBtn = document.getElementById('mode-edit-btn');
-
-            if (enable) {
-                testBtn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white shadow ring-2 ring-pink-400/50";
-                editBtn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white";
-                previewStep(1);
-            } else {
-                testBtn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white";
-                editBtn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white shadow";
-                previewStep(1);
-            }
-        }
-
-        function getRandomWarning() {
-            if (!appConfig.warnings || appConfig.warnings.length === 0) return "⚠️ No နှိပ်လို့ မရပါဘူးနော်!";
-            return appConfig.warnings[Math.floor(Math.random() * appConfig.warnings.length)];
+            document.getElementById('mode-test-btn').className = enable ? "px-3 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white shadow ring-2 ring-pink-400/50" : "px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white";
+            document.getElementById('mode-edit-btn').className = !enable ? "px-3 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white shadow" : "px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white";
+            previewStep(1);
         }
 
         let popupTimerPrev;
         function showPopupWarningPrev(wrapperId) {
             const wrapper = document.getElementById(wrapperId);
             if (!wrapper) return;
-            
             const oldPopup = wrapper.querySelector('.popup-warning-preview');
             if (oldPopup) oldPopup.remove();
-
             const popup = document.createElement('div');
             popup.className = 'popup-warning-preview';
-            popup.innerText = getRandomWarning();
+            popup.innerText = appConfig.warnings[Math.floor(Math.random() * appConfig.warnings.length)] || "⚠️ No နှိပ်လို့ မရပါဘူးနော်!";
             wrapper.appendChild(popup);
-
             clearTimeout(popupTimerPrev);
             popupTimerPrev = setTimeout(() => { popup.remove(); }, 1200);
         }
 
-        function handleYesClick(targetStep) {
-            previewStep(targetStep);
-        }
+        function handleYesClick(targetStep) { previewStep(targetStep); }
+        function openLetterPrev() { previewStep('letter'); }
 
-        function openLetterPrev() {
-            previewStep('letter');
-        }
-
-        // GENERATE STANDALONE HTML CODE FOR EXPORT
         function generateCompleteHTML() {
             const warningsArrayJSON = JSON.stringify(appConfig.warnings);
             const stepsDataJSON = JSON.stringify(appConfig.steps);
@@ -1397,8 +1049,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Padauk:wght@400;700&family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"><\/script>
-    
+    <script src="https://cdn.tailwindcss.com"><\\/script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pyidaungsu', 'Padauk', sans-serif; }
         body {
@@ -1409,42 +1060,34 @@
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .card-container { width: 100%; max-width: 440px; min-height: 520px; display: flex; justify-content: center; align-items: center; position: relative; }
-        
         .interactive-card {
             padding: 35px 25px; border-radius: 30px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.15), inset 0 0 20px rgba(255,255,255,0.6);
             text-align: center; width: 100%; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 2px solid rgba(255, 255, 255, 0.8); transition: all 0.4s ease; position: relative;
         }
-
         .env-glass { background: rgba(255, 255, 255, 0.75); color: #be123c; }
         .env-romantic-red { background: linear-gradient(135deg, rgba(225, 29, 72, 0.9), rgba(159, 18, 57, 0.95)); color: #ffffff; border-color: rgba(254, 205, 211, 0.5); }
         .env-pastel-pink { background: rgba(252, 231, 243, 0.92); color: #9d174d; border-color: rgba(244, 114, 182, 0.6); }
         .env-classic-gold { background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95)); color: #78350f; border-color: rgba(245, 158, 11, 0.5); }
         .env-dark-velvet { background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95)); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); }
-
         .step { display: none; flex-direction: column; align-items: center; gap: 22px; animation: fadeIn 0.4s ease-in-out forwards; }
         .step.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         img.gif-box { width: 180px; height: 180px; object-fit: cover; border-radius: 22px; box-shadow: 0 10px 25px rgba(220,38,38,0.2); border: 4px solid rgba(255,255,255,0.9); }
-        
         .btn-group { display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; min-height: 110px; position: relative; padding: 10px; }
-        
         .btn-custom-yes {
             padding: 14px 34px; font-weight: 800; border-radius: 50px; cursor: pointer;
             transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
             box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4); border: none; display: inline-flex; justify-content: center; align-items: center; z-index: 5;
         }
         .btn-custom-yes:hover { transform: translateY(-3px) scale(1.06); }
-
         .btn-custom-no {
             padding: 14px 34px; font-weight: 800; border-radius: 50px; cursor: pointer;
             transition: transform 0.25s, box-shadow 0.25s, opacity 0.3s;
             box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4); border: none; display: inline-flex; justify-content: center; align-items: center; z-index: 5;
         }
-
         .btn-no-wrapper { position: relative; display: inline-flex; justify-content: center; align-items: center; }
-        
         .popup-warning {
             position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: rgba(255, 228, 230, 0.95);
             color: #e11d48; border: 2px solid #f43f5e; padding: 8px 14px; border-radius: 12px; font-size: 0.85rem;
@@ -1453,17 +1096,12 @@
         }
         .popup-warning::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 6px; border-style: solid; border-color: #f43f5e transparent transparent transparent; }
         @keyframes popupBounce { 0% { opacity: 0; transform: translate(-50%, 10px) scale(0.8); } 100% { opacity: 1; transform: translate(-50%, 0) scale(1); } }
-        
         .escaped-btn { position: fixed !important; z-index: 9999; transition: top 0.2s ease-out, left 0.2s ease-out; }
-
         @keyframes orbitAnimation { 0% { transform: rotate(0deg) translateX(70px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); } }
         .orbiting-btn { animation: orbitAnimation 2.2s linear infinite; }
-
         @keyframes gravityFallAnim { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(600px) rotate(180deg); opacity: 0; } }
         .falling-btn { animation: gravityFallAnim 1.2s ease-in forwards !important; }
-
         .split-letter-particle { position: absolute; font-weight: 900; color: #ec4899; font-size: 1.5rem; pointer-events: none; z-index: 10000; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
         .falling-envelope-container {
             display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 20px; user-select: none;
             animation: fallAndSway 3.2s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatGentle 2.6s ease-in-out infinite 3.2s;
@@ -1474,33 +1112,25 @@
         .falling-envelope-container:hover .no-frame-gif { transform: scale(1.08); }
         .tap-hint-badge { margin-top: 18px; background: rgba(255, 255, 255, 0.88); color: #be123c; font-weight: 700; font-size: 1.05rem; padding: 8px 20px; border-radius: 30px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); border: 1.5px solid rgba(255, 255, 255, 0.9); animation: pulseHint 1.6s infinite ease-in-out; }
         @keyframes pulseHint { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.06); opacity: 1; } }
-        
         .paper-letter-wrapper { position: relative; width: 100%; max-width: 380px; margin: 0 auto; padding: 10px; display: flex; justify-content: center; align-items: center; z-index: 10; }
         .paper-letter-pop { animation: popInLetter 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes popInLetter { 0% { opacity: 0; transform: scale(0.3) rotate(-12deg); } 70% { transform: scale(1.04) rotate(-2deg); } 100% { opacity: 1; transform: scale(1) rotate(-2deg); } }
-        
         .paper-sheet { position: relative; width: 100%; padding: 32px 22px 28px 22px; border-radius: 16px; box-shadow: -8px 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255, 255, 255, 0.8); }
-        
         .paper-classic { background-color: rgba(255, 253, 248, 0.96); color: #2b2b2b; }
         .paper-classic .letter-title { color: #b91c1c; border-bottom: 2px dashed #fca5a5; }
         .paper-classic .letter-signature { color: #9f1239; }
-
         .paper-rose { background-color: rgba(255, 241, 242, 0.97); color: #881337; }
         .paper-rose .letter-title { color: #be123c; border-bottom: 2px dashed #fda4af; }
         .paper-rose .letter-signature { color: #e11d48; }
-
         .paper-vintage { background-color: rgba(254, 243, 199, 0.97); color: #451a03; border-color: #fde68a; }
         .paper-vintage .letter-title { color: #78350f; border-bottom: 2px dashed #fcd34d; }
         .paper-vintage .letter-signature { color: #92400e; }
-
         .paper-grid { background-color: rgba(255, 255, 255, 0.97); color: #1e293b; background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px); background-size: 16px 16px; }
         .paper-grid .letter-title { color: #0284c7; border-bottom: 2px dashed #38bdf8; }
         .paper-grid .letter-signature { color: #0369a1; }
-
         .paper-dark { background-color: rgba(15, 23, 42, 0.96); color: #f1f5f9; border-color: #334155; }
         .paper-dark .letter-title { color: #fb7185; border-bottom: 2px dashed #f43f5e; }
         .paper-dark .letter-signature { color: #fda4af; }
-
         .paperclip { position: absolute; top: 12px; right: 28px; width: 18px; height: 45px; border: 3px solid #4a4a4a; border-radius: 12px; z-index: 6; transform: rotate(8deg); }
         .letter-content { font-family: 'Pyidaungsu', sans-serif; line-height: 1.8; font-size: 0.95rem; text-align: left; }
         .letter-title { text-align: center; font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; padding-bottom: 8px; }
@@ -1508,9 +1138,7 @@
     </style>
 </head>
 <body>
-    <div class="card-container" id="app-card-container">
-        <!-- Dynamic Steps Rendered via JS -->
-    </div>
+    <div class="card-container" id="app-card-container"></div>
 
     <script>
         const formspreeUrl = "${appConfig.formspreeUrl}";
@@ -1528,7 +1156,6 @@
         const noFontSize = "${appConfig.noFontSize}";
 
         const questionFontSize = "${appConfig.questionFontSize}";
-
         const cardStyle = "${appConfig.cardStyle}";
         const paperStyle = "${appConfig.paperStyle}";
         const envelopeImg = "${appConfig.envelopeImg}";
@@ -1574,61 +1201,57 @@
             steps.forEach((step, idx) => {
                 const stepNum = idx + 1;
                 const nextTarget = stepNum < steps.length ? (stepNum + 1) : 'falling';
-
                 const card = document.createElement('div');
-                card.className = \`interactive-card \${cardStyle} step \${stepNum === 1 ? 'active' : ''}\`;
-                card.id = \`step-\${stepNum}\`;
+                card.className = "interactive-card " + cardStyle + " step " + (stepNum === 1 ? "active" : "");
+                card.id = "step-" + stepNum;
 
-                const yesStyle = \`background-color: \${yesBg}; color: \${yesColor}; font-size: \${yesFontSize}px;\`;
-                const noStyle = \`background-color: \${noBg}; color: \${noColor}; font-size: \${noFontSize}px;\`;
+                const yesStyle = "background-color: " + yesBg + "; color: " + yesColor + "; font-size: " + yesFontSize + "px;";
+                const noStyle = "background-color: " + noBg + "; color: " + noColor + "; font-size: " + noFontSize + "px;";
 
-                card.innerHTML = \`
-                    <img class="gif-box" src="\${step.gif}" alt="Gif \${stepNum}">
-                    <h2 class="font-bold leading-relaxed" style="font-size: \${questionFontSize}px;">\${step.text}</h2>
-                    <div class="btn-group">
-                        <button class="btn-custom-yes" style="\${yesStyle}" id="btn-yes-\${stepNum}" onclick="nextStep(\${typeof nextTarget === 'number' ? nextTarget : '\'' + nextTarget + '\''})">\${yesText}</button>
-                        <div class="btn-no-wrapper" id="btn-no-wrapper-\${stepNum}">
-                            <button class="btn-custom-no \${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="\${noStyle}" id="btn-no-\${stepNum}">\${noText}</button>
-                        </div>
-                    </div>
-                \`;
+                card.innerHTML = '\\
+                    <img class="gif-box" src="' + step.gif + '" alt="Gif ' + stepNum + '">\\
+                    <h2 class="font-bold leading-relaxed" style="font-size: ' + questionFontSize + 'px;">' + step.text + '</h2>\\
+                    <div class="btn-group">\\
+                        <button class="btn-custom-yes" style="' + yesStyle + '" id="btn-yes-' + stepNum + '" onclick="nextStep(' + (typeof nextTarget === 'number' ? nextTarget : "'" + nextTarget + "'") + ')">' + yesText + '</button>\\
+                        <div class="btn-no-wrapper" id="btn-no-wrapper-' + stepNum + '">\\
+                            <button class="btn-custom-no ' + (step.behavior === 'orbiting' ? 'orbiting-btn' : '') + '" style="' + noStyle + '" id="btn-no-' + stepNum + '">' + noText + '</button>\\
+                        </div>\\
+                    </div>\\
+                ';
                 container.appendChild(card);
-
                 setTimeout(() => attachBehaviorEventsApp(stepNum, step.behavior, nextTarget), 50);
             });
 
-            // Falling Bouquet Step
             const fallingCard = document.createElement('div');
             fallingCard.className = 'step';
             fallingCard.id = 'step-falling';
             fallingCard.style.width = '100%';
-            fallingCard.innerHTML = \`
-                <div class="falling-envelope-container" onclick="openLetter()">
-                    <img class="no-frame-gif" src="\${envelopeImg}" alt="Bouquet/Envelope">
-                    <div class="tap-hint-badge">✨ Tap to Open ✨</div>
-                </div>
-            \`;
+            fallingCard.innerHTML = '\\
+                <div class="falling-envelope-container" onclick="openLetter()">\\
+                    <img class="no-frame-gif" src="' + envelopeImg + '" alt="Bouquet/Envelope">\\
+                    <div class="tap-hint-badge">✨ Tap to Open ✨</div>\\
+                </div>\\
+            ';
             container.appendChild(fallingCard);
 
-            // Love Letter Step
             const letterCard = document.createElement('div');
             letterCard.className = 'step';
             letterCard.id = 'step-letter';
             letterCard.style.width = '100%';
-            letterCard.innerHTML = \`
-                <div class="paper-letter-wrapper paper-letter-pop">
-                    <div class="paper-sheet \${paperStyle}">
-                        <div class="paperclip"></div>
-                        <div class="letter-content">
-                            <div class="letter-title">\${letterTitle}</div>
-                            <p>\${letterP1}</p><br>
-                            <p>\${letterP2}</p><br>
-                            <p>\${letterP3}</p>
-                            <div class="letter-signature">\${letterSig}</div>
-                        </div>
-                    </div>
-                </div>
-            \`;
+            letterCard.innerHTML = '\\
+                <div class="paper-letter-wrapper paper-letter-pop">\\
+                    <div class="paper-sheet ' + paperStyle + '">\\
+                        <div class="paperclip"></div>\\
+                        <div class="letter-content">\\
+                            <div class="letter-title">' + letterTitle + '</div>\\
+                            <p>' + letterP1 + '</p><br>\\
+                            <p>' + letterP2 + '</p><br>\\
+                            <p>' + letterP3 + '</p>\\
+                            <div class="letter-signature">' + letterSig + '</div>\\
+                        </div>\\
+                    </div>\\
+                </div>\\
+            ';
             container.appendChild(letterCard);
         }
 
@@ -1637,14 +1260,14 @@
         let stateTeleportCountsApp = {};
 
         function attachBehaviorEventsApp(stepNum, behavior, nextTarget) {
-            const noBtn = document.getElementById(\`btn-no-\${stepNum}\`);
-            const yesBtn = document.getElementById(\`btn-yes-\${stepNum}\`);
+            const noBtn = document.getElementById("btn-no-" + stepNum);
+            const yesBtn = document.getElementById("btn-yes-" + stepNum);
             if (!noBtn) return;
 
             if (behavior === 'fleeing') {
                 const triggerFlee = (e) => {
                     if (e && e.type === 'touchstart') e.preventDefault();
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
+                    showPopupWarning("btn-no-wrapper-" + stepNum);
                     moveButtonRandomlyApp(noBtn);
                 };
                 noBtn.addEventListener('mouseenter', triggerFlee);
@@ -1653,19 +1276,16 @@
             } else if (behavior === 'shrinking') {
                 stateNoScalesApp[stepNum] = { yesScale: 1, noScale: 1 };
                 noBtn.onclick = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
+                    showPopupWarning("btn-no-wrapper-" + stepNum);
                     stateNoScalesApp[stepNum].yesScale += 0.35;
                     stateNoScalesApp[stepNum].noScale -= 0.22;
-                    yesBtn.style.transform = \`scale(\${stateNoScalesApp[stepNum].yesScale})\`;
-                    if (stateNoScalesApp[stepNum].noScale <= 0.1) {
-                        noBtn.style.display = 'none';
-                    } else {
-                        noBtn.style.transform = \`scale(\${stateNoScalesApp[stepNum].noScale})\`;
-                    }
+                    yesBtn.style.transform = "scale(" + stateNoScalesApp[stepNum].yesScale + ")";
+                    if (stateNoScalesApp[stepNum].noScale <= 0.1) noBtn.style.display = 'none';
+                    else noBtn.style.transform = "scale(" + stateNoScalesApp[stepNum].noScale + ")";
                 };
             } else if (behavior === 'swap') {
                 const swapFunc = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
+                    showPopupWarning("btn-no-wrapper-" + stepNum);
                     const parent = yesBtn.parentNode;
                     if (parent.children[0] === yesBtn) parent.appendChild(yesBtn);
                     else parent.insertBefore(yesBtn, parent.children[0]);
@@ -1676,7 +1296,7 @@
                 stateTeleportCountsApp[stepNum] = 0;
                 const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!", "Nice try!"];
                 noBtn.onclick = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
+                    showPopupWarning("btn-no-wrapper-" + stepNum);
                     stateTeleportCountsApp[stepNum]++;
                     noBtn.innerText = teleTexts[stateTeleportCountsApp[stepNum] % teleTexts.length];
                     moveButtonRandomlyApp(noBtn);
@@ -1684,16 +1304,16 @@
             } else if (behavior === 'loading') {
                 noBtn.onclick = () => {
                     noBtn.disabled = true;
-                    noBtn.innerHTML = \`<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...\`;
+                    noBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...';
                     setTimeout(() => {
-                        showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
+                        showPopupWarning("btn-no-wrapper-" + stepNum);
                         alert("Error 404: 'No' is not available. Server says you must click Yes!");
                         noBtn.innerHTML = noText;
                         noBtn.disabled = false;
                     }, 1200);
                 };
             } else if (behavior === 'orbiting') {
-                noBtn.onclick = () => { showPopupWarning(\`btn-no-wrapper-\${stepNum}\`); };
+                noBtn.onclick = () => { showPopupWarning("btn-no-wrapper-" + stepNum); };
             } else if (behavior === 'guilttrip') {
                 stateGuiltIndicesApp[stepNum] = 0;
                 const guiltTexts = ["Are you sure?", "Really?", "Think of us!", "Click Yes instead!"];
@@ -1730,25 +1350,21 @@
                     const letters = ["Y", "E", "S"];
                     const rect = noBtn.getBoundingClientRect();
                     const targetRect = yesBtn.getBoundingClientRect();
-
                     letters.forEach((char, i) => {
                         const particle = document.createElement('div');
                         particle.className = 'split-letter-particle';
                         particle.innerText = char;
-                        particle.style.left = \`\${rect.left + (i * 20)}px\`;
-                        particle.style.top = \`\${rect.top}px\`;
+                        particle.style.left = (rect.left + (i * 20)) + 'px';
+                        particle.style.top = rect.top + 'px';
                         document.body.appendChild(particle);
-
                         setTimeout(() => {
-                            particle.style.left = \`\${targetRect.left + 20}px\`;
-                            particle.style.top = \`\${targetRect.top}px\`;
+                            particle.style.left = (targetRect.left + 20) + 'px';
+                            particle.style.top = targetRect.top + 'px';
                             particle.style.transform = 'scale(1.5)';
                             particle.style.opacity = '0';
                         }, 50);
-
                         setTimeout(() => particle.remove(), 700);
                     });
-
                     noBtn.style.opacity = '0';
                     setTimeout(() => noBtn.style.display = 'none', 300);
                 };
@@ -1758,29 +1374,23 @@
         }
 
         function moveButtonRandomlyApp(btnEl) {
-            if (!btnEl.classList.contains('escaped-btn')) {
-                btnEl.classList.add('escaped-btn');
-            }
+            if (!btnEl.classList.contains('escaped-btn')) btnEl.classList.add('escaped-btn');
             const padding = 30;
             const maxX = Math.max(padding, window.innerWidth - btnEl.offsetWidth - padding);
             const maxY = Math.max(padding, window.innerHeight - btnEl.offsetHeight - padding);
-
-            const randomX = Math.min(Math.max(padding, Math.floor(Math.random() * maxX)), maxX);
-            const randomY = Math.min(Math.max(padding, Math.floor(Math.random() * maxY)), maxY);
-
-            btnEl.style.left = \`\${randomX}px\`;
-            btnEl.style.top = \`\${randomY}px\`;
+            btnEl.style.left = Math.min(Math.max(padding, Math.floor(Math.random() * maxX)), maxX) + 'px';
+            btnEl.style.top = Math.min(Math.max(padding, Math.floor(Math.random() * maxY)), maxY) + 'px';
         }
 
         function nextStep(stepTarget) {
             document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
             let targetEl;
             if (typeof stepTarget === 'number') {
-                targetEl = document.getElementById(\`step-\${stepTarget}\`);
-                sendToFormspree("Yes", \`Step \${stepTarget - 1}\`);
+                targetEl = document.getElementById("step-" + stepTarget);
+                sendToFormspree("Yes", "Step " + (stepTarget - 1));
             } else if (stepTarget === 'falling') {
                 targetEl = document.getElementById('step-falling');
-                sendToFormspree("Yes", \`Final Question Step\`);
+                sendToFormspree("Yes", "Final Question Step");
             } else {
                 targetEl = document.getElementById('step-letter');
             }
@@ -1793,21 +1403,18 @@
         }
 
         window.onload = renderApp;
-    <\/script>
+    <\\/script>
 </body>
 </html>`;
         }
 
-        // EXPORT MODAL HANDLERS
         function exportHTML() {
             const htmlCode = generateCompleteHTML();
             document.getElementById('export-code-area').value = htmlCode;
             document.getElementById('export-modal').classList.remove('hidden');
         }
 
-        function closeExportModal() {
-            document.getElementById('export-modal').classList.add('hidden');
-        }
+        function closeExportModal() { document.getElementById('export-modal').classList.add('hidden'); }
 
         function copyGeneratedCode() {
             const codeArea = document.getElementById('export-code-area');
@@ -1829,6 +1436,5 @@
             URL.revokeObjectURL(url);
         }
     </script>
-
 </body>
 </html>
