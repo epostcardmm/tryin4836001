@@ -803,11 +803,13 @@
                 const yesStyle = `background-color: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size: ${appConfig.yesFontSize}px;`;
                 const noStyle = `background-color: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size: ${appConfig.noFontSize}px;`;
 
+                const targetParam = typeof nextTarget === 'number' ? nextTarget : `'${nextTarget}'`;
+
                 card.innerHTML = `
                     <img class="gif-box" src="${step.gif}" alt="Gif ${stepNum}">
                     <h2 class="font-bold leading-relaxed" style="font-size: ${appConfig.questionFontSize}px;">${step.text}</h2>
                     <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative btn-container-step">
-                        <button class="btn-custom-yes" style="${yesStyle}" id="btn-yes-prev-${stepNum}" onclick="handleYesClick(${typeof nextTarget === 'number' ? nextTarget : '\'' + nextTarget + '\''})">${appConfig.yesText}</button>
+                        <button class="btn-custom-yes" style="${yesStyle}" id="btn-yes-prev-${stepNum}" onclick="handleYesClick(${targetParam})">${appConfig.yesText}</button>
                         <div class="btn-no-wrapper-preview" id="btn-no-wrapper-prev-${stepNum}">
                             <button class="btn-custom-no ${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="${noStyle}" id="btn-no-prev-${stepNum}">${appConfig.noText}</button>
                         </div>
@@ -1209,11 +1211,13 @@
                 const yesStyle = "background-color: " + yesBg + "; color: " + yesColor + "; font-size: " + yesFontSize + "px;";
                 const noStyle = "background-color: " + noBg + "; color: " + noColor + "; font-size: " + noFontSize + "px;";
 
+                const targetParam = typeof nextTarget === 'number' ? nextTarget : "'" + nextTarget + "'";
+
                 card.innerHTML = '\\
                     <img class="gif-box" src="' + step.gif + '" alt="Gif ' + stepNum + '">\\
                     <h2 class="font-bold leading-relaxed" style="font-size: ' + questionFontSize + 'px;">' + step.text + '</h2>\\
                     <div class="btn-group">\\
-                        <button class="btn-custom-yes" style="' + yesStyle + '" id="btn-yes-' + stepNum + '" onclick="nextStep(' + (typeof nextTarget === 'number' ? nextTarget : "'" + nextTarget + "'") + ')">' + yesText + '</button>\\
+                        <button class="btn-custom-yes" style="' + yesStyle + '" id="btn-yes-' + stepNum + '" onclick="nextStep(' + targetParam + ')">' + yesText + '</button>\\
                         <div class="btn-no-wrapper" id="btn-no-wrapper-' + stepNum + '">\\
                             <button class="btn-custom-no ' + (step.behavior === 'orbiting' ? 'orbiting-btn' : '') + '" style="' + noStyle + '" id="btn-no-' + stepNum + '">' + noText + '</button>\\
                         </div>\\
