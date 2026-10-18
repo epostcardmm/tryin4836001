@@ -227,15 +227,6 @@
             animation: gravityFallAnim 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important;
             pointer-events: none !important;
         }
-
-        /* Hover Animation Presets */
-        .anim-hover-pulse:hover { transform: scale(1.08); transition: transform 0.2s ease; }
-        .anim-hover-shake:hover { animation: wobble 0.5s ease infinite; }
-        @keyframes wobble {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px) rotate(-3deg); }
-            75% { transform: translateX(5px) rotate(3deg); }
-        }
     </style>
 </head>
 <body class="bg-slate-100 text-gray-800 min-h-screen flex flex-col font-sans">
@@ -263,8 +254,8 @@
                     <span id="soundText" class="hidden md:inline">Sound On</span>
                 </button>
 
-                <!-- Standalone Player Export Button -->
-                <button onclick="exportStandalonePlayer()" class="px-3.5 py-2 bg-gradient-to-r from-brandPink to-purple-600 hover:opacity-90 text-white rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all" title="ညာဘက်ကစားကွက် သီးသန့်ထုတ်ရန်">
+                <!-- NEW: Standalone Player Export Button -->
+                <button onclick="exportStandalonePlayer()" class="px-3.5 py-2 bg-gradient-to-r from-brandPink to-purple-600 hover:opacity-90 text-white rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all" title="ညာဘက်က ကစားကွက် သီးသန့်ထုတ်ရန်">
                     <i class="fa-solid fa-file-arrow-down"></i>
                     <span class="hidden md:inline">Standalone Player</span>
                 </button>
@@ -814,7 +805,7 @@
             appState.stages.forEach((s, idx) => {
                 const opt = document.createElement('option');
                 opt.value = idx;
-                opt.textContent = `Stage ${idx + 1}:${s.question.substring(0, 22)}...`;
+                opt.textContent = `Stage ${idx + 1}: ${s.question.substring(0, 22)}...`;
                 select.appendChild(opt);
             });
         }
@@ -914,7 +905,7 @@
             document.getElementById('ePostcardArea').classList.add('hidden');
 
             const stage = appState.stages[appState.currentStageIndex];
-            document.getElementById('displayStageBadge').textContent = `STAGE ${appState.currentStageIndex + 1} OF${appState.stages.length}`;
+            document.getElementById('displayStageBadge').textContent = `STAGE ${appState.currentStageIndex + 1} OF ${appState.stages.length}`;
             document.getElementById('displayTrickTitle').textContent = `Trick: ${stage.trick.toUpperCase()}`;
             document.getElementById('displayQuestionText').textContent = stage.question;
             document.getElementById('displayStageGif').src = stage.gif;
@@ -930,8 +921,6 @@
             btnYes.style.transform = 'scale(1)';
             btnYes.style.order = '1';
 
-            // FIXED: Remove gravity falling-active class and reset button state
-            btnNo.classList.remove('falling-active');
             btnNo.style.transform = 'scale(1)';
             btnNo.style.position = 'relative';
             btnNo.style.left = '0px';
@@ -953,7 +942,6 @@
             const noWrapper = document.getElementById('noBtnWrapper');
 
             const activeNo = btnNo.cloneNode(true);
-            activeNo.classList.remove('falling-active'); // FIXED: Ensure cloned node doesn't inherit falling state
             btnNo.parentNode.replaceChild(activeNo, btnNo);
 
             switch(stage.trick) {
@@ -1287,6 +1275,7 @@
             a.remove();
         }
 
+        // --- NEW FUNCTION: Export Standalone Right-Side Player Only ---
         function exportStandalonePlayer() {
             playSound('pop');
             const standaloneHtml = `<!DOCTYPE html>
@@ -1518,9 +1507,6 @@
 
             btnYes.style.transform = 'scale(1)';
             btnYes.style.order = '1';
-            
-            // FIXED
-            btnNo.classList.remove('falling-active');
             btnNo.style.transform = 'scale(1)';
             btnNo.style.position = 'relative';
             btnNo.style.left = '0px';
@@ -1539,7 +1525,6 @@
             const btnYes = document.getElementById('btnYes');
             const noWrapper = document.getElementById('noBtnWrapper');
             const activeNo = btnNo.cloneNode(true);
-            activeNo.classList.remove('falling-active'); // FIXED
             btnNo.parentNode.replaceChild(activeNo, btnNo);
 
             switch(stage.trick) {
@@ -1701,6 +1686,20 @@
 
         function closeSecretLetterOverlay() {
             document.getElementById('secretLetterModal').classList.add('hidden');
+        }
+    <\/script>
+</body>
+</html>`;
+
+            const blob = new Blob([standaloneHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'YesNoQuest_StandalonePlayer.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            alert("ညာဘက်ကစားကွက် သီးသန့် Standalone Player ဖိုင်ကို အောင်မြင်စွာ ဒေါင်းလုဒ်လုပ်ပြီးပါပြီ!");
         }
     </script>
 </body>
