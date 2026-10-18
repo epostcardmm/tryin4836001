@@ -1586,7 +1586,7 @@
                     <img class="gif-box" src="\${step.gif}" alt="Gif \${stepNum}">
                     <h2 class="font-bold leading-relaxed" style="font-size: \${questionFontSize}px;">\${step.text}</h2>
                     <div class="btn-group">
-                        <button class="btn-custom-yes" style="\${yesStyle}" id="btn-yes-\${stepNum}" onclick="nextStep(\${JSON.stringify(nextTarget)})">\${yesText}</button>
+                        <button class="btn-custom-yes" style="\${yesStyle}" id="btn-yes-\${stepNum}" onclick="nextStep(\${typeof nextTarget === 'number' ? nextTarget : '\'' + nextTarget + '\''})">\${yesText}</button>
                         <div class="btn-no-wrapper" id="btn-no-wrapper-\${stepNum}">
                             <button class="btn-custom-no \${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="\${noStyle}" id="btn-no-\${stepNum}">\${noText}</button>
                         </div>
