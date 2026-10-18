@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yes/No Story Quest & ePostcard Studio Pro</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Caveat:wght@600&family=Padauk:wght@400;700&family=Quicksand:wght@500;600;700&family=Poppins:wght@400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <!-- Tone.js Web Audio Synthesizer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'Padauk', 'sans-serif'],
+                        padauk: ['Padauk', 'sans-serif'],
+                        handwriting: ['Caveat', 'Dancing Script', 'Padauk', 'cursive'],
+                        typewriter: ['Special Elite', 'Padauk', 'monospace']
+                    },
+                    colors: {
+                        brandPink: '#ff4d6d',
+                        brandRose: '#ff758f',
+                        brandPurple: '#7209b7',
+                        brandDark: '#0f172a'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Quicksand', 'Padauk', sans-serif;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        ::-webkit-scrollbar-thumb { background: #ff758f; border-radius: 10px; }
+
+        /* --- 10 ENTRANCE ANIMATIONS FOR ePOSTCARD NO-FRAME GIF --- */
+        @keyframes animFadeBounce {
+            0% { opacity: 0; transform: scale(0.2); }
+            60% { opacity: 1; transform: scale(1.15); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .anim-fade-bounce { animation: animFadeBounce 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        @keyframes animFlip3D {
+            0% { opacity: 0; transform: perspective(600px) rotateY(180deg) scale(0.5); }
+            100% { opacity: 1; transform: perspective(600px) rotateY(0deg) scale(1); }
+        }
+        .anim-flip-3d { animation: animFlip3D 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+
+        @keyframes animSlideElastic {
+            0% { opacity: 0; transform: translateY(200px); }
+            70% { opacity: 1; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .anim-slide-elastic { animation: animSlideElastic 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; }
+
+        @keyframes animHeartbeat {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .anim-heartbeat { animation: animHeartbeat 1s ease-in-out forwards; }
+
+        @keyframes animSpiralSpin {
+            0% { opacity: 0; transform: rotate(-720deg) scale(0.1); }
+            100% { opacity: 1; transform: rotate(0deg) scale(1); }
+        }
+        .anim-spiral-spin { animation: animSpiralSpin 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+
+        @keyframes animOrigami {
+            0% { opacity: 0; transform: rotateX(-90deg) rotateZ(20deg) scale(0.3); }
+            100% { opacity: 1; transform: rotateX(0deg) rotateZ(0deg) scale(1); }
+        }
+        .anim-origami { animation: animOrigami 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+
+        @keyframes animCurtain {
+            0% { opacity: 0; clip-path: inset(0 50% 0 50%); transform: scale(1.1); }
+            100% { opacity: 1; clip-path: inset(0 0 0 0); transform: scale(1); }
+        }
+        .anim-curtain { animation: animCurtain 1s ease-out forwards; }
+
+        @keyframes animGlitch {
+            0% { opacity: 0; transform: translate(-10px, 10px) skewX(20deg); }
+            30% { opacity: 1; transform: translate(10px, -10px) skewX(-20deg); }
+            60% { transform: translate(-5px, 0) scale(1.1); }
+            100% { opacity: 1; transform: translate(0, 0) scale(1); }
+        }
+        .anim-glitch { animation: animGlitch 0.8s ease-in-out forwards; }
+
+        @keyframes animFloatSwing {
+            0% { opacity: 0; transform: translateY(-150px) rotate(-25deg); }
+            60% { opacity: 1; transform: translateY(15px) rotate(10deg); }
+            100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+        }
+        .anim-float-swing { animation: animFloatSwing 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        @keyframes animRubberband {
+            0% { opacity: 0; transform: scale3d(1, 1, 1); }
+            30% { opacity: 1; transform: scale3d(1.25, 0.75, 1); }
+            40% { transform: scale3d(0.75, 1.25, 1); }
+            50% { transform: scale3d(1.15, 0.85, 1); }
+            65% { transform: scale3d(0.95, 1.05, 1); }
+            100% { opacity: 1; transform: scale3d(1, 1, 1); }
+        }
+        .anim-rubberband { animation: animRubberband 1s ease forwards; }
+
+        /* --- 10 PAPER / LETTER DESIGN STYLES --- */
+        .paper-vintage {
+            background: #f4e4bc;
+            background-image: radial-gradient(#e2c992 1px, transparent 1px);
+            background-size: 16px 16px;
+            color: #4a2c11;
+            border: 8px solid #c8a364;
+            font-family: 'Padauk', serif;
+            box-shadow: inset 0 0 30px rgba(139, 69, 19, 0.25), 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .paper-rose {
+            background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+            color: #800f2f;
+            border: 4px solid #ff4d6d;
+            box-shadow: 0 20px 40px rgba(255, 77, 109, 0.25);
+            font-family: 'Caveat', 'Padauk', cursive;
+        }
+
+        .paper-cyber {
+            background: #0f172a;
+            color: #38bdf8;
+            border: 2px solid #38bdf8;
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4), inset 0 0 15px rgba(56, 189, 248, 0.2);
+            font-family: 'Quicksand', 'Padauk', sans-serif;
+        }
+
+        .paper-minimal {
+            background: #ffffff;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            font-family: 'Quicksand', 'Padauk', sans-serif;
+        }
+
+        .paper-gold {
+            background: linear-gradient(135deg, #fafafa 0%, #f1f1f1 100%);
+            color: #27272a;
+            border: 6px solid;
+            border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7) 1;
+            box-shadow: 0 20px 40px rgba(191, 149, 63, 0.25);
+            font-family: 'Padauk', serif;
+        }
+
+        .paper-sakura {
+            background: linear-gradient(135deg, #fff5f7 0%, #fce7f3 100%);
+            color: #9d174d;
+            border: 3px dashed #f472b6;
+            font-family: 'Caveat', 'Padauk', cursive;
+        }
+
+        .paper-kawaii {
+            background: linear-gradient(135deg, #e0f2fe 0%, #fbcfe8 50%, #fef08a 100%);
+            color: #475569;
+            border: 5px solid #ffffff;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
+            font-family: 'Quicksand', 'Padauk', sans-serif;
+        }
+
+        .paper-kraft {
+            background: #d7ccc8;
+            color: #3e2723;
+            border: 4px solid #8d6e63;
+            font-family: 'Special Elite', 'Padauk', monospace;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.15);
+        }
+
+        .paper-galaxy {
+            background: linear-gradient(135deg, #090979 0%, #020024 50%, #450a0a 100%);
+            color: #f1f5f9;
+            border: 2px solid #a855f7;
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.3);
+            font-family: 'Dancing Script', 'Padauk', cursive;
+        }
+
+        .paper-envelope {
+            background: #fffbeb;
+            color: #78350f;
+            border: 2px solid #f59e0b;
+            box-shadow: 0 20px 40px rgba(245, 158, 11, 0.2);
+            font-family: 'Padauk', serif;
+        }
+
+        /* Orbiting Trick Anim */
+        @keyframes orbitAnim {
+            from { transform: rotate(0deg) translate(var(--orbit-r, 90px)) rotate(0deg); }
+            to { transform: rotate(360deg) translate(var(--orbit-r, 90px)) rotate(-360deg); }
+        }
+        .orbit-active { animation: orbitAnim 3s linear infinite; }
+
+        /* Gravity Fall Anim */
+        @keyframes gravityFallAnim {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(800px) rotate(180deg); opacity: 0; }
+        }
+        .falling-active {
+            animation: gravityFallAnim 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important;
+            pointer-events: none !important;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-gray-800 min-h-screen flex flex-col font-sans">
+
+    <!-- HEADER TOP BAR -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 sticky top-0 z-40 px-4 py-3 shadow-sm">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brandPink to-brandPurple flex items-center justify-center text-white text-xl font-bold shadow-md">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-gray-900 text-base sm:text-lg leading-tight flex items-center gap-2">
+                        Yes/No Quest & ePostcard Studio
+                        <span class="bg-pink-100 text-brandPink text-xs px-2.5 py-0.5 rounded-full font-bold uppercase">Pro</span>
+                    </h1>
+                    <p class="text-xs text-gray-500 hidden sm:block">Full Customizer for Questions, GIFs, Button Designs & Letters</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <!-- Sound Toggle -->
+                <button id="soundToggleBtn" onclick="toggleSoundMaster()" class="px-3 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 border border-purple-200 transition-all">
+                    <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+                    <span id="soundText" class="hidden md:inline">Sound On</span>
+                </button>
+
+                <!-- NEW: Standalone Player Export Button -->
+                <button onclick="exportStandalonePlayer()" class="px-3.5 py-2 bg-gradient-to-r from-brandPink to-purple-600 hover:opacity-90 text-white rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all" title="ညာဘက်က ကစားကွက် သီးသန့်ထုတ်ရန်">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                    <span class="hidden md:inline">Standalone Player</span>
+                </button>
+
+                <!-- Stage Manager -->
+                <button onclick="openStageManagerModal()" class="px-3 py-2 bg-pink-50 hover:bg-pink-100 text-brandPink rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 border border-pink-200 transition-all">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span class="hidden sm:inline">Manage Levels</span>
+                </button>
+
+                <!-- Export Modal -->
+                <button onclick="openExportModal()" class="px-3.5 py-2 bg-gray-900 hover:bg-gray-800 text-white rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition-all">
+                    <i class="fa-solid fa-code"></i>
+                    <span class="hidden sm:inline">Export Code</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP LAYOUT GRID -->
+    <div class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        <!-- LEFT CONTROL EDITOR PANEL (5 COLS) -->
+        <aside class="lg:col-span-5 bg-white rounded-3xl border border-gray-200 shadow-sm flex flex-col overflow-hidden max-h-[calc(100vh-90px)]">
+            
+            <!-- Stage Selector Header -->
+            <div class="p-4 border-b border-gray-100 bg-slate-50/80 flex items-center justify-between gap-2">
+                <div class="flex-1">
+                    <label class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1">
+                        <i class="fa-solid fa-list-check text-brandPink mr-1"></i> Current Editing Stage
+                    </label>
+                    <select id="stageSelect" onchange="onStageSelectChange(this.value)" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-brandPink">
+                        <!-- Populated JS -->
+                    </select>
+                </div>
+                <div class="flex items-center gap-1 mt-5">
+                    <button onclick="addNewStage()" class="p-2.5 bg-brandPink hover:bg-rose-600 text-white rounded-xl text-xs font-bold shadow-sm transition-all" title="Add New Stage">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <button onclick="deleteCurrentStage()" class="p-2.5 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-bold shadow-sm transition-all" title="Delete Current Stage">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Scrollable Settings -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-5">
+
+                <!-- Stage Question & 10 GIF Library -->
+                <div class="bg-slate-50 rounded-2xl p-4 border border-gray-200 space-y-3">
+                    <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-brandPink"></i>
+                        <span>Question & GIF Options (မေးခွန်းနှင့် GIF)</span>
+                    </h3>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">Question Text (မေးခွန်းစာသား)</label>
+                        <input type="text" id="inputQuestionText" oninput="updateCurrentStageData()" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-sm font-bold">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">Select Stage GIF (GIF Option ၁၀ မျိုး)</label>
+                        <select id="selectStageGif" onchange="updateStageGifFromPreset(this.value)" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold text-gray-800">
+                            <option value="0">1. Shy Cute Cat / Kitten</option>
+                            <option value="1">2. Puppy Love / Cute Dog</option>
+                            <option value="2">3. Boba Tea Milk Bear</option>
+                            <option value="3">4. Dancing Happy Bear</option>
+                            <option value="4">5. Cute Peach Bunny</option>
+                            <option value="5">6. Hugging Teddy Bears</option>
+                            <option value="6">7. Sparkle Cupid Heart</option>
+                            <option value="7">8. Rose Bouquet Romance</option>
+                            <option value="8">9. Sweet Kiss Animation</option>
+                            <option value="9">10. Loving Heart Flowers</option>
+                            <option value="custom">-- Custom GIF URL --</option>
+                        </select>
+                    </div>
+
+                    <div id="customGifUrlWrapper" class="hidden">
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">Custom GIF URL</label>
+                        <input type="text" id="inputGifUrl" oninput="updateCurrentStageData()" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-mono">
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">Select 'No' Trick Behavior (ခလုတ် လှည့်ကွက်)</label>
+                        <select id="selectTrickType" onchange="updateCurrentStageData()" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold text-gray-800">
+                            <option value="fleeing">1. The Fleeing Button (ထွက်ပြေးသွားသော ခလုတ်)</option>
+                            <option value="shrinking">2. The Shrinking Button (သေးသွားသော ခလုတ်)</option>
+                            <option value="swap">3. The Swap Places (နေရာချင်း လဲသွားခြင်း)</option>
+                            <option value="teleport">4. Teleporting Trick (ပျောက်သွားပြီး တခြားမှာ ပေါ်ခြင်း)</option>
+                            <option value="fake_loading">5. Fake Loading / Disabled State (အလုပ်မလုပ်သော ခလုတ်)</option>
+                            <option value="orbiting">6. Orbiting Target (ပတ်ခြာလည် ပြေးနေခြင်း)</option>
+                            <option value="guilt_trip">7. Guilt-Trip Text Change (စာသားပြောင်းခြင်း)</option>
+                            <option value="popup_trap">8. Pop-up Modal Trap (Pop-up ပေါ်လာခြင်း)</option>
+                            <option value="gravity">9. Gravity Fall (အောက်ကို ပြုတ်ကျသွားခြင်း)</option>
+                            <option value="dissecting">10. Split / Shatter Into YES (အစိတ်စိတ်အမွှာမွှာ ကွဲသွားခြင်း)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- BUTTON DESIGN CUSTOMIZER -->
+                <div class="bg-purple-50/70 rounded-2xl p-4 border border-purple-200/80 space-y-3">
+                    <h3 class="text-sm font-bold text-purple-800 flex items-center gap-2">
+                        <i class="fa-solid fa-palette text-purple-600"></i>
+                        <span>Button Customizer (ခလုတ် ဒီဇိုင်း ပြင်ရန်)</span>
+                    </h3>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-600 block mb-1">'Yes' Text (Yes စာသား)</label>
+                            <input type="text" id="inputYesText" value="Yes!" oninput="updateButtonStyles()" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-1.5 text-xs font-bold">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-gray-600 block mb-1">'No' Text (No စာသား)</label>
+                            <input type="text" id="inputNoText" value="No" oninput="updateButtonStyles()" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-1.5 text-xs font-bold">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-600 block mb-1">Yes Color</label>
+                            <input type="color" id="inputYesBg" value="#10b981" onchange="updateButtonStyles()" class="w-full h-8 rounded-lg cursor-pointer bg-white p-0.5 border">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-gray-600 block mb-1">No Color</label>
+                            <input type="color" id="inputNoBg" value="#ff4d6d" onchange="updateButtonStyles()" class="w-full h-8 rounded-lg cursor-pointer bg-white p-0.5 border">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-xs font-semibold text-gray-600 block mb-1">Font Size (px)</label>
+                            <input type="range" id="inputBtnFontSize" min="14" max="28" value="18" oninput="updateButtonStyles()" class="w-full">
+                        </div>
+                        <div>
+                            <label class="text-xs font-semibold text-gray-600 block mb-1">Corner Radius (px)</label>
+                            <input type="range" id="inputBtnRadius" min="0" max="40" value="16" oninput="updateButtonStyles()" class="w-full">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONGRATULATIONS STAGE SETTINGS (5 GIF OPTIONS) -->
+                <div class="bg-amber-50/70 rounded-2xl p-4 border border-amber-200/80 space-y-3">
+                    <h3 class="text-sm font-bold text-amber-900 flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-amber-600"></i>
+                        <span>Congratulations Stage (အောင်မြင်သည့် အဆင့်)</span>
+                    </h3>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">Congratulation GIF (Option ၅ မျိုး)</label>
+                        <select id="selectCongratGif" onchange="updateCongratGif(this.value)" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold text-gray-800">
+                            <option value="0">1. Confetti Hugging Cat</option>
+                            <option value="1">2. Fireworks Party Celebration</option>
+                            <option value="2">3. Happy Dancing Bears Party</option>
+                            <option value="3">4. Heart Balloon Pop Celebration</option>
+                            <option value="4">5. Cute Champagne Toast Bears</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- ePOSTCARD & STICKER GIF SETTINGS (10 GIF OPTIONS) -->
+                <div class="bg-pink-50/70 rounded-2xl p-4 border border-pink-200/80 space-y-3">
+                    <h3 class="text-sm font-bold text-brandPink flex items-center gap-2">
+                        <i class="fa-solid fa-envelope-open-text"></i>
+                        <span>ePostcard GIF & Letter (ကတ်နှင့် စာရွက် ဒီဇိုင်း)</span>
+                    </h3>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">ePostcard No-Frame GIF (Option ၁၀ မျိုး)</label>
+                        <select id="selectPostcardGif" onchange="updatePostcardGifFromPreset(this.value)" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold text-gray-800">
+                            <option value="0">1. Envelope Opening with Hearts</option>
+                            <option value="1">2. Love Letter Wax Seal</option>
+                            <option value="2">3. Floating Sparkle Hearts</option>
+                            <option value="3">4. Flying Love Bird Letter</option>
+                            <option value="4">5. Golden Glowing Heart</option>
+                            <option value="5">6. Animated Rose Letter</option>
+                            <option value="6">7. Glowing Neon Love Envelope</option>
+                            <option value="7">8. Cute Teddy Hugging Letter</option>
+                            <option value="8">9. Romantic Music Note Heart</option>
+                            <option value="9">10. Vintage Envelope Stamp</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">GIF Entrance Style (ပေါ်လာသည့် ပုံစံ ၁၀ မျိုး)</label>
+                        <select id="selectEntranceAnim" onchange="updatePostcardData()" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold text-gray-800">
+                            <option value="fade-bounce">1. Fade & Bounce Scale</option>
+                            <option value="flip-3d">2. Flip 3D Reveal</option>
+                            <option value="slide-elastic">3. Slide Up Elastic</option>
+                            <option value="heartbeat">4. Heartbeat Pulse Entrance</option>
+                            <option value="spiral-spin">5. Spiral Spin Zoom</option>
+                            <option value="origami">6. Origami Unfold</option>
+                            <option value="curtain">7. Curtain Reveal</option>
+                            <option value="glitch">8. Sparkle Glitch Pop</option>
+                            <option value="float-swing">9. Float Down Swing</option>
+                            <option value="rubberband">10. Rubberband Snap</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">Letter Paper Style (စာရွက် ဒီဇိုင်း ၁၀ မျိုး)</label>
+                        <select id="selectPaperStyle" onchange="updatePostcardData()" class="w-full bg-white border border-gray-300 rounded-xl px-3 py-2 text-xs font-bold text-gray-800">
+                            <option value="paper-vintage">1. Vintage Parchment (ရှေးဟောင်းစာရွက်)</option>
+                            <option value="paper-rose">2. Romantic Rose Pink (ပန်းရောင် ရိုမန်းတစ်)</option>
+                            <option value="paper-cyber">3. Cyber Midnight Dark (ဆိုက်ဘာ နီယွန်)</option>
+                            <option value="paper-minimal">4. Clean Minimalist Modern (အဖြူရောင် မော်ဒန်)</option>
+                            <option value="paper-gold">5. Golden Luxe Marble (ရွှေရောင် မာဘယ်လ်)</option>
+                            <option value="paper-sakura">6. Japanese Sakura Floral (ဆာကူရာ ပန်းရောင်)</option>
+                            <option value="paper-kawaii">7. Kawaii Pastel Rainbow (ချစ်စရာ ရောင်စုံ)</option>
+                            <option value="paper-kraft">8. Retro Kraft Paper (ဂျူတီ စာရွက်)</option>
+                            <option value="paper-galaxy">9. Starlight Galaxy Night (ကြယ်ရောင် ကောင်းကင်)</option>
+                            <option value="paper-envelope">10. Elegant Envelope Seal (စာအိတ် ဒီဇိုင်း)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600 block mb-1">Letter Secret Message (စာရွက်ပေါ်တွင် ရေးမည့်စာ)</label>
+                        <textarea id="inputSecretMessage" rows="4" oninput="updatePostcardData()" class="w-full bg-white border border-gray-300 rounded-xl p-3 text-xs leading-relaxed font-semibold focus:ring-2 focus:ring-brandPink focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <!-- Config Backup / JSON Load Save -->
+                <div class="flex gap-2">
+                    <button onclick="exportJSONConfig()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 border">
+                        <i class="fa-solid fa-download"></i> Save JSON
+                    </button>
+                    <button onclick="document.getElementById('importJsonInput').click()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 border">
+                        <i class="fa-solid fa-upload"></i> Load JSON
+                    </button>
+                    <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importJSONConfig(event)">
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- RIGHT PLAYGROUND LIVE CANVAS (7 COLS) -->
+        <main id="playgroundContainer" class="lg:col-span-7 bg-gradient-to-tr from-pink-100 via-rose-50 to-teal-100 flex flex-col justify-center items-center min-h-[580px] rounded-3xl p-4 sm:p-8 relative border border-white/60 shadow-inner overflow-hidden">
+
+            <!-- STAGE QUESTION PLAYGROUND CARD -->
+            <div id="activeStageCard" class="glass-card w-full max-w-lg rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-between min-h-[490px] relative transition-all duration-300 my-auto">
+
+                <!-- Stage Progress Info -->
+                <div class="w-full flex flex-col items-center gap-1">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-100 text-brandPink text-xs font-extrabold tracking-wide">
+                        <i class="fa-solid fa-flag-checkered"></i>
+                        <span id="displayStageBadge">STAGE 1 OF 3</span>
+                    </div>
+                    <p class="text-xs text-gray-400 font-semibold mt-1" id="displayTrickTitle">Fleeing Trick</p>
+                </div>
+
+                <!-- GIF Display Frame -->
+                <div class="my-4 relative w-44 h-44 sm:w-52 sm:h-52 rounded-2xl overflow-hidden bg-pink-50 flex items-center justify-center border-4 border-white shadow-md">
+                    <img id="displayStageGif" src="" alt="Stage GIF" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Question Text -->
+                <h2 id="displayQuestionText" class="text-xl sm:text-2xl font-bold text-gray-800 px-2 my-2 leading-snug">
+                    Question text goes here
+                </h2>
+
+                <!-- Interactive Buttons Area -->
+                <div id="interactiveButtonsArea" class="w-full relative min-h-[120px] flex items-center justify-center gap-4 mt-2 p-2">
+                    
+                    <!-- YES Button -->
+                    <button id="btnYes" onclick="onYesClickProgress()" class="px-7 py-3.5 text-white font-bold text-lg rounded-2xl shadow-lg flex items-center gap-2 transition-all z-20">
+                        <i class="fa-solid fa-heart"></i>
+                        <span id="displayYesText">Yes!</span>
+                    </button>
+
+                    <!-- NO Button Container Wrapper -->
+                    <div id="noBtnWrapper" class="inline-block relative">
+                        <button id="btnNo" class="px-7 py-3.5 text-white font-bold text-lg rounded-2xl shadow-lg flex items-center gap-2 transition-all z-20">
+                            <i class="fa-solid fa-xmark"></i>
+                            <span id="displayNoText">No</span>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Reset Stage View Button -->
+                <button onclick="resetActiveStageView()" class="absolute top-4 right-4 text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 p-2 rounded-xl transition-all" title="Reset Stage Trick">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+            </div>
+
+            <!-- ALL STAGES COMPLETED VICTORY SCREEN (Hidden Initially) -->
+            <div id="victoryScreenCard" class="glass-card w-full max-w-lg rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-between min-h-[480px] relative hidden animate-fade-in">
+                
+                <div class="text-3xl">🎉 💕 💖</div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-brandPink my-2">
+                    Congratulations!
+                </h2>
+                <p class="text-gray-700 font-bold text-sm sm:text-base">
+                    မေးခွန်းအဆင့်အားလုံးတွင် "YES" ကို အောင်မြင်စွာ ရွေးချယ်ပြီးပါပြီ။
+                </p>
+
+                <div class="my-4 relative w-48 h-48 rounded-2xl overflow-hidden border-4 border-white shadow-lg">
+                    <img id="displayCongratGif" src="" alt="Victory GIF" class="w-full h-full object-cover">
+                </div>
+
+                <!-- ePostcard Trigger Button -->
+                <button onclick="triggerEPostcardReveal()" class="w-full py-4 bg-gradient-to-r from-brandPink via-purple-600 to-brandRose text-white font-extrabold text-lg rounded-2xl shadow-xl shadow-pink-300 flex items-center justify-center gap-3 hover:scale-105 transition-all">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>ePostcard ကြည့်ရှုရန်နှိပ်ပါ</span>
+                </button>
+
+                <button onclick="restartQuestFromBeginning()" class="text-xs text-gray-500 font-semibold underline hover:text-gray-700 mt-2">
+                    အစမှ ပြန်လည်စတင်ရန်
+                </button>
+            </div>
+
+            <!-- E-POSTCARD NO-FRAME GIF DISPLAY AREA (Hidden Initially) -->
+            <div id="ePostcardArea" class="glass-card w-full max-w-lg rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-center min-h-[480px] relative hidden">
+                
+                <p class="text-xs font-bold text-pink-600 uppercase tracking-widest mb-3">
+                    <i class="fa-solid fa-sparkles mr-1"></i> Interactive ePostcard Sticker
+                </p>
+
+                <!-- Animated No Frame GIF Container -->
+                <div id="noFrameGifWrapper" onclick="openSecretLetterOverlay()" class="cursor-pointer relative p-2 transition-all hover:scale-105 group" title="စာရွက်လေးဖတ်ရန် နှိပ်ပါ">
+                    <img id="noFrameGifImg" src="" alt="No Frame GIF" class="w-56 h-56 sm:w-64 sm:h-64 object-contain filter drop-shadow-xl">
+                    <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white/90 text-brandPink text-xs font-bold px-3 py-1 rounded-full shadow-md border border-pink-200 group-hover:bg-brandPink group-hover:text-white transition-all">
+                        ✨ ထိပြီး စာဖတ်ပါ ✨
+                    </div>
+                </div>
+
+                <p class="text-xs text-gray-500 font-semibold mt-6">
+                    (No Frame GIF လေးကို နှိပ်လိုက်ပါက စာရွက်လေး ပေါ်လာပါမည်)
+                </p>
+
+                <button onclick="restartQuestFromBeginning()" class="mt-4 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-xl font-bold">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> အစမှ ပြန်စရန်
+                </button>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- SECRET LETTER OVERLAY MODAL -->
+    <div id="secretLetterModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div id="letterPaperCard" class="max-w-md w-full p-8 sm:p-10 rounded-3xl text-center relative transition-all duration-500 shadow-2xl my-auto max-h-[85vh] flex flex-col justify-between overflow-y-auto">
+            
+            <button onclick="closeSecretLetterOverlay()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center text-current font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-2xl mb-2">💌</div>
+            
+            <div id="letterContentDisplay" class="text-base sm:text-lg leading-relaxed whitespace-pre-wrap font-bold my-4">
+                Secret note message here...
+            </div>
+
+            <div class="pt-4 border-t border-current/20 flex justify-center">
+                <button onclick="closeSecretLetterOverlay()" class="px-6 py-2.5 bg-brandPink text-white font-bold rounded-xl shadow-md text-xs">
+                    ပိတ်မည်
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE MANAGER MODAL -->
+    <div id="stageManagerModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white max-w-xl w-full p-6 rounded-3xl flex flex-col max-h-[85vh] shadow-2xl border">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-brandPink"></i>
+                    <span>Manage All Levels (အဆင့်များ ပြင်ဆင်ရန်)</span>
+                </h3>
+                <button onclick="closeStageManagerModal()" class="text-gray-400 hover:text-gray-600 text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto space-y-2 pr-1" id="stageListManagerContainer">
+                <!-- Injected JS -->
+            </div>
+
+            <div class="pt-4 mt-2 border-t flex justify-between gap-2">
+                <button onclick="addNewStage()" class="px-4 py-2.5 bg-pink-100 text-brandPink font-bold rounded-xl text-xs hover:bg-pink-200">
+                    <i class="fa-solid fa-plus mr-1"></i> အဆင့်သစ်ထည့်မည်
+                </button>
+                <button onclick="closeStageManagerModal()" class="px-5 py-2.5 bg-gray-900 text-white font-bold rounded-xl text-xs">
+                    ပြီးပြီ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXPORT CODE MODAL -->
+    <div id="exportModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white max-w-2xl w-full p-6 rounded-3xl flex flex-col max-h-[85vh] shadow-2xl border">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-gray-900 text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-code text-brandPink"></i>
+                    <span>Export Standalone HTML Web App</span>
+                </h3>
+                <button onclick="closeExportModal()" class="text-gray-400 hover:text-gray-600 text-xl">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <textarea id="exportCodeTextarea" readonly class="flex-1 w-full bg-slate-900 text-emerald-400 font-mono text-xs p-3 rounded-xl focus:outline-none resize-none mb-4 h-64"></textarea>
+
+            <div class="flex gap-2">
+                <button onclick="copyExportCode()" class="flex-1 py-3 bg-brandPink hover:bg-rose-600 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-md">
+                    <i class="fa-solid fa-copy"></i>
+                    <span>Copy HTML Code</span>
+                </button>
+                <button onclick="downloadExportHTML()" class="flex-1 py-3 bg-gray-900 hover:bg-gray-800 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 shadow-md">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download .html File</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POP-UP TRAP ALERT MODAL FOR STAGE TRICK 8 -->
+    <div id="stage8AlertModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card max-w-xs w-full p-6 rounded-3xl text-center space-y-4 shadow-2xl">
+            <div class="text-4xl" id="stage8AlertIcon">🤔</div>
+            <p id="stage8AlertMsg" class="text-gray-800 font-bold text-base">Are you strictly sure?</p>
+            <button onclick="advanceStage8Alert()" class="w-full py-2.5 bg-brandPink text-white font-bold rounded-xl shadow-md">
+                Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP ENGINE -->
+    <script>
+        // Preset GIF Options Libraries
+        const QUESTION_GIF_LIBRARY = [
+            "https://media.giphy.com/media/cLS1AC1E8hv8n5534z/giphy.gif", // 1. Shy Cute Cat
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHY5b3lyODNsdm45YXZsdWhsOWRrd3Y1ejBnbms5bjFlbWptYW0zZCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Lq0h93752f6J9tijrh/giphy.gif", // 2. Puppy Love
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2R4d3kybGNwcnRwMXVwbjRmeGRjcTUzZmIwdnAxb3FscndvMmZydCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kXdo4BgGOqdHO/giphy.gif", // 3. Boba Tea Bear
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Yyb2sxbjRqYXZyNXU5OHBhMGpnbmxvNHBhbjRmdjVvdjNmb3NqYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif", // 4. Dancing Bear
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHkycmZreW1yZjRmcThpMzgyamw3dWc4czVrczdpbjVvMmswbzJhMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/k93vubaq1h0erCxyvZ/giphy.gif", // 5. Cute Peach Bunny
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWVpMzVxbHR2czR5aXU3cGNpMW8wZjA0cXJjNGpwbmdtMnlqczNkbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/S92wD3f9506JHWRrA6/giphy.gif", // 6. Teddy Hugs
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDVnbTFyYWVqbnIxNnA3NHZ3Nnl4cTFzbWtkdXh4NzludGk3bm5nbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26hpUebnmd40M8vF6/giphy.gif", // 7. Cupid Heart
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNm40dzR5czB0ejBxeW5yZmNydDZqOGV5bzY4NDgwYjgwMnBmdTR2cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKoWXm3okO1mgHC/giphy.gif", // 8. Rose Bouquet
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGtzaHN5aGNyNzY1N3ZocnR1NXUxbDhtNzJ5NnFmcDR4NmRrdWN2dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l2YSgsunr/giphy.gif", // 9. Kiss Anim
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODFseWRzY21xc3hyeTNtMWdqNDB4MDFsaW8zdmxudnNqMjJndzh1YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKoWXm3okO1mgHC/giphy.gif" // 10. Flower Heart
+        ];
+
+        const CONGRAT_GIF_LIBRARY = [
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Yyb2sxbjRqYXZyNXU5OHBhMGpnbmxvNHBhbjRmdjVvdjNmb3NqYSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif", // 1. Confetti Hugging Cat
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGlqODNyYmxvaTFwOTJxdXBsbzhxbGcxNWNydjVvbjZ0cHFsb3RhbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26tP213O3k19e2Q8M/giphy.gif", // 2. Fireworks Celebration
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzZ1c3l2ZnU1Mmlmcnd1ejY1MG4zdTNxeWp0dmdudTNyYXkzb214ciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/11sBLVxEv6WA4U/giphy.gif", // 3. Happy Dancing Bears
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm9jZm4zcjh6MnlhZmd2bXRrbTVwYml2NmxsZWJvemdzNGw4enRldSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/artj92V8o75VPL7AeQ/giphy.gif", // 4. Heart Balloon Pop
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdm4ybm5oZHNrc2I0Yndzbnk5OHVmbGZsdnRseXJ2OHI4aWptOG1ldyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/g9582DNuQppxC/giphy.gif"  // 5. Champagne Toast
+        ];
+
+        const POSTCARD_GIF_LIBRARY = [
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHkycmZreW1yZjRmcThpMzgyamw3dWc4czVrczdpbjVvMmswbzJhMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/k93vubaq1h0erCxyvZ/giphy.gif", // 1. Envelope Opening
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWVpMzVxbHR2czR5aXU3cGNpMW8wZjA0cXJjNGpwbmdtMnlqczNkbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/S92wD3f9506JHWRrA6/giphy.gif", // 2. Wax Seal
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDVnbTFyYWVqbnIxNnA3NHZ3Nnl4cTFzbWtkdXh4NzludGk3bm5nbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26hpUebnmd40M8vF6/giphy.gif", // 3. Sparkle Hearts
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNm40dzR5czB0ejBxeW5yZmNydDZqOGV5bzY4NDgwYjgwMnBmdTR2cSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKoWXm3okO1mgHC/giphy.gif", // 4. Flying Love Bird
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaGtzaHN5aGNyNzY1N3ZocnR1NXUxbDhtNzJ5NnFmcDR4NmRrdWN2dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l2YSgsunr/giphy.gif", // 5. Golden Heart
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3pxZnRzeHhjcXZxdmxzaG14eDFwMnA5bmtpM3k0Z3FiNXF3d3l0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/L13y8G1B55k8w/giphy.gif", // 6. Animated Rose Letter
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG15ODlydW9hcnpoODR5ejlncm04b2kzaDlsYXZudm4zdzRwMDZ2MiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26FL3m2t877iJ034Y/giphy.gif", // 7. Neon Envelope
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZHBsZ2FwbWFvczZ2eTR5YmdpdmdpdTBsaWpsZXkydmllZnIwd2RreSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/11E0b9Eno8L36U/giphy.gif", // 8. Teddy Hugging
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnFkNWxrbnhmcnNtbGk1bWs0OHJtY2NsdDFreW8xb25icDVsYTZsbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKMt1VVNkHV2PaE/giphy.gif", // 9. Music Note Heart
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbDVrMnhoc21xeXpxNngybzU4ZTVrd3ljdTFscDdzM3o4bm5od2s5NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xT0xezQGU5xCDJuCPe/giphy.gif"  // 10. Vintage Stamp
+        ];
+
+        // Master Application State
+        let appState = {
+            currentStageIndex: 0,
+            audioEnabled: true,
+            congratGifIndex: 0,
+            buttonStyle: {
+                yesText: "Yes!",
+                noText: "No",
+                yesBg: "#10b981",
+                noBg: "#ff4d6d",
+                fontSize: 18,
+                radius: 16
+            },
+            postcard: {
+                gifUrl: POSTCARD_GIF_LIBRARY[0],
+                entranceAnim: "fade-bounce",
+                paperStyle: "paper-rose",
+                secretMessage: "ချစ်ရပါသော...\n\nမေးခွန်းလေးတွေကို 'Yes' နှိပ်ပြီး ဖြေပေးခဲ့တဲ့အတွက် ကျေးဇူးအများကြီးတင်ပါတယ်နော်! 💖\nဒီနေ့ကစပြီး အမြဲတမ်း ပျော်ရွှင်ချမ်းမြေ့ပါစေလို့ ဆုတောင်းပေးလိုက်ပါတယ်။\n\nချစ်ခြင်းများစွာဖြင့်... ✨"
+            },
+            stages: [
+                {
+                    id: 1,
+                    question: "1. ငါနဲ့အတူတူ Romantic Date သွားမလား?",
+                    gif: QUESTION_GIF_LIBRARY[0],
+                    trick: "fleeing"
+                },
+                {
+                    id: 2,
+                    question: "2. ငါ့ကို အမြဲတမ်း ချစ်သွားမှာ သေချာလား?",
+                    gif: QUESTION_GIF_LIBRARY[1],
+                    trick: "shrinking"
+                },
+                {
+                    id: 3,
+                    question: "3. ဒီနေ့ Boba Milk Tea ဝယ်တိုက်မှာလား?",
+                    gif: QUESTION_GIF_LIBRARY[2],
+                    trick: "swap"
+                }
+            ]
+        };
+
+        // Runtime variables
+        let runtimeShrinkScale = 1;
+        let runtimeYesScale = 1;
+        let runtimeGuiltIndex = 0;
+        let runtimeAlertStep = 0;
+        let activeToneSynth = null;
+
+        function initAudio() {
+            try {
+                if (!activeToneSynth) activeToneSynth = new Tone.Synth().toDestination();
+            } catch(e){}
+        }
+
+        function playSound(type) {
+            if (!appState.audioEnabled) return;
+            try {
+                Tone.start();
+                initAudio();
+                if (type === 'pop') activeToneSynth.triggerAttackRelease("C5", "16n");
+                else if (type === 'trick') activeToneSynth.triggerAttackRelease("G4", "8n");
+                else if (type === 'win') {
+                    const poly = new Tone.PolySynth().toDestination();
+                    poly.triggerAttackRelease(["C4", "E4", "G4", "C5"], "4n");
+                }
+            } catch(e){}
+        }
+
+        function toggleSoundMaster() {
+            appState.audioEnabled = !appState.audioEnabled;
+            document.getElementById('soundText').textContent = appState.audioEnabled ? "Sound On" : "Sound Off";
+            document.getElementById('soundIcon').className = appState.audioEnabled ? "fa-solid fa-volume-high" : "fa-solid fa-volume-xmark";
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderStageSelectorOptions();
+            loadStageConfigToBuilder(0);
+            updateButtonStyles();
+        });
+
+        function renderStageSelectorOptions() {
+            const select = document.getElementById('stageSelect');
+            select.innerHTML = '';
+            appState.stages.forEach((s, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = `Stage ${idx + 1}: ${s.question.substring(0, 22)}...`;
+                select.appendChild(opt);
+            });
+        }
+
+        function onStageSelectChange(val) {
+            loadStageConfigToBuilder(parseInt(val));
+        }
+
+        function loadStageConfigToBuilder(index) {
+            appState.currentStageIndex = index;
+            const stage = appState.stages[index];
+
+            document.getElementById('stageSelect').value = index;
+            document.getElementById('inputQuestionText').value = stage.question;
+            document.getElementById('selectTrickType').value = stage.trick;
+
+            const libIndex = QUESTION_GIF_LIBRARY.indexOf(stage.gif);
+            if (libIndex !== -1) {
+                document.getElementById('selectStageGif').value = libIndex;
+                document.getElementById('customGifUrlWrapper').classList.add('hidden');
+            } else {
+                document.getElementById('selectStageGif').value = "custom";
+                document.getElementById('customGifUrlWrapper').classList.remove('hidden');
+                document.getElementById('inputGifUrl').value = stage.gif;
+            }
+
+            document.getElementById('selectPostcardGif').value = POSTCARD_GIF_LIBRARY.indexOf(appState.postcard.gifUrl) !== -1 ? POSTCARD_GIF_LIBRARY.indexOf(appState.postcard.gifUrl) : 0;
+            document.getElementById('selectEntranceAnim').value = appState.postcard.entranceAnim;
+            document.getElementById('selectPaperStyle').value = appState.postcard.paperStyle;
+            document.getElementById('inputSecretMessage').value = appState.postcard.secretMessage;
+
+            resetActiveStageView();
+        }
+
+        function updateStageGifFromPreset(val) {
+            const stage = appState.stages[appState.currentStageIndex];
+            if (val === "custom") {
+                document.getElementById('customGifUrlWrapper').classList.remove('hidden');
+            } else {
+                document.getElementById('customGifUrlWrapper').classList.add('hidden');
+                stage.gif = QUESTION_GIF_LIBRARY[parseInt(val)];
+            }
+            resetActiveStageView();
+        }
+
+        function updateCurrentStageData() {
+            const stage = appState.stages[appState.currentStageIndex];
+            stage.question = document.getElementById('inputQuestionText').value;
+            stage.trick = document.getElementById('selectTrickType').value;
+            if (document.getElementById('selectStageGif').value === "custom") {
+                stage.gif = document.getElementById('inputGifUrl').value;
+            }
+            resetActiveStageView();
+        }
+
+        function updateCongratGif(val) {
+            appState.congratGifIndex = parseInt(val);
+        }
+
+        function updatePostcardGifFromPreset(val) {
+            appState.postcard.gifUrl = POSTCARD_GIF_LIBRARY[parseInt(val)];
+        }
+
+        function updatePostcardData() {
+            appState.postcard.entranceAnim = document.getElementById('selectEntranceAnim').value;
+            appState.postcard.paperStyle = document.getElementById('selectPaperStyle').value;
+            appState.postcard.secretMessage = document.getElementById('inputSecretMessage').value;
+        }
+
+        function updateButtonStyles() {
+            const bs = appState.buttonStyle;
+            bs.yesText = document.getElementById('inputYesText').value;
+            bs.noText = document.getElementById('inputNoText').value;
+            bs.yesBg = document.getElementById('inputYesBg').value;
+            bs.noBg = document.getElementById('inputNoBg').value;
+            bs.fontSize = document.getElementById('inputBtnFontSize').value;
+            bs.radius = document.getElementById('inputBtnRadius').value;
+
+            const btnYes = document.getElementById('btnYes');
+            const btnNo = document.getElementById('btnNo');
+
+            document.getElementById('displayYesText').textContent = bs.yesText;
+            document.getElementById('displayNoText').textContent = bs.noText;
+
+            btnYes.style.backgroundColor = bs.yesBg;
+            btnYes.style.fontSize = `${bs.fontSize}px`;
+            btnYes.style.borderRadius = `${bs.radius}px`;
+
+            btnNo.style.backgroundColor = bs.noBg;
+            btnNo.style.fontSize = `${bs.fontSize}px`;
+            btnNo.style.borderRadius = `${bs.radius}px`;
+        }
+
+        function resetActiveStageView() {
+            document.getElementById('activeStageCard').classList.remove('hidden');
+            document.getElementById('victoryScreenCard').classList.add('hidden');
+            document.getElementById('ePostcardArea').classList.add('hidden');
+
+            const stage = appState.stages[appState.currentStageIndex];
+            document.getElementById('displayStageBadge').textContent = `STAGE ${appState.currentStageIndex + 1} OF ${appState.stages.length}`;
+            document.getElementById('displayTrickTitle').textContent = `Trick: ${stage.trick.toUpperCase()}`;
+            document.getElementById('displayQuestionText').textContent = stage.question;
+            document.getElementById('displayStageGif').src = stage.gif;
+
+            runtimeShrinkScale = 1;
+            runtimeYesScale = 1;
+            runtimeGuiltIndex = 0;
+
+            const btnYes = document.getElementById('btnYes');
+            const btnNo = document.getElementById('btnNo');
+            const noWrapper = document.getElementById('noBtnWrapper');
+
+            btnYes.style.transform = 'scale(1)';
+            btnYes.style.order = '1';
+
+            btnNo.style.transform = 'scale(1)';
+            btnNo.style.position = 'relative';
+            btnNo.style.left = '0px';
+            btnNo.style.top = '0px';
+            btnNo.style.opacity = '1';
+            btnNo.style.pointerEvents = 'auto';
+            document.getElementById('displayNoText').textContent = appState.buttonStyle.noText;
+
+            noWrapper.style.order = '2';
+            noWrapper.classList.remove('orbit-active');
+
+            updateButtonStyles();
+            bindStageTrickEvents(stage);
+        }
+
+        function bindStageTrickEvents(stage) {
+            const btnNo = document.getElementById('btnNo');
+            const btnYes = document.getElementById('btnYes');
+            const noWrapper = document.getElementById('noBtnWrapper');
+
+            const activeNo = btnNo.cloneNode(true);
+            btnNo.parentNode.replaceChild(activeNo, btnNo);
+
+            switch(stage.trick) {
+                case 'fleeing':
+                    const fleeFn = (e) => {
+                        e.preventDefault();
+                        playSound('trick');
+                        const rx = (Math.random() - 0.5) * 180;
+                        const ry = (Math.random() - 0.5) * 120;
+                        activeNo.style.position = 'absolute';
+                        activeNo.style.left = `${rx}px`;
+                        activeNo.style.top = `${ry}px`;
+                    };
+                    activeNo.addEventListener('mouseenter', fleeFn);
+                    activeNo.addEventListener('touchstart', fleeFn);
+                    break;
+
+                case 'shrinking':
+                    activeNo.addEventListener('click', () => {
+                        playSound('pop');
+                        runtimeShrinkScale -= 0.25;
+                        runtimeYesScale += 0.25;
+                        if (runtimeShrinkScale <= 0.1) {
+                            activeNo.style.transform = 'scale(0)';
+                            activeNo.style.pointerEvents = 'none';
+                        } else {
+                            activeNo.style.transform = `scale(${runtimeShrinkScale})`;
+                            btnYes.style.transform = `scale(${runtimeYesScale})`;
+                        }
+                    });
+                    break;
+
+                case 'swap':
+                    const swapFn = () => {
+                        playSound('trick');
+                        const cur = window.getComputedStyle(btnYes).order;
+                        btnYes.style.order = cur === '1' ? '2' : '1';
+                        noWrapper.style.order = cur === '1' ? '1' : '2';
+                    };
+                    activeNo.addEventListener('mouseenter', swapFn);
+                    activeNo.addEventListener('touchstart', swapFn);
+                    break;
+
+                case 'teleport':
+                    activeNo.addEventListener('click', () => {
+                        playSound('trick');
+                        const positions = [
+                            { top: '-130px', left: '-90px' },
+                            { top: '-130px', left: '90px' },
+                            { top: '60px', left: '-100px' },
+                            { top: '60px', left: '100px' }
+                        ];
+                        const r = positions[Math.floor(Math.random() * positions.length)];
+                        activeNo.style.position = 'absolute';
+                        activeNo.style.top = r.top;
+                        activeNo.style.left = r.left;
+                    });
+                    break;
+
+                case 'fake_loading':
+                    activeNo.addEventListener('click', () => {
+                        playSound('pop');
+                        activeNo.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Loading...`;
+                        activeNo.style.pointerEvents = 'none';
+                        setTimeout(() => {
+                            activeNo.innerHTML = `<i class="fa-solid fa-ban"></i> Disabled`;
+                            activeNo.style.opacity = '0.5';
+                        }, 1000);
+                    });
+                    break;
+
+                case 'orbiting':
+                    noWrapper.classList.add('orbit-active');
+                    activeNo.addEventListener('click', () => playSound('trick'));
+                    break;
+
+                case 'guilt_trip':
+                    const phrases = ["Are you sure?", "Really?", "Think again! 🥺", "Click Yes! ❤️"];
+                    const guiltFn = () => {
+                        playSound('pop');
+                        if (runtimeGuiltIndex < phrases.length) {
+                            document.getElementById('displayNoText').textContent = phrases[runtimeGuiltIndex];
+                            runtimeGuiltIndex++;
+                        } else {
+                            document.getElementById('displayNoText').textContent = appState.buttonStyle.yesText;
+                            activeNo.onclick = onYesClickProgress;
+                        }
+                    };
+                    activeNo.addEventListener('mouseenter', guiltFn);
+                    activeNo.addEventListener('click', guiltFn);
+                    break;
+
+                case 'popup_trap':
+                    activeNo.addEventListener('click', () => {
+                        playSound('trick');
+                        runtimeAlertStep = 0;
+                        showStage8AlertModal();
+                    });
+                    break;
+
+                case 'gravity':
+                    const fallFn = () => {
+                        playSound('trick');
+                        activeNo.classList.add('falling-active');
+                    };
+                    activeNo.addEventListener('mouseenter', fallFn);
+                    activeNo.addEventListener('touchstart', fallFn);
+                    break;
+
+                case 'dissecting':
+                    const splitFn = () => {
+                        playSound('trick');
+                        activeNo.style.opacity = '0';
+                        activeNo.style.pointerEvents = 'none';
+                        btnYes.style.transform = 'scale(1.2)';
+                        setTimeout(() => btnYes.style.transform = 'scale(1)', 300);
+                    };
+                    activeNo.addEventListener('mouseenter', splitFn);
+                    activeNo.addEventListener('touchstart', splitFn);
+                    break;
+            }
+        }
+
+        function showStage8AlertModal() {
+            const alerts = ["Are you strictly sure?", "Please think one more time! 🥺", "Okay fine! Re-directing to YES..."];
+            if (runtimeAlertStep < alerts.length) {
+                document.getElementById('stage8AlertMsg').textContent = alerts[runtimeAlertStep];
+                document.getElementById('stage8AlertModal').classList.remove('hidden');
+            } else {
+                document.getElementById('stage8AlertModal').classList.add('hidden');
+                onYesClickProgress();
+            }
+        }
+
+        function advanceStage8Alert() {
+            playSound('pop');
+            runtimeAlertStep++;
+            showStage8AlertModal();
+        }
+
+        function onYesClickProgress() {
+            playSound('pop');
+            if (appState.currentStageIndex < appState.stages.length - 1) {
+                appState.currentStageIndex++;
+                loadStageConfigToBuilder(appState.currentStageIndex);
+            } else {
+                playSound('win');
+                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+                document.getElementById('activeStageCard').classList.add('hidden');
+                document.getElementById('displayCongratGif').src = CONGRAT_GIF_LIBRARY[appState.congratGifIndex];
+                document.getElementById('victoryScreenCard').classList.remove('hidden');
+            }
+        }
+
+        function triggerEPostcardReveal() {
+            playSound('win');
+            document.getElementById('victoryScreenCard').classList.add('hidden');
+            const ePostcardArea = document.getElementById('ePostcardArea');
+            const gifImg = document.getElementById('noFrameGifImg');
+
+            gifImg.src = appState.postcard.gifUrl;
+
+            const animMap = {
+                'fade-bounce': 'anim-fade-bounce',
+                'flip-3d': 'anim-flip-3d',
+                'slide-elastic': 'anim-slide-elastic',
+                'heartbeat': 'anim-heartbeat',
+                'spiral-spin': 'anim-spiral-spin',
+                'origami': 'anim-origami',
+                'curtain': 'anim-curtain',
+                'glitch': 'anim-glitch',
+                'float-swing': 'anim-float-swing',
+                'rubberband': 'anim-rubberband'
+            };
+
+            Object.values(animMap).forEach(c => gifImg.classList.remove(c));
+            const selectedClass = animMap[appState.postcard.entranceAnim] || 'anim-fade-bounce';
+            gifImg.classList.add(selectedClass);
+
+            ePostcardArea.classList.remove('hidden');
+        }
+
+        function openSecretLetterOverlay() {
+            playSound('pop');
+            const modal = document.getElementById('secretLetterModal');
+            const paperCard = document.getElementById('letterPaperCard');
+            const content = document.getElementById('letterContentDisplay');
+
+            paperCard.className = `max-w-md w-full p-8 sm:p-10 rounded-3xl text-center relative transition-all duration-500 shadow-2xl my-auto max-h-[85vh] flex flex-col justify-between overflow-y-auto ${appState.postcard.paperStyle}`;
+            content.textContent = appState.postcard.secretMessage;
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeSecretLetterOverlay() {
+            document.getElementById('secretLetterModal').classList.add('hidden');
+        }
+
+        function restartQuestFromBeginning() {
+            loadStageConfigToBuilder(0);
+        }
+
+        function openStageManagerModal() {
+            renderStageListManager();
+            document.getElementById('stageManagerModal').classList.remove('hidden');
+        }
+
+        function closeStageManagerModal() {
+            document.getElementById('stageManagerModal').classList.add('hidden');
+        }
+
+        function renderStageListManager() {
+            const container = document.getElementById('stageListManagerContainer');
+            container.innerHTML = '';
+            appState.stages.forEach((stage, idx) => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-3 bg-slate-50 border rounded-2xl gap-2";
+                item.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-pink-100 text-brandPink text-xs font-bold flex items-center justify-center">${idx + 1}</span>
+                        <span class="text-xs font-bold text-gray-800 truncate max-w-[220px]">${stage.question}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button onclick="moveStage(${idx}, -1)" class="p-1.5 text-gray-500 hover:text-gray-800"><i class="fa-solid fa-arrow-up text-xs"></i></button>
+                        <button onclick="moveStage(${idx}, 1)" class="p-1.5 text-gray-500 hover:text-gray-800"><i class="fa-solid fa-arrow-down text-xs"></i></button>
+                        <button onclick="deleteStage(${idx})" class="p-1.5 text-red-500 hover:text-red-700" ${appState.stages.length <= 1 ? 'disabled style="opacity:0.3"' : ''}><i class="fa-solid fa-trash text-xs"></i></button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function addNewStage() {
+            const newStage = {
+                id: Date.now(),
+                question: `${appState.stages.length + 1}. မေးခွန်းစာသား အသစ်ဖြည့်ပါ?`,
+                gif: QUESTION_GIF_LIBRARY[appState.stages.length % QUESTION_GIF_LIBRARY.length],
+                trick: "fleeing"
+            };
+            appState.stages.push(newStage);
+            renderStageSelectorOptions();
+            renderStageListManager();
+            loadStageConfigToBuilder(appState.stages.length - 1);
+        }
+
+        function deleteCurrentStage() {
+            if (appState.stages.length <= 1) {
+                alert("အနည်းဆုံး အဆင့် ၁ ခု ရှိရပါမည်။ ထို့ကြောင့် ဖျက်၍မရပါ။");
+                return;
+            }
+            appState.stages.splice(appState.currentStageIndex, 1);
+            renderStageSelectorOptions();
+            loadStageConfigToBuilder(Math.max(0, appState.currentStageIndex - 1));
+        }
+
+        function moveStage(index, direction) {
+            const target = index + direction;
+            if (target < 0 || target >= appState.stages.length) return;
+            const temp = appState.stages[index];
+            appState.stages[index] = appState.stages[target];
+            appState.stages[target] = temp;
+            renderStageSelectorOptions();
+            renderStageListManager();
+            loadStageConfigToBuilder(target);
+        }
+
+        function deleteStage(index) {
+            if (appState.stages.length <= 1) return;
+            appState.stages.splice(index, 1);
+            renderStageSelectorOptions();
+            renderStageListManager();
+            loadStageConfigToBuilder(0);
+        }
+
+        function exportJSONConfig() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "YesNoStory_Config.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importJSONConfig(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                try {
+                    const imported = JSON.parse(evt.target.result);
+                    if (imported.stages && imported.postcard) {
+                        appState = imported;
+                        renderStageSelectorOptions();
+                        loadStageConfigToBuilder(0);
+                        alert("Configuration loaded successfully!");
+                    }
+                } catch(err) {
+                    alert("Invalid JSON file!");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function openExportModal() {
+            const html = document.documentElement.outerHTML;
+            document.getElementById('exportCodeTextarea').value = html;
+            document.getElementById('exportModal').classList.remove('hidden');
+        }
+
+        function closeExportModal() {
+            document.getElementById('exportModal').classList.add('hidden');
+        }
+
+        function copyExportCode() {
+            const textarea = document.getElementById('exportCodeTextarea');
+            textarea.select();
+            document.execCommand('copy');
+            alert("HTML Code copied to clipboard!");
+        }
+
+        function downloadExportHTML() {
+            const code = document.getElementById('exportCodeTextarea').value;
+            const blob = new Blob([code], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'YesNoQuest_ePostcard.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
+        // --- NEW FUNCTION: Export Standalone Right-Side Player Only ---
+        function exportStandalonePlayer() {
+            playSound('pop');
+            const standaloneHtml = `<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yes/No Story Quest & ePostcard</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"><\/script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Caveat:wght@600&family=Padauk:wght@400;700&family=Quicksand:wght@500;600;700&family=Poppins:wght@400;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"><\/script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'Padauk', 'sans-serif'],
+                        padauk: ['Padauk', 'sans-serif'],
+                        handwriting: ['Caveat', 'Dancing Script', 'Padauk', 'cursive'],
+                        typewriter: ['Special Elite', 'Padauk', 'monospace']
+                    },
+                    colors: {
+                        brandPink: '#ff4d6d',
+                        brandRose: '#ff758f',
+                        brandPurple: '#7209b7',
+                        brandDark: '#0f172a'
+                    }
+                }
+            }
+        }
+    <\/script>
+    <style>
+        body { font-family: 'Quicksand', 'Padauk', sans-serif; user-select: none; overflow-x: hidden; }
+        .glass-card { background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        ::-webkit-scrollbar-thumb { background: #ff758f; border-radius: 10px; }
+        @keyframes animFadeBounce { 0% { opacity: 0; transform: scale(0.2); } 60% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: scale(1); } }
+        .anim-fade-bounce { animation: animFadeBounce 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes animFlip3D { 0% { opacity: 0; transform: perspective(600px) rotateY(180deg) scale(0.5); } 100% { opacity: 1; transform: perspective(600px) rotateY(0deg) scale(1); } }
+        .anim-flip-3d { animation: animFlip3D 1s cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+        @keyframes animSlideElastic { 0% { opacity: 0; transform: translateY(200px); } 70% { opacity: 1; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }
+        .anim-slide-elastic { animation: animSlideElastic 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; }
+        @keyframes animHeartbeat { 0% { opacity: 0; transform: scale(0.5); } 50% { opacity: 1; transform: scale(1.2); } 70% { transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+        .anim-heartbeat { animation: animHeartbeat 1s ease-in-out forwards; }
+        @keyframes animSpiralSpin { 0% { opacity: 0; transform: rotate(-720deg) scale(0.1); } 100% { opacity: 1; transform: rotate(0deg) scale(1); } }
+        .anim-spiral-spin { animation: animSpiralSpin 1.1s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+        @keyframes animOrigami { 0% { opacity: 0; transform: rotateX(-90deg) rotateZ(20deg) scale(0.3); } 100% { opacity: 1; transform: rotateX(0deg) rotateZ(0deg) scale(1); } }
+        .anim-origami { animation: animOrigami 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        @keyframes animCurtain { 0% { opacity: 0; clip-path: inset(0 50% 0 50%); transform: scale(1.1); } 100% { opacity: 1; clip-path: inset(0 0 0 0); transform: scale(1); } }
+        .anim-curtain { animation: animCurtain 1s ease-out forwards; }
+        @keyframes animGlitch { 0% { opacity: 0; transform: translate(-10px, 10px) skewX(20deg); } 30% { opacity: 1; transform: translate(10px, -10px) skewX(-20deg); } 60% { transform: translate(-5px, 0) scale(1.1); } 100% { opacity: 1; transform: translate(0, 0) scale(1); } }
+        .anim-glitch { animation: animGlitch 0.8s ease-in-out forwards; }
+        @keyframes animFloatSwing { 0% { opacity: 0; transform: translateY(-150px) rotate(-25deg); } 60% { opacity: 1; transform: translateY(15px) rotate(10deg); } 100% { opacity: 1; transform: translateY(0) rotate(0deg); } }
+        .anim-float-swing { animation: animFloatSwing 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes animRubberband { 0% { opacity: 0; transform: scale3d(1, 1, 1); } 30% { opacity: 1; transform: scale3d(1.25, 0.75, 1); } 40% { transform: scale3d(0.75, 1.25, 1); } 50% { transform: scale3d(1.15, 0.85, 1); } 65% { transform: scale3d(0.95, 1.05, 1); } 100% { opacity: 1; transform: scale3d(1, 1, 1); } }
+        .anim-rubberband { animation: animRubberband 1s ease forwards; }
+        .paper-vintage { background: #f4e4bc; background-image: radial-gradient(#e2c992 1px, transparent 1px); background-size: 16px 16px; color: #4a2c11; border: 8px solid #c8a364; font-family: 'Padauk', serif; box-shadow: inset 0 0 30px rgba(139, 69, 19, 0.25), 0 20px 40px rgba(0,0,0,0.3); }
+        .paper-rose { background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%); color: #800f2f; border: 4px solid #ff4d6d; box-shadow: 0 20px 40px rgba(255, 77, 109, 0.25); font-family: 'Caveat', 'Padauk', cursive; }
+        .paper-cyber { background: #0f172a; color: #38bdf8; border: 2px solid #38bdf8; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4), inset 0 0 15px rgba(56, 189, 248, 0.2); font-family: 'Quicksand', 'Padauk', sans-serif; }
+        .paper-minimal { background: #ffffff; color: #1e293b; border: 1px solid #e2e8f0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); font-family: 'Quicksand', 'Padauk', sans-serif; }
+        .paper-gold { background: linear-gradient(135deg, #fafafa 0%, #f1f1f1 100%); color: #27272a; border: 6px solid; border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7) 1; box-shadow: 0 20px 40px rgba(191, 149, 63, 0.25); font-family: 'Padauk', serif; }
+        .paper-sakura { background: linear-gradient(135deg, #fff5f7 0%, #fce7f3 100%); color: #9d174d; border: 3px dashed #f472b6; font-family: 'Caveat', 'Padauk', cursive; }
+        .paper-kawaii { background: linear-gradient(135deg, #e0f2fe 0%, #fbcfe8 50%, #fef08a 100%); color: #475569; border: 5px solid #ffffff; box-shadow: 0 20px 35px rgba(0,0,0,0.1); font-family: 'Quicksand', 'Padauk', sans-serif; }
+        .paper-kraft { background: #d7ccc8; color: #3e2723; border: 4px solid #8d6e63; font-family: 'Special Elite', 'Padauk', monospace; box-shadow: inset 0 0 20px rgba(0,0,0,0.15); }
+        .paper-galaxy { background: linear-gradient(135deg, #090979 0%, #020024 50%, #450a0a 100%); color: #f1f5f9; border: 2px solid #a855f7; box-shadow: 0 0 30px rgba(168, 85, 247, 0.3); font-family: 'Dancing Script', 'Padauk', cursive; }
+        .paper-envelope { background: #fffbeb; color: #78350f; border: 2px solid #f59e0b; box-shadow: 0 20px 40px rgba(245, 158, 11, 0.2); font-family: 'Padauk', serif; }
+        @keyframes orbitAnim { from { transform: rotate(0deg) translate(90px) rotate(0deg); } to { transform: rotate(360deg) translate(90px) rotate(-360deg); } }
+        .orbit-active { animation: orbitAnim 3s linear infinite; }
+        @keyframes gravityFallAnim { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(800px) rotate(180deg); opacity: 0; } }
+        .falling-active { animation: gravityFallAnim 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important; pointer-events: none !important; }
+    </style>
+</head>
+<body class="bg-gradient-to-tr from-pink-100 via-rose-50 to-teal-100 min-h-screen flex flex-col justify-center items-center p-4">
+
+    <div class="absolute top-4 right-4 z-40">
+        <button onclick="toggleSoundMaster()" class="px-3 py-2 bg-white/80 hover:bg-white text-purple-700 rounded-xl font-bold text-xs shadow-md flex items-center gap-2 border border-purple-200 transition-all">
+            <i id="soundIcon" class="fa-solid fa-volume-high"></i>
+            <span id="soundText">Sound On</span>
+        </button>
+    </div>
+
+    <main class="w-full max-w-lg flex flex-col justify-center items-center relative my-auto">
+        <div id="activeStageCard" class="glass-card w-full rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-between min-h-[490px] relative transition-all duration-300">
+            <div class="w-full flex flex-col items-center gap-1">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-100 text-brandPink text-xs font-extrabold tracking-wide">
+                    <i class="fa-solid fa-flag-checkered"></i>
+                    <span id="displayStageBadge">STAGE 1 OF 3</span>
+                </div>
+            </div>
+
+            <div class="my-4 relative w-44 h-44 sm:w-52 sm:h-52 rounded-2xl overflow-hidden bg-pink-50 flex items-center justify-center border-4 border-white shadow-md">
+                <img id="displayStageGif" src="" alt="Stage GIF" class="w-full h-full object-cover">
+            </div>
+
+            <h2 id="displayQuestionText" class="text-xl sm:text-2xl font-bold text-gray-800 px-2 my-2 leading-snug"></h2>
+
+            <div id="interactiveButtonsArea" class="w-full relative min-h-[120px] flex items-center justify-center gap-4 mt-2 p-2">
+                <button id="btnYes" onclick="onYesClickProgress()" class="px-7 py-3.5 text-white font-bold text-lg rounded-2xl shadow-lg flex items-center gap-2 transition-all z-20">
+                    <i class="fa-solid fa-heart"></i>
+                    <span id="displayYesText">${appState.buttonStyle.yesText}</span>
+                </button>
+                <div id="noBtnWrapper" class="inline-block relative">
+                    <button id="btnNo" class="px-7 py-3.5 text-white font-bold text-lg rounded-2xl shadow-lg flex items-center gap-2 transition-all z-20">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span id="displayNoText">${appState.buttonStyle.noText}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="victoryScreenCard" class="glass-card w-full rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-between min-h-[480px] relative hidden">
+            <div class="text-3xl">🎉 💕 💖</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-brandPink my-2">Congratulations!</h2>
+            <p class="text-gray-700 font-bold text-sm sm:text-base">မေးခွန်းအဆင့်အားလုံးတွင် "YES" ကို အောင်မြင်စွာ ရွေးချယ်ပြီးပါပြီ။</p>
+            <div class="my-4 relative w-48 h-48 rounded-2xl overflow-hidden border-4 border-white shadow-lg">
+                <img id="displayCongratGif" src="${CONGRAT_GIF_LIBRARY[appState.congratGifIndex]}" alt="Victory GIF" class="w-full h-full object-cover">
+            </div>
+            <button onclick="triggerEPostcardReveal()" class="w-full py-4 bg-gradient-to-r from-brandPink via-purple-600 to-brandRose text-white font-extrabold text-lg rounded-2xl shadow-xl shadow-pink-300 flex items-center justify-center gap-3 hover:scale-105 transition-all">
+                <i class="fa-solid fa-envelope"></i>
+                <span>ePostcard ကြည့်ရှုရန်နှိပ်ပါ</span>
+            </button>
+        </div>
+
+        <div id="ePostcardArea" class="glass-card w-full rounded-3xl p-6 sm:p-8 text-center flex flex-col items-center justify-center min-h-[480px] relative hidden">
+            <p class="text-xs font-bold text-pink-600 uppercase tracking-widest mb-3">
+                <i class="fa-solid fa-sparkles mr-1"></i> Interactive ePostcard Sticker
+            </p>
+            <div id="noFrameGifWrapper" onclick="openSecretLetterOverlay()" class="cursor-pointer relative p-2 transition-all hover:scale-105 group" title="စာရွက်လေးဖတ်ရန် နှိပ်ပါ">
+                <img id="noFrameGifImg" src="" alt="No Frame GIF" class="w-56 h-56 sm:w-64 sm:h-64 object-contain filter drop-shadow-xl">
+                <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-white/90 text-brandPink text-xs font-bold px-3 py-1 rounded-full shadow-md border border-pink-200 group-hover:bg-brandPink group-hover:text-white transition-all">
+                    ✨ ထိပြီး စာဖတ်ပါ ✨
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 font-semibold mt-6">(No Frame GIF လေးကို နှိပ်လိုက်ပါက စာရွက်လေး ပေါ်လာပါမည်)</p>
+        </div>
+    </main>
+
+    <div id="secretLetterModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div id="letterPaperCard" class="max-w-md w-full p-8 sm:p-10 rounded-3xl text-center relative transition-all duration-500 shadow-2xl my-auto max-h-[85vh] flex flex-col justify-between overflow-y-auto ${appState.postcard.paperStyle}">
+            <button onclick="closeSecretLetterOverlay()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/10 hover:bg-black/20 flex items-center justify-center text-current font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-2xl mb-2">💌</div>
+            <div id="letterContentDisplay" class="text-base sm:text-lg leading-relaxed whitespace-pre-wrap font-bold my-4">${appState.postcard.secretMessage}</div>
+            <div class="pt-4 border-t border-current/20 flex justify-center">
+                <button onclick="closeSecretLetterOverlay()" class="px-6 py-2.5 bg-brandPink text-white font-bold rounded-xl shadow-md text-xs">ပိတ်မည်</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="stage8AlertModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass-card max-w-xs w-full p-6 rounded-3xl text-center space-y-4 shadow-2xl">
+            <div class="text-4xl">🤔</div>
+            <p id="stage8AlertMsg" class="text-gray-800 font-bold text-base">Are you strictly sure?</p>
+            <button onclick="advanceStage8Alert()" class="w-full py-2.5 bg-brandPink text-white font-bold rounded-xl shadow-md">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        const appData = ${JSON.stringify(appState, null, 2)};
+        let currentStageIndex = 0;
+        let audioEnabled = true;
+        let runtimeShrinkScale = 1;
+        let runtimeYesScale = 1;
+        let runtimeGuiltIndex = 0;
+        let runtimeAlertStep = 0;
+        let activeToneSynth = null;
+
+        function initAudio() {
+            try { if (!activeToneSynth) activeToneSynth = new Tone.Synth().toDestination(); } catch(e){}
+        }
+
+        function playSound(type) {
+            if (!audioEnabled) return;
+            try {
+                Tone.start();
+                initAudio();
+                if (type === 'pop') activeToneSynth.triggerAttackRelease("C5", "16n");
+                else if (type === 'trick') activeToneSynth.triggerAttackRelease("G4", "8n");
+                else if (type === 'win') {
+                    const poly = new Tone.PolySynth().toDestination();
+                    poly.triggerAttackRelease(["C4", "E4", "G4", "C5"], "4n");
+                }
+            } catch(e){}
+        }
+
+        function toggleSoundMaster() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('soundText').textContent = audioEnabled ? "Sound On" : "Sound Off";
+            document.getElementById('soundIcon').className = audioEnabled ? "fa-solid fa-volume-high" : "fa-solid fa-volume-xmark";
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            applyButtonStyles();
+            loadStage(0);
+        });
+
+        function applyButtonStyles() {
+            const bs = appData.buttonStyle;
+            const btnYes = document.getElementById('btnYes');
+            const btnNo = document.getElementById('btnNo');
+            document.getElementById('displayYesText').textContent = bs.yesText;
+            document.getElementById('displayNoText').textContent = bs.noText;
+            btnYes.style.backgroundColor = bs.yesBg;
+            btnYes.style.fontSize = \`\${bs.fontSize}px\`;
+            btnYes.style.borderRadius = \`\${bs.radius}px\`;
+            btnNo.style.backgroundColor = bs.noBg;
+            btnNo.style.fontSize = \`\${bs.fontSize}px\`;
+            btnNo.style.borderRadius = \`\${bs.radius}px\`;
+        }
+
+        function loadStage(index) {
+            currentStageIndex = index;
+            const stage = appData.stages[index];
+            document.getElementById('displayStageBadge').textContent = \`STAGE \${index + 1} OF \${appData.stages.length}\`;
+            document.getElementById('displayQuestionText').textContent = stage.question;
+            document.getElementById('displayStageGif').src = stage.gif;
+
+            runtimeShrinkScale = 1;
+            runtimeYesScale = 1;
+            runtimeGuiltIndex = 0;
+
+            const btnYes = document.getElementById('btnYes');
+            const btnNo = document.getElementById('btnNo');
+            const noWrapper = document.getElementById('noBtnWrapper');
+
+            btnYes.style.transform = 'scale(1)';
+            btnYes.style.order = '1';
+            btnNo.style.transform = 'scale(1)';
+            btnNo.style.position = 'relative';
+            btnNo.style.left = '0px';
+            btnNo.style.top = '0px';
+            btnNo.style.opacity = '1';
+            btnNo.style.pointerEvents = 'auto';
+            document.getElementById('displayNoText').textContent = appData.buttonStyle.noText;
+            noWrapper.style.order = '2';
+            noWrapper.classList.remove('orbit-active');
+
+            bindTrick(stage);
+        }
+
+        function bindTrick(stage) {
+            const btnNo = document.getElementById('btnNo');
+            const btnYes = document.getElementById('btnYes');
+            const noWrapper = document.getElementById('noBtnWrapper');
+            const activeNo = btnNo.cloneNode(true);
+            btnNo.parentNode.replaceChild(activeNo, btnNo);
+
+            switch(stage.trick) {
+                case 'fleeing':
+                    const fleeFn = (e) => {
+                        e.preventDefault();
+                        playSound('trick');
+                        const rx = (Math.random() - 0.5) * 180;
+                        const ry = (Math.random() - 0.5) * 120;
+                        activeNo.style.position = 'absolute';
+                        activeNo.style.left = \`\${rx}px\`;
+                        activeNo.style.top = \`\${ry}px\`;
+                    };
+                    activeNo.addEventListener('mouseenter', fleeFn);
+                    activeNo.addEventListener('touchstart', fleeFn);
+                    break;
+                case 'shrinking':
+                    activeNo.addEventListener('click', () => {
+                        playSound('pop');
+                        runtimeShrinkScale -= 0.25;
+                        runtimeYesScale += 0.25;
+                        if (runtimeShrinkScale <= 0.1) {
+                            activeNo.style.transform = 'scale(0)';
+                            activeNo.style.pointerEvents = 'none';
+                        } else {
+                            activeNo.style.transform = \`scale(\${runtimeShrinkScale})\`;
+                            btnYes.style.transform = \`scale(\${runtimeYesScale})\`;
+                        }
+                    });
+                    break;
+                case 'swap':
+                    const swapFn = () => {
+                        playSound('trick');
+                        const cur = window.getComputedStyle(btnYes).order;
+                        btnYes.style.order = cur === '1' ? '2' : '1';
+                        noWrapper.style.order = cur === '1' ? '1' : '2';
+                    };
+                    activeNo.addEventListener('mouseenter', swapFn);
+                    activeNo.addEventListener('touchstart', swapFn);
+                    break;
+                case 'teleport':
+                    activeNo.addEventListener('click', () => {
+                        playSound('trick');
+                        const pos = [{top:'-130px',left:'-90px'},{top:'-130px',left:'90px'},{top:'60px',left:'-100px'},{top:'60px',left:'100px'}];
+                        const r = pos[Math.floor(Math.random()*pos.length)];
+                        activeNo.style.position = 'absolute';
+                        activeNo.style.top = r.top;
+                        activeNo.style.left = r.left;
+                    });
+                    break;
+                case 'fake_loading':
+                    activeNo.addEventListener('click', () => {
+                        playSound('pop');
+                        activeNo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+                        activeNo.style.pointerEvents = 'none';
+                        setTimeout(() => {
+                            activeNo.innerHTML = '<i class="fa-solid fa-ban"></i> Disabled';
+                            activeNo.style.opacity = '0.5';
+                        }, 1000);
+                    });
+                    break;
+                case 'orbiting':
+                    noWrapper.classList.add('orbit-active');
+                    activeNo.addEventListener('click', () => playSound('trick'));
+                    break;
+                case 'guilt_trip':
+                    const phrases = ["Are you sure?", "Really?", "Think again! 🥺", "Click Yes! ❤️"];
+                    const guiltFn = () => {
+                        playSound('pop');
+                        if (runtimeGuiltIndex < phrases.length) {
+                            document.getElementById('displayNoText').textContent = phrases[runtimeGuiltIndex];
+                            runtimeGuiltIndex++;
+                        } else {
+                            document.getElementById('displayNoText').textContent = appData.buttonStyle.yesText;
+                            activeNo.onclick = onYesClickProgress;
+                        }
+                    };
+                    activeNo.addEventListener('mouseenter', guiltFn);
+                    activeNo.addEventListener('click', guiltFn);
+                    break;
+                case 'popup_trap':
+                    activeNo.addEventListener('click', () => {
+                        playSound('trick');
+                        runtimeAlertStep = 0;
+                        showStage8AlertModal();
+                    });
+                    break;
+                case 'gravity':
+                    const fallFn = () => {
+                        playSound('trick');
+                        activeNo.classList.add('falling-active');
+                    };
+                    activeNo.addEventListener('mouseenter', fallFn);
+                    activeNo.addEventListener('touchstart', fallFn);
+                    break;
+                case 'dissecting':
+                    const splitFn = () => {
+                        playSound('trick');
+                        activeNo.style.opacity = '0';
+                        activeNo.style.pointerEvents = 'none';
+                        btnYes.style.transform = 'scale(1.2)';
+                        setTimeout(() => btnYes.style.transform = 'scale(1)', 300);
+                    };
+                    activeNo.addEventListener('mouseenter', splitFn);
+                    activeNo.addEventListener('touchstart', splitFn);
+                    break;
+            }
+        }
+
+        function showStage8AlertModal() {
+            const alerts = ["Are you strictly sure?", "Please think one more time! 🥺", "Okay fine! Re-directing to YES..."];
+            if (runtimeAlertStep < alerts.length) {
+                document.getElementById('stage8AlertMsg').textContent = alerts[runtimeAlertStep];
+                document.getElementById('stage8AlertModal').classList.remove('hidden');
+            } else {
+                document.getElementById('stage8AlertModal').classList.add('hidden');
+                onYesClickProgress();
+            }
+        }
+
+        function advanceStage8Alert() {
+            playSound('pop');
+            runtimeAlertStep++;
+            showStage8AlertModal();
+        }
+
+        function onYesClickProgress() {
+            playSound('pop');
+            if (currentStageIndex < appData.stages.length - 1) {
+                currentStageIndex++;
+                loadStage(currentStageIndex);
+            } else {
+                playSound('win');
+                confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+                document.getElementById('activeStageCard').classList.add('hidden');
+                document.getElementById('victoryScreenCard').classList.remove('hidden');
+            }
+        }
+
+        function triggerEPostcardReveal() {
+            playSound('win');
+            document.getElementById('victoryScreenCard').classList.add('hidden');
+            const ePostcardArea = document.getElementById('ePostcardArea');
+            const gifImg = document.getElementById('noFrameGifImg');
+            gifImg.src = appData.postcard.gifUrl;
+            const animMap = {
+                'fade-bounce': 'anim-fade-bounce', 'flip-3d': 'anim-flip-3d', 'slide-elastic': 'anim-slide-elastic',
+                'heartbeat': 'anim-heartbeat', 'spiral-spin': 'anim-spiral-spin', 'origami': 'anim-origami',
+                'curtain': 'anim-curtain', 'glitch': 'anim-glitch', 'float-swing': 'anim-float-swing', 'rubberband': 'anim-rubberband'
+            };
+            gifImg.className = \`w-56 h-56 sm:w-64 sm:h-64 object-contain filter drop-shadow-xl \${animMap[appData.postcard.entranceAnim] || 'anim-fade-bounce'}\`;
+            ePostcardArea.classList.remove('hidden');
+        }
+
+        function openSecretLetterOverlay() {
+            playSound('pop');
+            document.getElementById('secretLetterModal').classList.remove('hidden');
+        }
+
+        function closeSecretLetterOverlay() {
+            document.getElementById('secretLetterModal').classList.add('hidden');
+        }
+    <\/script>
+</body>
+</html>`;
+
+            const blob = new Blob([standaloneHtml], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'YesNoQuest_StandalonePlayer.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            alert("ညာဘက်ကစားကွက် သီးသန့် Standalone Player ဖိုင်ကို အောင်မြင်စွာ ဒေါင်းလုဒ်လုပ်ပြီးပါပြီ!");
+        }
+    </script>
+</body>
+</html>
