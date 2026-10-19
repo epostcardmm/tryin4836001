@@ -1043,11 +1043,11 @@
                 const nextTarget = stepNum < appConfig.steps.length ? (stepNum + 1) : 'falling';
 
                 const card = document.createElement('div');
-                card.className = `interactive-card ${appConfig.cardStyle} step-view ${currentActiveStepView === stepNum ? 'active' : ''}`;
+                card.className = `interactive-card ${appConfig.cardStyle} step-view${currentActiveStepView === stepNum ? 'active' : ''}`;
                 card.id = `prev-step-${stepNum}`;
 
-                const yesStyle = `background: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size: ${appConfig.yesFontSize}px;`;
-                const noStyle = `background: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size: ${appConfig.noFontSize}px;`;
+                const yesStyle = `background: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size:${appConfig.yesFontSize}px;`;
+                const noStyle = `background: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size:${appConfig.noFontSize}px;`;
 
                 card.innerHTML = `
                     <img class="gif-box" src="${step.gif}" alt="Gif ${stepNum}">
@@ -1055,7 +1055,7 @@
                         ${step.text}
                     </h2>
                     <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative btn-container-step">
-                        <button class="btn-custom-yes" style="${yesStyle}" id="btn-yes-prev-${stepNum}" onclick="handleYesClick(${nextTarget})">${appConfig.yesText}</button>
+                        <button class="btn-custom-yes" style="${yesStyle}" id="btn-yes-prev-${stepNum}" onclick="handleYesClick('${nextTarget}')">${appConfig.yesText}</button>
                         <div class="btn-no-wrapper-preview" id="btn-no-wrapper-prev-${stepNum}">
                             <button class="btn-custom-no ${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="${noStyle}" id="btn-no-prev-${stepNum}">${appConfig.noText}</button>
                         </div>
@@ -1595,7 +1595,7 @@
                     <img class="gif-box" src="\${step.gif}" alt="Gif \${stepNum}">
                     <h2 class="font-bold leading-relaxed" style="font-size: \${questionFontSize}px;">\${step.text}</h2>
                     <div class="btn-group">
-                        <button class="btn-custom-yes" style="\${yesStyle}" id="btn-yes-\${stepNum}" onclick="nextStep(\${nextTarget})">\${yesText}</button>
+                        <button class="btn-custom-yes" style="\${yesStyle}" id="btn-yes-\${stepNum}" onclick="nextStep('\${nextTarget}')">\${yesText}</button>
                         <div class="btn-no-wrapper" id="btn-no-wrapper-\${stepNum}">
                             <button class="btn-custom-no \${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="\${noStyle}" id="btn-no-\${stepNum}">\${noText}</button>
                         </div>
@@ -1784,16 +1784,24 @@
         function nextStep(stepTarget) {
             document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
             let targetEl;
-            if (typeof stepTarget === 'number') {
-                targetEl = document.getElementById(\`step-\${stepTarget}\`);
-                sendToFormspree("Yes", \`Step \${stepTarget - 1}\`);
+            
+            // Check if stepTarget is a number string or number type
+            let numTarget = parseInt(stepTarget);
+            if (!isNaN(numTarget)) {
+                targetEl = document.getElementById(\`step-\${numTarget}\`);
+                sendToFormspree("Yes", \`Step \${numTarget - 1}\`);
             } else if (stepTarget === 'falling') {
                 targetEl = document.getElementById('step-falling');
                 sendToFormspree("Yes", \`Final Question Step\`);
-            } else {
+            } else if (stepTarget === 'letter') {
                 targetEl = document.getElementById('step-letter');
+            } else {
+                targetEl = document.getElementById('step-' + stepTarget);
             }
-            if (targetEl) targetEl.classList.add('active');
+            
+            if (targetEl) {
+                targetEl.classList.add('active');
+            }
         }
 
         function openLetter() {
@@ -1803,41 +1811,5 @@
 
         window.onload = renderApp;
     <\/script>
-</body>
-</html>`;
-        }
-
-        // EXPORT MODAL HANDLERS
-        function exportHTML() {
-            const htmlCode = generateCompleteHTML();
-            document.getElementById('export-code-area').value = htmlCode;
-            document.getElementById('export-modal').classList.remove('hidden');
-        }
-
-        function closeExportModal() {
-            document.getElementById('export-modal').classList.add('hidden');
-        }
-
-        function copyGeneratedCode() {
-            const codeArea = document.getElementById('export-code-area');
-            codeArea.select();
-            document.execCommand('copy');
-            alert('Code များကို Clipboard သို့ ကူးယူပြီးပါပြီ!');
-        }
-
-        function downloadHTMLFile() {
-            const htmlCode = generateCompleteHTML();
-            const blob = new Blob([htmlCode], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Interactive_Love_Surprise.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-    </script>
-
 </body>
 </html>
