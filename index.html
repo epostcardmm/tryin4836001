@@ -31,7 +31,7 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Card Style (Relative for Full Card Boundary Escape) */
+        /* Glassmorphism Card Style (Relative for Card Boundary Escape) */
         .interactive-card {
             padding: 35px 25px;
             border-radius: 28px;
@@ -144,8 +144,8 @@
             align-items: center;
         }
 
-        /* Card ဧရိယာအပြည့် လွတ်လွတ်လပ်လပ်ပြေးရန် Absolute သုံးထားသော Class */
-        .escaped-btn-fullcard {
+        /* Card ဧရိယာဘောင်အတွင်းသာ အပြည့်ပြေးရန် Absolute သုံးထားသော Class */
+        .escaped-btn-card {
             position: absolute !important;
             transition: all 0.15s ease-out !important;
         }
@@ -1167,7 +1167,7 @@
 
                 cardHolder.appendChild(card);
 
-                // Attach Behavior Event Listeners (ကတ်ပြားဘောင်အတွင်းသာ ပြေးစေရန်)
+                // Attach Behavior Event Listeners (ကတ်ပြားဘောင်အတွင်းသာ အတိအကျပြေးစေရန်)
                 setTimeout(() => attachBehaviorEvents(stepNum, step.behavior, nextTarget, activeYesLabel), 50);
             });
 
@@ -1208,7 +1208,7 @@
             cardHolder.appendChild(letterCard);
         }
 
-        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (Card Boundary Inner Escape)
+        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (Card Frame Inner Safe Bounds)
         let stateNoScales = {};
         let stateGuiltIndices = {};
         let stateTeleportCounts = {};
@@ -1225,12 +1225,12 @@
             const newNoBtn = noBtn.cloneNode(true);
             noBtn.parentNode.replaceChild(newNoBtn, noBtn);
 
-            // 1. FLEEING (ဖရိန်ကတ်ပြားဘောင်အတွင်းသာ နေရာအနှံ့ လွတ်လွတ်လပ်လပ် ပြေးမည်၊ နှိပ်မှပြေးမည်)
+            // 1. FLEEING (ကတ်ပြားဘောင်အတွင်းသာ အပြည့်အဝ ပြေးမည်)
             if (behavior === 'fleeing') {
                 const triggerFlee = (e) => {
                     if (e) e.preventDefault();
                     showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    moveButtonFullCard(newNoBtn, cardEl);
+                    moveButtonWithinCard(newNoBtn, cardEl);
                 };
                 newNoBtn.onclick = triggerFlee;
             }
@@ -1266,7 +1266,7 @@
                 newNoBtn.onclick = swapFunc;
             }
 
-            // 4. TELEPORT / REAPPEARING (ဖရိန်ကတ်ပြားဘောင်အတွင်းသာ နေရာအနှံ့ ပျောက်ပြီးပေါ်မည်)
+            // 4. TELEPORT / REAPPEARING (ကတ်ပြားဘောင်အတွင်းသာ ပျောက်ပြီးပေါ်မည်)
             else if (behavior === 'teleport') {
                 stateTeleportCounts[stepNum] = 0;
                 const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!", "Nice try!"];
@@ -1275,7 +1275,7 @@
                     stateTeleportCounts[stepNum]++;
                     const text = teleTexts[stateTeleportCounts[stepNum] % teleTexts.length];
                     newNoBtn.innerText = text;
-                    moveButtonFullCard(newNoBtn, cardEl);
+                    moveButtonWithinCard(newNoBtn, cardEl);
                 };
             }
 
@@ -1377,24 +1377,24 @@
             }
         }
 
-        // ကတ်ပြားဘောင် (Card Frame) အတွင်း၌သာ အပြည့်အဝ ပြေးလွှားစေသော တွက်ချက်မှု (Card boundary calculation)
-        function moveButtonFullCard(btnEl, cardEl) {
-            if (!btnEl.classList.contains('escaped-btn-fullcard')) {
-                btnEl.classList.add('escaped-btn-fullcard');
+        // ကတ်ပြားဘောင် (Card Frame) အတွင်းမှ လုံးဝမထွက်ဘဲ ဘောင်အတွင်း၌သာ အတိအကျပြေးစေမည့် တွက်ချက်မှု
+        function moveButtonWithinCard(btnEl, cardEl) {
+            if (!btnEl.classList.contains('escaped-btn-card')) {
+                btnEl.classList.add('escaped-btn-card');
             }
             const cardRect = cardEl.getBoundingClientRect();
             const btnRect = btnEl.getBoundingClientRect();
 
-            // Card ၏ အပေါ်ပိုင်း (GIF နဲ့ စာသားများ) နှင့် အောက်ခြေ Padding ကို ထည့်သွင်းတွက်ချက်ခြင်း
-            const paddingX = 25;
-            const topOffset = 210; // GIF နဲ့ Question နေရာကို ကျော်လွန်ပြီးမှ အောက်ဘက် ဧရိယာတွင် ပြေးရန်
-            const bottomOffset = 30;
+            // Card ရဲ့ အထက်၊ အောက်၊ ဘယ်၊ ညာ ဘောင်အတွင်း လုံခြုံသော နေရာအကွာအဝေး (Safe padding bounds)
+            const paddingX = 20;
+            const topBoundary = 180; // GIF နဲ့ Question နေရာများကို ကျော်လွန်ပြီးမှ အောက်ဘက်ဧရိယာတွင် ပြေးရန်
+            const bottomBoundary = 25;
 
-            const maxX = cardRect.width - btnRect.width - (paddingX * 2);
-            const maxY = cardRect.height - btnRect.height - topOffset - bottomOffset;
+            const maxAllowedWidth = cardRect.width - btnRect.width - (paddingX * 2);
+            const maxAllowedHeight = cardRect.height - btnRect.height - topBoundary - bottomBoundary;
 
-            const randomX = Math.max(paddingX, Math.floor(Math.random() * Math.max(50, maxX)));
-            const randomY = Math.max(topOffset, topOffset + Math.floor(Math.random() * Math.max(50, maxY)));
+            const randomX = Math.max(paddingX, Math.floor(Math.random() * Math.max(40, maxAllowedWidth)));
+            const randomY = Math.max(topBoundary, topBoundary + Math.floor(Math.random() * Math.max(40, maxAllowedHeight)));
 
             btnEl.style.left = `${randomX}px`;
             btnEl.style.top = `${randomY}px`;
@@ -1568,7 +1568,7 @@
 
         .btn-no-wrapper { position: relative; display: inline-flex; justify-content: center; align-items: center; }
         
-        .escaped-btn-fullcard { position: absolute !important; transition: all 0.15s ease-out !important; }
+        .escaped-btn-card { position: absolute !important; transition: all 0.15s ease-out !important; }
 
         .popup-warning {
             position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: rgba(255, 228, 230, 0.95);
@@ -1772,7 +1772,7 @@
                 const triggerFlee = (e) => {
                     if (e) e.preventDefault();
                     showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    moveButtonFullCardApp(noBtn, cardEl);
+                    moveButtonWithinCardApp(noBtn, cardEl);
                 };
                 noBtn.onclick = triggerFlee;
             } else if (behavior === 'shrinking') {
@@ -1803,7 +1803,7 @@
                     showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
                     stateTeleportCountsApp[stepNum]++;
                     noBtn.innerText = teleTexts[stateTeleportCountsApp[stepNum] % teleTexts.length];
-                    moveButtonFullCardApp(noBtn, cardEl);
+                    moveButtonWithinCardApp(noBtn, cardEl);
                 };
             } else if (behavior === 'loading') {
                 const stepObj = steps[stepNum - 1];
@@ -1883,22 +1883,22 @@
             }
         }
 
-        function moveButtonFullCardApp(btnEl, cardEl) {
-            if (!btnEl.classList.contains('escaped-btn-fullcard')) {
-                btnEl.classList.add('escaped-btn-fullcard');
+        function moveButtonWithinCardApp(btnEl, cardEl) {
+            if (!btnEl.classList.contains('escaped-btn-card')) {
+                btnEl.classList.add('escaped-btn-card');
             }
             const cardRect = cardEl.getBoundingClientRect();
             const btnRect = btnEl.getBoundingClientRect();
 
-            const paddingX = 25;
-            const topOffset = 210;
-            const bottomOffset = 30;
+            const paddingX = 20;
+            const topBoundary = 180;
+            const bottomBoundary = 25;
 
-            const maxX = cardRect.width - btnRect.width - (paddingX * 2);
-            const maxY = cardRect.height - btnRect.height - topOffset - bottomOffset;
+            const maxAllowedWidth = cardRect.width - btnRect.width - (paddingX * 2);
+            const maxAllowedHeight = cardRect.height - btnRect.height - topBoundary - bottomBoundary;
 
-            const randomX = Math.max(paddingX, Math.floor(Math.random() * Math.max(50, maxX)));
-            const randomY = Math.max(topOffset, topOffset + Math.floor(Math.random() * Math.max(50, maxY)));
+            const randomX = Math.max(paddingX, Math.floor(Math.random() * Math.max(40, maxAllowedWidth)));
+            const randomY = Math.max(topBoundary, topBoundary + Math.floor(Math.random() * Math.max(40, maxAllowedHeight)));
 
             btnEl.style.left = \`\${randomX}px\`;
             btnEl.style.top = \`\${randomY}px\`;
