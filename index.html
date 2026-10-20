@@ -1,2083 +1,1324 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Love Surprise - App & Builder Pro</title>
-    <!-- Fonts -->
+    <title>Birthday Card Studio & Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Padauk:wght@400;700&family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@600&family=Cinzel:wght@600&family=Caveat:wght@600&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Pyidaungsu', 'Padauk', sans-serif;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
         }
 
-        /* Dynamic Custom Gradient Background for Preview */
-        .preview-bg {
-            background-size: 400% 400%;
-            animation: gradientBG 12s ease infinite;
-        }
+        .font-cursive { font-family: 'Great Vibes', cursive; }
+        .font-serif-custom { font-family: 'Playfair Display', serif; }
+        .font-padauk { font-family: 'Padauk', sans-serif; }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.6); }
 
-        /* Glassmorphism Card Style */
-        .interactive-card {
-            padding: 30px 20px;
-            border-radius: 28px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.6);
-            text-align: center;
-            width: 100%;
+        /* --- PRESET PAPER DESIGNS --- */
+        /* 1. Vintage Parchment */
+        .paper-vintage {
+            background: #f4efd8;
+            background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0), linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 15px 15px, 100% 24px;
+            color: #292524;
+            border: 1px solid #d6d3d1;
+        }
+        .paper-vintage .title-text { color: #78350f; }
+        .paper-vintage .heading-text { color: #9f1239; }
+
+        /* 2. Rose Gold Soft Paper */
+        .paper-rosegold {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            color: #4a2c3a;
+            border: 1px solid #fbcfe8;
+        }
+        .paper-rosegold .title-text { color: #9d174d; }
+        .paper-rosegold .heading-text { color: #be185d; }
+
+        /* 3. Midnight Dark Elegant */
+        .paper-midnight {
+            background: linear-gradient(145deg, #0f172a, #1e1b4b);
+            color: #f1f5f9;
+            border: 1px solid #3b82f6;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+        .paper-midnight .title-text { color: #fbbf24; }
+        .paper-midnight .heading-text { color: #38bdf8; }
+
+        /* 4. Pastel Pink Love Note */
+        .paper-pink {
+            background: #fdf2f8;
+            background-image: radial-gradient(#f472b6 0.5px, transparent 0.5px);
+            background-size: 12px 12px;
+            color: #831843;
+            border: 2px solid #fbcfe8;
+        }
+        .paper-pink .title-text { color: #db2777; }
+        .paper-pink .heading-text { color: #be185d; }
+
+        /* 5. Floral Border Paper */
+        .paper-floral {
+            background: #fffdfa;
+            border: 8px solid #fef3c7;
+            outline: 2px dashed #f59e0b;
+            outline-offset: -5px;
+            color: #374151;
+        }
+        .paper-floral .title-text { color: #d97706; }
+        .paper-floral .heading-text { color: #b45309; }
+
+        /* 6. Golden Luxury Paper */
+        .paper-golden {
+            background: linear-gradient(135deg, #1c1917, #292524);
+            color: #fef3c7;
+            border: 2px solid #d97706;
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.3);
+        }
+        .paper-golden .title-text { color: #fbbf24; }
+        .paper-golden .heading-text { color: #fef08a; }
+
+        /* 7. Classic Lined Notebook */
+        .paper-notebook {
+            background: #ffffff;
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 100% 26px;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+            border-left: 4px solid #ef4444;
+        }
+        .paper-notebook .title-text { color: #1e40af; }
+        .paper-notebook .heading-text { color: #dc2626; }
+
+        /* 8. Cozy Kraft Paper */
+        .paper-kraft {
+            background: #d7ba89;
+            background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
+            background-size: 8px 8px;
+            color: #3b250f;
+            border: 1px solid #b8955d;
+        }
+        .paper-kraft .title-text { color: #581c87; }
+        .paper-kraft .heading-text { color: #7f1d1d; }
+
+        /* 9. Aesthetic Glassmorphism */
+        .paper-glass {
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 2px solid rgba(255, 255, 255, 0.85);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden; /* No ခလုတ် ကတ်ပြားအပြင် မထွက်စေရန် ထိန်းချုပ်ခြင်း */
-        }
-
-        /* Envelope / Card Styles */
-        .env-glass {
-            background: rgba(255, 255, 255, 0.82);
-            color: #be123c;
-        }
-        .env-romantic-red {
-            background: linear-gradient(135deg, rgba(225, 29, 72, 0.9), rgba(159, 18, 57, 0.95));
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: #ffffff;
-            border-color: rgba(254, 205, 211, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         }
-        .env-pastel-pink {
-            background: rgba(252, 231, 243, 0.92);
-            color: #9d174d;
-            border-color: rgba(244, 114, 182, 0.6);
+        .paper-glass .title-text { color: #fef08a; }
+        .paper-glass .heading-text { color: #f472b6; }
+
+        /* 10. Lavender Dream */
+        .paper-lavender {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            color: #3b0764;
+            border: 1px solid #c084fc;
         }
-        .env-classic-gold {
-            background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95));
-            color: #78350f;
-            border-color: rgba(245, 158, 11, 0.5);
-        }
-        .env-dark-velvet {
-            background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95));
-            color: #f43f5e;
-            border-color: rgba(244, 63, 94, 0.4);
+        .paper-lavender .title-text { color: #7e22ce; }
+        .paper-lavender .heading-text { color: #a21caf; }
+
+        /* Animations for Preview Canvas */
+        @keyframes previewFloatDown {
+            0% { transform: translate(-50%, -100%) rotate(-12deg); opacity: 0; }
+            35% { transform: translate(-35%, 15%) rotate(8deg); opacity: 1; }
+            65% { transform: translate(-60%, 30%) rotate(-6deg); }
+            100% { transform: translate(-50%, 35%) rotate(-2deg); opacity: 1; }
         }
 
-        .step-view {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 18px;
-            animation: fadeIn 0.4s ease-in-out forwards;
+        @keyframes previewSwaying {
+            0%, 100% { transform: translate(-50%, 35%) rotate(-2deg) scale(1); }
+            50% { transform: translate(-50%, 30%) rotate(2deg) scale(1.03); }
         }
 
-        .step-view.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        img.gif-box {
-            width: 170px;
-            height: 170px;
-            object-fit: cover;
-            border-radius: 22px;
-            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2);
-            border: 4px solid rgba(255, 255, 255, 0.9);
-        }
-
-        /* Base Buttons Styles for Customizers */
-        .btn-custom-yes {
-            font-weight: 800;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border: none;
-            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
-            padding: 12px 28px;
-            user-select: none;
-            z-index: 5;
-        }
-        .btn-custom-yes:hover {
-            transform: translateY(-2px) scale(1.05);
-        }
-
-        .btn-custom-no {
-            font-weight: 800;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border: none;
-            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
-            padding: 12px 28px;
-            user-select: none;
-            z-index: 5;
-        }
-
-        .btn-no-wrapper-preview {
-            position: relative;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Popup Warning Window */
-        .popup-warning-preview {
+        .anim-floating-card {
             position: absolute;
-            bottom: 115%;
+            top: 20%;
             left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 228, 230, 0.95);
-            color: #e11d48;
-            border: 2px solid #f43f5e;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            white-space: nowrap;
-            box-shadow: 0 6px 18px rgba(225, 29, 72, 0.25);
-            z-index: 10000;
+            animation: previewFloatDown 4s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+                       previewSwaying 4s ease-in-out infinite 4s;
+        }
+
+        .pulse-glow {
+            animation: pulseGlowAnim 1.8s infinite;
+        }
+        @keyframes pulseGlowAnim {
+            0%, 100% { opacity: 0.8; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .sparkle-particle {
+            position: absolute;
+            background: radial-gradient(circle, #fff 10%, rgba(255,215,0,0.8) 60%, transparent 100%);
+            border-radius: 50%;
             pointer-events: none;
-            backdrop-filter: blur(4px);
-            animation: popupBounce 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: floatUpAnim var(--duration) linear infinite;
+        }
+        @keyframes floatUpAnim {
+            0% { transform: translateY(100%) scale(0); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-20%) scale(1.2); opacity: 0; }
         }
 
-        .popup-warning-preview::after {
-            content: '';
+        /* Stamp Tape Polaroid Styling */
+        .corner-stamp-wrapper {
             position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 6px;
-            border-style: solid;
-            border-color: #f43f5e transparent transparent transparent;
-        }
-
-        @keyframes popupBounce {
-            0% { opacity: 0; transform: translate(-50%, 10px) scale(0.8); }
-            100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-        }
-
-        /* ကတ်ပြားအတွင်းမှာသာ ရွှေ့ရန်ပြင်ဆင်ထားသော class (Absolute Positioning ဖြင့် ကတ်ပြားအတွင်း ကန့်သတ်ခြင်း) */
-        .escaped-btn-card {
-            position: absolute !important;
-            transition: all 0.2s ease-in-out;
-            z-index: 50;
-        }
-
-        /* Orbiting Animation */
-        @keyframes orbitAnimation {
-            0% { transform: rotate(0deg) translateX(70px) rotate(0deg); }
-            100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); }
-        }
-        .orbiting-btn {
-            animation: orbitAnimation 2.2s linear infinite;
-        }
-
-        /* Gravity Fall Animation */
-        @keyframes gravityFallAnim {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(600px) rotate(180deg); opacity: 0; }
-        }
-        .falling-btn {
-            animation: gravityFallAnim 1.2s ease-in forwards !important;
-        }
-
-        /* Flying Split Text Particles */
-        .split-letter-particle {
-            position: absolute;
-            font-weight: 900;
-            color: #ec4899;
-            font-size: 1.5rem;
-            pointer-events: none;
-            z-index: 10000;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Falling Envelope / Bouquet Animation */
-        .falling-envelope-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            bottom: -8px;
+            right: -8px;
+            transform: rotate(6deg);
+            transition: transform 0.2s ease, filter 0.2s ease;
             cursor: pointer;
-            padding: 15px;
-            user-select: none;
-            animation: fallAndSway 3.2s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatGentle 2.6s ease-in-out infinite 3.2s;
+            z-index: 25;
         }
-
-        @keyframes fallAndSway {
-            0% { transform: translateY(-240px) rotate(-18deg); opacity: 0; }
-            30% { transform: translateY(-100px) rotate(14deg); opacity: 1; }
-            60% { transform: translateY(15px) rotate(-10deg); }
-            85% { transform: translateY(-6px) rotate(6deg); }
-            100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
+        .corner-stamp-wrapper:hover {
+            transform: rotate(0deg) scale(1.1);
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.3));
         }
-
-        @keyframes floatGentle {
-            0%, 100% { transform: translateY(0px) rotate(-4deg); }
-            50% { transform: translateY(-12px) rotate(4deg); }
-        }
-
-        .no-frame-gif {
-            width: 190px;
-            height: auto;
-            background: transparent !important;
-            filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.2));
-            transition: transform 0.3s ease;
-        }
-
-        .falling-envelope-container:hover .no-frame-gif {
-            transform: scale(1.08);
-        }
-
-        .tap-hint-badge {
-            margin-top: 14px;
-            background: rgba(255, 255, 255, 0.92);
-            color: #be123c;
-            font-weight: 700;
-            font-size: 0.95rem;
-            padding: 7px 18px;
-            border-radius: 30px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-            border: 1.5px solid rgba(255, 255, 255, 0.9);
-            animation: pulseHint 1.6s infinite ease-in-out;
-        }
-
-        @keyframes pulseHint {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; }
-        }
-
-        /* Paper Letter Styles */
-        .paper-letter-pop {
-            animation: popInLetter 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes popInLetter {
-            0% { opacity: 0; transform: scale(0.3) rotate(-12deg); }
-            70% { transform: scale(1.03) rotate(-2deg); }
-            100% { opacity: 1; transform: scale(1) rotate(-2deg); }
-        }
-
-        .paper-sheet {
-            position: relative;
-            width: 100%;
-            padding: 28px 20px 24px 20px;
-            border-radius: 16px;
-            box-shadow: -8px 15px 35px rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            transition: all 0.3s ease;
-        }
-
-        .paper-classic {
-            background-color: rgba(255, 253, 248, 0.97);
-            color: #2b2b2b;
-            background-image: radial-gradient(rgba(0,0,0,0.03) 1px, transparent 0);
-            background-size: 12px 12px;
-        }
-        .paper-classic .paper-title { color: #b91c1c; border-bottom: 2px dashed #fca5a5; }
-        .paper-classic .paper-sig { color: #9f1239; }
-
-        .paper-rose {
-            background-color: rgba(255, 241, 242, 0.97);
-            color: #881337;
-            background-image: radial-gradient(rgba(244, 63, 94, 0.1) 1px, transparent 0);
-            background-size: 14px 14px;
-        }
-        .paper-rose .paper-title { color: #be123c; border-bottom: 2px dashed #fda4af; }
-        .paper-rose .paper-sig { color: #e11d48; }
-
-        .paper-vintage {
-            background-color: rgba(254, 243, 199, 0.97);
-            color: #451a03;
-            border-color: #fde68a;
-        }
-        .paper-vintage .paper-title { color: #78350f; border-bottom: 2px dashed #fcd34d; }
-        .paper-vintage .paper-sig { color: #92400e; }
-
-        .paper-grid {
-            background-color: rgba(255, 255, 255, 0.97);
-            color: #1e293b;
-            background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
-            background-size: 16px 16px;
-        }
-        .paper-grid .paper-title { color: #0284c7; border-bottom: 2px dashed #38bdf8; }
-        .paper-grid .paper-sig { color: #0369a1; }
-
-        .paper-dark {
-            background-color: rgba(15, 23, 42, 0.96);
-            color: #f1f5f9;
-            border-color: #334155;
-        }
-        .paper-dark .paper-title { color: #fb7185; border-bottom: 2px dashed #f43f5e; }
-        .paper-dark .paper-sig { color: #fda4af; }
-
-        .paperclip {
-            position: absolute;
-            top: 10px;
-            right: 24px;
-            width: 16px;
-            height: 40px;
-            border: 3px solid #4a4a4a;
-            border-radius: 12px;
-            z-index: 6;
-            transform: rotate(8deg);
-            box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.25);
-        }
-
-        /* Preset Thumbnails */
-        .gif-thumb {
-            width: 48px;
-            height: 48px;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: all 0.2s;
-            flex-shrink: 0;
-        }
-        .gif-thumb:hover, .gif-thumb.selected {
-            border-color: #ec4899;
-            transform: scale(1.08);
-            box-shadow: 0 4px 10px rgba(236, 72, 153, 0.4);
-        }
-
-        .env-thumb {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            padding: 4px;
-            transition: all 0.2s;
-        }
-        .env-thumb:hover, .env-thumb.selected {
-            border-color: #ec4899;
-            transform: scale(1.06);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Custom Scrollbar for sidebar editor */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+        .stamp-polaroid-frame {
+            background: #ffffff;
+            padding: 4px 4px 14px 4px;
             border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            border: 1px solid rgba(0,0,0,0.08);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+        .stamp-tape {
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-3deg);
+            width: 32px;
+            height: 12px;
+            background: rgba(254, 240, 138, 0.75);
+            backdrop-filter: blur(2px);
+            border: 1px dashed rgba(217, 119, 6, 0.4);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 30;
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-800 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<body class="min-h-screen flex flex-col bg-slate-950 text-slate-100">
 
-    <!-- LEFT SIDEBAR: CUSTOMIZER / APP BUILDER CONTROLS -->
-    <div class="w-full md:w-1/2 lg:w-5/12 bg-slate-900 text-slate-100 p-4 md:p-6 flex flex-col h-auto md:h-screen overflow-y-auto border-r border-slate-800 shadow-2xl z-20">
-        
-        <!-- Header -->
-        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
-            <div class="flex items-center space-x-3">
-                <div class="p-2.5 bg-gradient-to-tr from-pink-500 to-rose-600 rounded-2xl text-white shadow-lg shadow-pink-500/30">
-                    <i class="fa-solid fa-heart-circle-bolt text-xl"></i>
-                </div>
+    <!-- Header Navigation Bar -->
+    <header class="bg-slate-900/90 border-b border-slate-800 p-4 sticky top-0 z-50 backdrop-blur-md shadow-xl">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-3xl">🎁</span>
                 <div>
-                    <h1 class="font-bold text-lg text-white leading-tight">Love Surprise Builder Pro</h1>
-                    <p class="text-xs text-pink-400">Step တစ်ခုချင်းစီအလိုက် Yes/No စာသားများနှင့် Design များ စိတ်ကြိုက်ပြင်ပါ</p>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-amber-300 via-pink-400 to-purple-400 bg-clip-text text-transparent">
+                        Birthday Wish Card Studio
+                    </h1>
+                    <p class="text-xs text-slate-400">Custom Stamp Photo, No-Border Envelope & 1-Click HTML Generator</p>
                 </div>
             </div>
             
-            <button onclick="exportHTML()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl text-xs font-bold shadow-lg shadow-emerald-900/40 transition flex items-center gap-1.5">
-                <i class="fa-solid fa-download"></i> App / HTML ယူမည်
-            </button>
-        </div>
-
-        <!-- Tab Controls for Builder -->
-        <div class="flex gap-2 mb-4 p-1 bg-slate-800/80 rounded-xl border border-slate-700/60">
-            <button onclick="switchTab('content')" id="tab-btn-content" class="flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow">
-                <i class="fa-solid fa-list-check mr-1"></i> Steps များ
-            </button>
-            <button onclick="switchTab('buttons')" id="tab-btn-buttons" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
-                <i class="fa-solid fa-paint-roller mr-1"></i> ခလုတ် & Fonts
-            </button>
-            <button onclick="switchTab('design')" id="tab-btn-design" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
-                <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Bouquet & Paper
-            </button>
-            <button onclick="switchTab('settings')" id="tab-btn-settings" class="flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white">
-                <i class="fa-solid fa-sliders mr-1"></i> Theme/Form
-            </button>
-        </div>
-
-        <!-- TAB CONTENT 1: DYNAMIC STEPS CONFIG -->
-        <div id="tab-content" class="space-y-4">
-            
-            <!-- Quick Step Selector for Live Preview View -->
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
-                <div class="flex justify-between items-center mb-2">
-                    <label class="text-xs font-semibold text-slate-300">
-                        <i class="fa-solid fa-eye text-pink-400 mr-1"></i> Preview တွင် စမ်းကြည့်လိုသော Step:
-                    </label>
-                    <div class="flex gap-1">
-                        <button onclick="addNewStep()" class="px-2 py-1 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1">
-                            <i class="fa-solid fa-plus text-[10px]"></i> Step အသစ်ထည့်
-                        </button>
-                    </div>
-                </div>
-                <div class="flex gap-1.5 overflow-x-auto pb-1" id="step-nav-bar">
-                    <!-- Dynamic Step Nav Buttons will be generated here -->
-                </div>
-            </div>
-
-            <!-- Dynamic Steps Accordion Container -->
-            <div id="steps-container" class="space-y-4">
-                <!-- Step config cards will be injected by JS -->
-            </div>
-
-            <!-- STEP 4 (LOVE LETTER CONFIG) -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3 mt-4">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-envelope-open-text"></i> အဆုံးသတ် ချစ်စာလွှာ (Love Letter)
-                </h3>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">စာလွှာ ခေါင်းစဉ် (Title)</label>
-                    <input type="text" id="cfg-letter-title" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">စာပိုဒ် ၁ (Paragraph 1)</label>
-                    <textarea id="cfg-letter-p1" rows="2" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">စာပိုဒ် ၂ (Paragraph 2)</label>
-                    <textarea id="cfg-letter-p2" rows="2" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">စာပိုဒ် ၃ (Paragraph 3)</label>
-                    <textarea id="cfg-letter-p3" rows="2" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">လက်မှတ် / အဆုံးသတ် စာသား (Signature)</label>
-                    <input type="text" id="cfg-letter-sig" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
-                </div>
-            </div>
-
-        </div>
-
-        <!-- TAB CONTENT 2: BUTTON STYLES & FONTS CUSTOMIZATION -->
-        <div id="tab-buttons" class="space-y-4 hidden">
-            
-            <!-- Global YES Button Customization -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
-                    <i class="fa-solid fa-thumbs-up"></i> Default "YES" ခလုတ် ဒီဇိုင်း
-                </h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">စာသား (Text)</label>
-                        <input type="text" id="cfg-yes-text" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500" value="Yes">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Font Size (px)</label>
-                        <input type="number" id="cfg-yes-fontsize" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500" value="18" min="12" max="36">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Background Color (ခလုတ်အရောင်)</label>
-                        <input type="color" id="cfg-yes-bg" oninput="updateConfig()" class="w-full h-9 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer" value="#ff416c">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Text Color (စာသားအရောင်)</label>
-                        <input type="color" id="cfg-yes-color" oninput="updateConfig()" class="w-full h-9 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer" value="#ffffff">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Global NO Button Customization -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-rose-400 flex items-center gap-2">
-                    <i class="fa-solid fa-thumbs-down"></i> Default "NO" ခလုတ် ဒီဇိုင်း
-                </h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">စာသား (Text)</label>
-                        <input type="text" id="cfg-no-text" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-rose-500" value="No">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Font Size (px)</label>
-                        <input type="number" id="cfg-no-fontsize" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-rose-500" value="18" min="12" max="36">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Background Color (ခလုတ်အရောင်)</label>
-                        <input type="color" id="cfg-no-bg" oninput="updateConfig()" class="w-full h-9 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer" value="#6a11cb">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Text Color (စာသားအရောင်)</label>
-                        <input type="color" id="cfg-no-color" oninput="updateConfig()" class="w-full h-9 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer" value="#ffffff">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question Font Size Global Slider -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-amber-400 flex items-center gap-2">
-                    <i class="fa-solid fa-font"></i> မေးခွန်း စာသား Font Size (Global Question Size)
-                </h3>
-                <div class="flex items-center gap-3">
-                    <input type="range" id="cfg-question-fontsize" min="14" max="32" value="20" oninput="updateConfig()" class="w-full accent-pink-500">
-                    <span id="cfg-question-fontsize-val" class="text-xs font-bold text-pink-400 w-8">20px</span>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- TAB CONTENT 3: STYLES & DESIGNS (BOUQUET & PAPER) -->
-        <div id="tab-design" class="space-y-4 hidden">
-            
-            <!-- Falling Envelope / Bouquet Choice -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-gift"></i> Falling Envelope / Bouquet Image
-                </h3>
-                <p class="text-xs text-slate-400">ကျလာမည့် ပုံစံ (Envelope သို့မဟုတ် Bouquet ၃ မျိုး) ကို ရွေးပါ</p>
-                <div class="flex gap-2 flex-wrap items-center">
-                    <img src="https://i.ibb.co/JWycnnh9/pngegg.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/JWycnnh9/pngegg.png', this)" title="Envelope">
-                    <img src="https://i.ibb.co/8DvMS7jx/Bouquet-2.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/8DvMS7jx/Bouquet-2.png', this)" title="Bouquet 2">
-                    <img src="https://i.ibb.co/wFdWQPkx/Bouquet-3.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/wFdWQPkx/Bouquet-3.png', this)" title="Bouquet 3">
-                    <img src="https://i.ibb.co/pvzHgNLR/Bouquet.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/pvzHgNLR/Bouquet.png', this)" title="Bouquet">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1 mt-2">Custom Image Link ထည့်ရန်</label>
-                    <input type="text" id="cfg-envelope-img" oninput="updateEnvelopeCustomImg()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500" value="https://i.ibb.co/JWycnnh9/pngegg.png">
-                </div>
-            </div>
-
-            <!-- Card Frame Design Styles -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-envelope"></i> Card Frame Design
-                </h3>
-                <p class="text-xs text-slate-400">မေးခွန်းကတ်ပြား၏ ဒီဇိုင်းစတိုင်ကို ရွေးပါ</p>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setCardStyle('env-glass')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white/80 border border-slate-300 shadow">
-                        ✨ Glassmorphic
-                    </button>
-                    <button onclick="setCardStyle('env-romantic-red')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 border border-rose-400 shadow">
-                        ❤️ Romantic Red
-                    </button>
-                    <button onclick="setCardStyle('env-pastel-pink')" class="p-2.5 rounded-xl text-xs font-bold text-pink-900 bg-pink-200 border border-pink-300 shadow">
-                        🌸 Pastel Pink
-                    </button>
-                    <button onclick="setCardStyle('env-classic-gold')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-200 border border-amber-300 shadow">
-                        👑 Classic Gold
-                    </button>
-                    <button onclick="setCardStyle('env-dark-velvet')" class="p-2.5 rounded-xl text-xs font-bold text-rose-400 bg-slate-950 border border-rose-900 shadow">
-                        🌙 Dark Velvet
-                    </button>
-                </div>
-            </div>
-
-            <!-- Paper Letter Design Presets -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-scroll"></i> Letter Paper Design
-                </h3>
-                <p class="text-xs text-slate-400">အထဲမှ စာလွှာစာရွက်၏ ဒီဇိုင်းနှင့် ကာလာစတိုင်ကို ရွေးပါ</p>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setPaperStyle('paper-classic')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-amber-50 border border-amber-200 shadow">
-                        📜 Classic Cream
-                    </button>
-                    <button onclick="setPaperStyle('paper-rose')" class="p-2.5 rounded-xl text-xs font-bold text-rose-800 bg-rose-100 border border-rose-300 shadow">
-                        🌹 Soft Rose
-                    </button>
-                    <button onclick="setPaperStyle('paper-vintage')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-yellow-100 border border-yellow-300 shadow">
-                        🏷️ Vintage Gold
-                    </button>
-                    <button onclick="setPaperStyle('paper-grid')" class="p-2.5 rounded-xl text-xs font-bold text-sky-900 bg-white border border-sky-200 shadow">
-                        📐 Love Grid Paper
-                    </button>
-                    <button onclick="setPaperStyle('paper-dark')" class="p-2.5 rounded-xl text-xs font-bold text-pink-300 bg-slate-900 border border-slate-700 shadow">
-                        🖤 Midnight Dark
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- TAB CONTENT 4: SETTINGS & SETUPS -->
-        <div id="tab-settings" class="space-y-4 hidden">
-            
-            <!-- Formspree / Webhook Endpoint Link -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-paper-plane"></i> Formspree / Webhook Link
-                </h3>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    သူများ အဖြေပေးလိုက်သည့်အခါ သင့် Gmail သို့ အကြောင်းကြားချက် ရောက်ရှိစေရန် Formspree Endpoint လင့်ခ် ထည့်ပါ (မထည့်ပါကလည်း အလုပ်လုပ်ပါသည်)။
-                </p>
-                <input type="text" id="cfg-formspree-url" placeholder="https://formspree.io/f/your_form_id" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
-            </div>
-
-            <!-- Popup Warning Messages -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation"></i> 'No' ခလုတ် သတိပေးစာသားများ
-                </h3>
-                <p class="text-xs text-slate-400">No ခလုတ် နှိပ်သည့်အခါ အလှည့်ကျ ပေါ်လာမည့် သတိပေးစာများ (တစ်ကြောင်းလျှင် တစ်ခု ရေးပါ)</p>
-                <textarea id="cfg-warnings" rows="4" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500"></textarea>
-            </div>
-
-            <!-- Background Gradient Theme -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-palette"></i> Background Color Gradient
-                </h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setTheme('romantic')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300 border border-white/20">
-                        Romantic Pink
-                    </button>
-                    <button onclick="setTheme('purple')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-400 border border-white/20">
-                        Sweet Purple
-                    </button>
-                    <button onclick="setTheme('sunset')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-red-500 via-orange-400 to-yellow-300 border border-white/20">
-                        Sunset Glow
-                    </button>
-                    <button onclick="setTheme('ocean')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-teal-400 via-sky-400 to-indigo-400 border border-white/20">
-                        Ocean Sky
-                    </button>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Footer Info -->
-        <div class="mt-auto pt-4 text-center text-xs text-slate-500 border-t border-slate-800">
-            Preview ထဲတွင် Interactive စမ်းသပ်ကြည့်ရှုနိုင်ပါသည်။
-        </div>
-
-    </div>
-
-    <!-- RIGHT DISPLAY: LIVE APP PREVIEW PANEL -->
-    <div class="w-full md:w-1/2 lg:w-7/12 min-h-[550px] md:h-screen flex flex-col bg-slate-950 relative overflow-hidden">
-        
-        <!-- Preview Top Bar -->
-        <div class="bg-slate-900/90 backdrop-blur-md px-4 py-2.5 border-b border-slate-800 flex items-center justify-between z-30">
-            <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
-                <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
-                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
-                <span class="text-xs font-mono text-slate-400 ml-2">App Live Preview</span>
-            </div>
-
-            <div class="flex items-center gap-2">
-                <button id="mode-test-btn" onclick="toggleTestMode(true)" class="px-3 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white shadow">
-                    <i class="fa-solid fa-play text-[10px] mr-1"></i> စမ်းသပ်ရန် (Test Mode)
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <button onclick="resetAllDefaults()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg border border-slate-700 transition">
+                    🔄 Reset Defaults
                 </button>
-                <button id="mode-edit-btn" onclick="toggleTestMode(false)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400">
-                    <i class="fa-solid fa-rotate-left text-[10px] mr-1"></i> Reset View
+                <button onclick="generateAndExportHTML()" class="flex-1 sm:flex-none bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition hover:scale-105">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Export Standalone HTML
                 </button>
             </div>
         </div>
+    </header>
 
-        <!-- PREVIEW CONTAINER BODY -->
-        <div id="preview-body" class="preview-bg flex-1 flex justify-center items-center p-4 relative overflow-hidden transition-all duration-500" style="background: linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb);">
+    <!-- Main Studio Layout (Split Screen) -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- CONTROLS PANEL (LEFT) -->
+        <section class="lg:col-span-5 bg-slate-900/80 rounded-2xl border border-slate-800 p-4 sm:p-5 space-y-6 overflow-y-auto max-h-[calc(100vh-100px)]">
             
-            <div class="w-full max-w-[440px] min-h-[500px] flex justify-center items-center relative z-10" id="preview-card-holder">
+            <!-- Tab Navigation for Controls -->
+            <div class="flex border-b border-slate-800 gap-2 pb-2">
+                <button onclick="switchControlTab('presets')" id="tab-btn-presets" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30">🎨 Presets</button>
+                <button onclick="switchControlTab('background')" id="tab-btn-background" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700">🖼️ Background</button>
+                <button onclick="switchControlTab('content')" id="tab-btn-content" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700">✍️ Content</button>
+                <button onclick="switchControlTab('audio')" id="tab-btn-audio" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700">🎵 Music</button>
+            </div>
+
+            <!-- TAB 1: PRESETS SELECTOR -->
+            <div id="tab-sec-presets" class="space-y-6">
                 
-                <!-- Dynamic Step Cards will be generated dynamically in Preview -->
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- CODE EXPORT & GITHUB PUBLISH MODAL -->
-    <div id="export-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex justify-center items-center p-4 z-50 hidden overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl p-6 space-y-4 shadow-2xl text-slate-100 my-auto">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 class="font-bold text-lg text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-code"></i> Standalone HTML Code & Auto Live Link
-                </h3>
-                <button onclick="closeExportModal()" class="text-slate-400 hover:text-white text-lg">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            
-            <!-- AUTO GITHUB DEPLOY SECTION -->
-            <div class="bg-slate-800/60 p-4 rounded-2xl border border-pink-500/30 space-y-3">
-                <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-pink-300 flex items-center gap-1.5">
-                        <i class="fa-brands fa-github text-sm"></i> GitHub တွင် Auto Upload လုပ်ပြီး Live Link ထုတ်မည်
-                    </h4>
-                    <span class="text-[10px] bg-pink-950 text-pink-400 border border-pink-800 px-2 py-0.5 rounded-full font-mono">index.html auto generated</span>
+                <!-- 10 BOUQUET PRESETS -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-bold text-amber-300 uppercase tracking-wider">🌸 Bouquet Preset (10 Options)</label>
+                        <span id="bouquet-selected-name" class="text-[11px] text-slate-400">Selected: Animated Sparkle</span>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2" id="bouquet-grid"></div>
+                    
+                    <div class="mt-2">
+                        <input type="text" id="custom-bouquet-url" onchange="setCustomBouquet(this.value)" placeholder="Or enter custom Bouquet Image/GIF URL..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 focus:outline-none focus:border-amber-400">
+                    </div>
                 </div>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                    စာသားရိုက်ထည့်ရာနေရာတွင် <b>epostcard</b> သို့မဟုတ် <b>mm</b> သို့မဟုတ် <b>epostcardmm</b> ဟု ရိုက်ထည့်၍ လင့်ခ်အလိုအလျောက် ထုတ်နိုင်ပါသည်။
-                </p>
 
-                <div class="space-y-2 pt-1">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <!-- Custom Text Input Field for API Code / Trigger -->
-                        <div class="space-y-1">
-                            <label class="block text-[11px] text-slate-400">စာရိုက်ထည့်ရန် Box (epostcard / mm):</label>
-                            <input type="text" id="gh-keyword-input" oninput="onKeywordInputChange()" placeholder="စာရိုက်ပါ (e.g. epostcardmm)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-pink-300 font-bold focus:outline-none focus:border-pink-500">
-                        </div>
-                        <input type="text" id="gh-repo" placeholder="Repository Name (e.g. love-surprise)" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500 self-end" value="my-love-surprise">
+                <!-- 10 ENVELOPE / PHOTO PRESETS -->
+                <div class="border-t border-slate-800/80 pt-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-bold text-rose-300 uppercase tracking-wider">✉️ Envelope / Photo Cover (10 Options)</label>
+                        <span id="envelope-selected-name" class="text-[11px] text-slate-400">Selected: Golden Sparkle</span>
                     </div>
+                    <div class="grid grid-cols-5 gap-2" id="envelope-grid"></div>
 
-                    <!-- Hidden API Token Box -->
-                    <div class="pt-1">
-                        <label class="block text-[11px] text-slate-400 mb-1">API Token (Hidden Box):</label>
-                        <input type="password" id="gh-token-custom" readonly placeholder="အထက်ပါနေရာတွင် စာရိုက်ပါက API အလိုအလျောက် ပေါ်လာပါမည်" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-mono focus:outline-none">
+                    <div class="mt-2">
+                        <input type="text" id="custom-envelope-url" onchange="setCustomEnvelope(this.value)" placeholder="Or enter custom Photo/Envelope Image URL..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-rose-200 focus:outline-none focus:border-amber-400">
                     </div>
+                </div>
 
-                    <div class="flex flex-wrap gap-2 items-center justify-between pt-1">
-                        <button onclick="autoDeployToGitHub()" id="btn-deploy-gh" class="px-4 py-2 bg-gradient-to-r from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> Auto Deploy & Get Link
+                <!-- 10 NOTE PAPER DESIGN PRESETS -->
+                <div class="border-t border-slate-800/80 pt-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-bold text-purple-300 uppercase tracking-wider">📜 Paper Card Design (10 Styles)</label>
+                        <span id="paper-selected-name" class="text-[11px] text-slate-400">Selected: Vintage Parchment</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2" id="paper-grid"></div>
+                </div>
+
+            </div>
+
+            <!-- TAB 2: BACKGROUND CUSTOMIZER -->
+            <div id="tab-sec-background" class="hidden space-y-5">
+                <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-slate-800 pb-2">🖼️ Background Customizer</h3>
+
+                <!-- Background Type Toggle Switch -->
+                <div>
+                    <label class="block text-xs text-slate-400 mb-2 font-medium">Select Background Style</label>
+                    <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+                        <button type="button" id="bg-type-single-btn" onclick="setBgType('single')" class="py-2 text-xs font-semibold rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition">
+                            🎨 Single Color
                         </button>
-                        <span id="deploy-status" class="text-xs text-amber-400 font-medium"></span>
-                    </div>
-
-                    <!-- Generated Link Result Box -->
-                    <div id="gh-link-container" class="hidden pt-2">
-                        <label class="block text-[11px] font-bold text-emerald-400 mb-1">✨ သင့် Live Web Link ရရှိပါပြီ (GitHub Pages):</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="gh-generated-link" readonly class="flex-1 bg-slate-950 border border-emerald-500/50 rounded-xl px-3 py-2 text-xs font-mono text-emerald-300 focus:outline-none select-all">
-                            <button onclick="copyGitHubLink()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
-                                <i class="fa-regular fa-copy"></i> Copy Link
-                            </button>
-                        </div>
-                        <p class="text-[10px] text-slate-400 mt-1">Note: GitHub Pages ပထမဆုံးအကြိမ် တည်ဆောက်ချိန် ၁ မိနစ်မှ ၂ မိနစ်ခန့် ကြာမြင့်နိုင်ပါသည်။</p>
+                        <button type="button" id="bg-type-gradient-btn" onclick="setBgType('gradient')" class="py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 transition hover:bg-slate-700">
+                            🌈 Gradient Color
+                        </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- CODE PREVIEW TEXTAREA -->
-            <div>
-                <p class="text-xs text-slate-400 mb-1">
-                    သို့မဟုတ် အောက်ပါ Source Code အား ကူးယူ၍ သီးသန့် <code class="text-pink-400 font-mono">index.html</code> အဖြစ် သိမ်းဆည်း/Download ရယူနိုင်ပါသည်:
-                </p>
-                <textarea id="export-code-area" rows="7" readonly class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs font-mono text-emerald-400 focus:outline-none select-all"></textarea>
-            </div>
-
-            <!-- ACTION BUTTONS -->
-            <div class="flex items-center justify-end gap-3 pt-1">
-                <button onclick="copyGeneratedCode()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                    <i class="fa-regular fa-copy"></i> Code ကူးယူမည်
-                </button>
-                <button onclick="downloadHTMLFile()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl text-xs font-bold shadow-lg transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-file-arrow-down"></i> Download index.html
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        // KEYWORD TO API MAPPING LOGIC
-        function onKeywordInputChange() {
-            const val = document.getElementById('gh-keyword-input').value.trim().toLowerCase();
-            const tokenBox = document.getElementById('gh-token-custom');
-            
-            const part1 = "ghp_l25YhqL0XsLZFEf8w";
-            const part2 = "S4J9vqnigY9uz1ihXpt";
-
-            if (val === "epostcard") {
-                tokenBox.value = part1;
-            } else if (val === "mm") {
-                tokenBox.value = part2;
-            } else if (val === "epostcardmm") {
-                tokenBox.value = part1 + part2;
-            } else {
-                tokenBox.value = "";
-            }
-        }
-
-        function getActiveGitHubToken() {
-            return document.getElementById('gh-token-custom').value.trim();
-        }
-
-        // PRESET GIF LIST (10+ Cute GIFs)
-        const presetGifs = [
-            "https://media.tenor.com/Zrr4L_Wd4JkAAAAi/bubu-rub-bubu-love-dudu.gif",
-            "https://media.tenor.com/nA5iSpAftHAAAAAi/bubu-dudu.gif",
-            "https://media.tenor.com/_YoesJxE1tYAAAAj/panda-%C3%B6p%C3%BCc%C3%BCk.gif",
-            "https://media.tenor.com/h7cPrBzb_JEAAAAi/bubu-dudu.gif",
-            "https://media.tenor.com/Lgr_6-nkvnUAAAAi/casal-dudu.gif",
-            "https://media.tenor.com/xxtopNzO7jsAAAAi/bubu-dudu.gif",
-            "https://media.tenor.com/AAMep-6P7lwAAAAi/bubu-dudu-hug.gif",
-            "https://media.tenor.com/Q02fYKUOa7oAAAAi/bubu-dudu-sseeyall.gif",
-            "https://media.tenor.com/wKP-p_HtfOoAAAAi/bubu-dudu.gif",
-            "https://media.tenor.com/qQmsOJoeMoMAAAAi/dudu-bubu.gif",
-            "https://media.tenor.com/Nes9mNbHJmYAAAAi/dudu-bubu-dudu-ride-bubu.gif"
-        ];
-
-        // 10 BEHAVIOR DEFINITIONS
-        const behaviorOptions = [
-            { id: "fleeing", name: "1. The Fleeing Button (ထွက်ပြေးသွားသော ခလုတ်)" },
-            { id: "shrinking", name: "2. The Shrinking Button (သေးသွားသော ခလုတ်)" },
-            { id: "swap", name: "3. The Swap Places (နေရာချင်း လဲသွားခြင်း)" },
-            { id: "teleport", name: "4. Teleporting / Reappearing Trick (ပျောက်သွားပြီး တခြားမှာ ပေါ်ခြင်း)" },
-            { id: "loading", name: "5. Fake Loading / Disabled State (အလုပ်မလုပ်သော ခလုတ်)" },
-            { id: "orbiting", name: "6. Moving Target / Orbiting Button (ပတ်ခြာလည် ပြေးနေခြင်း)" },
-            { id: "guilttrip", name: "7. Guilt-Trip Text Change (စာသားပြောင်းပြီး မေးခွန်းထုတ်ခြင်း)" },
-            { id: "popuptrap", name: "8. Pop-up / Modal Trap (Pop-up တွေ ထပ်ခါထပ်ခါ ပေါ်လာခြင်း)" },
-            { id: "gravity", name: "9. The Gravity Fall (အောက်ကို ပြုတ်ကျသွားခြင်း)" },
-            { id: "split", name: "10. Dissecting / Split Button (အစိတ်စိတ်အမွှာမွှာ ကွဲသွားခြင်း)" }
-        ];
-
-        // CONFIG APP STATE (Step တစ်ခုချင်းစီတွင် yesText နှင့် noText ထည့်သွင်းနိုင်ရန် ပြင်ဆင်ထားသည်)
-        const appConfig = {
-            steps: [
-                {
-                    id: 1,
-                    text: "ပြန်ချစ်ပါတော့လား နွေးထွေးပေးချင်ပြီ… 💕",
-                    gif: presetGifs[0],
-                    behavior: "fleeing",
-                    yesText: "",
-                    noText: ""
-                },
-                {
-                    id: 2,
-                    text: "တကယ် အမြဲတမ်း ချစ်ပေးမှာလား… 🥺",
-                    gif: presetGifs[1],
-                    behavior: "fleeing",
-                    yesText: "",
-                    noText: ""
-                },
-                {
-                    id: 3,
-                    text: "တကယ်ကြီး အဖြေပြန်ပေးလိုက်တာလား? 💖",
-                    gif: presetGifs[2],
-                    behavior: "shrinking",
-                    yesText: "",
-                    noText: ""
-                }
-            ],
-            
-            // Global Default Button Styles
-            yesText: "Yes",
-            yesFontSize: "18",
-            yesBg: "#ff416c",
-            yesColor: "#ffffff",
-
-            noText: "No",
-            noFontSize: "18",
-            noBg: "#6a11cb",
-            noColor: "#ffffff",
-
-            questionFontSize: "20",
-
-            // Letter Data
-            letterTitle: "💌 ချစ်ရပါသော… 💌",
-            letterP1: "ဒီကမ္ဘာပေါ်မှာ လူတွေအများကြီးရှိတဲ့ထဲကမှ မင်းနဲ့ဆုံတွေ့ခွင့်ရခဲ့တာဟာ ငါ့အတွက်တော့ အလှပဆုံးသော ကံကြမ္မာတစ်ခုပါပဲ။",
-            letterP2: "အမြဲတမ်း ပျော်ရွှင်အောင်ထားပေးမယ်လို့ ကတိမပေးနိုင်ရင်တောင်မှ မင်းဝမ်းနည်းတဲ့အခါတိုင်း သို့မဟုတ် ခက်ခဲတဲ့အချိန်တိုင်းမှာ အနားမှာ အမြဲရှိနေပေးမယ့်သူတစ်ယောက် ဖြစ်ပါရစေ။",
-            letterP3: "အမြဲတမ်း ချစ်နေမှာပါ… 🌹✨",
-            letterSig: "love you so much❤️",
-            
-            envelopeImg: "https://i.ibb.co/JWycnnh9/pngegg.png",
-            cardStyle: "env-glass",
-            paperStyle: "paper-classic",
-
-            formspreeUrl: "",
-            warnings: [
-                "⚠️ No နှိပ်လို့ မရပါဘူးနော်!",
-                "⚠️ Yes ပဲ နှိပ်ပါ! 🥺",
-                "⚠️ No ကို နှိပ်ခွင့် မရှိပါဘူး! 💖",
-                "⚠️ တကယ်ကြီး No နှိပ်မှာလား? 😭"
-            ],
-            bgGradient: "linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb)"
-        };
-
-        // Theme Definitions
-        const themes = {
-            romantic: "linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb)",
-            purple: "linear-gradient(-45deg, #8ec5fc, #e0c3fc, #fbc2eb, #a6c1ee)",
-            sunset: "linear-gradient(-45deg, #ff9a9e, #fecfef, #feada6, #f5efef)",
-            ocean: "linear-gradient(-45deg, #84fab0, #8fd3f4, #a1c4fd, #c2e9fb)"
-        };
-
-        let currentActiveStepView = 1;
-
-        // INITIALIZE APP BUILDER
-        window.onload = function() {
-            renderStepsEditor();
-            
-            // Fill static inputs
-            document.getElementById('cfg-yes-text').value = appConfig.yesText;
-            document.getElementById('cfg-yes-fontsize').value = appConfig.yesFontSize;
-            document.getElementById('cfg-yes-bg').value = appConfig.yesBg;
-            document.getElementById('cfg-yes-color').value = appConfig.yesColor;
-
-            document.getElementById('cfg-no-text').value = appConfig.noText;
-            document.getElementById('cfg-no-fontsize').value = appConfig.noFontSize;
-            document.getElementById('cfg-no-bg').value = appConfig.noBg;
-            document.getElementById('cfg-no-color').value = appConfig.noColor;
-
-            document.getElementById('cfg-question-fontsize').value = appConfig.questionFontSize;
-            document.getElementById('cfg-question-fontsize-val').innerText = appConfig.questionFontSize + 'px';
-
-            document.getElementById('cfg-letter-title').value = appConfig.letterTitle;
-            document.getElementById('cfg-letter-p1').value = appConfig.letterP1;
-            document.getElementById('cfg-letter-p2').value = appConfig.letterP2;
-            document.getElementById('cfg-letter-p3').value = appConfig.letterP3;
-            document.getElementById('cfg-letter-sig').value = appConfig.letterSig;
-            
-            document.getElementById('cfg-envelope-img').value = appConfig.envelopeImg;
-            document.getElementById('cfg-formspree-url').value = appConfig.formspreeUrl;
-            document.getElementById('cfg-warnings').value = appConfig.warnings.join('\n');
-
-            updateConfig();
-        };
-
-        // RENDER SIDEBAR STEP CONFIGURATORS & PREVIEW CARDS
-        function renderStepsEditor() {
-            const stepsContainer = document.getElementById('steps-container');
-            const stepNavBar = document.getElementById('step-nav-bar');
-            
-            stepsContainer.innerHTML = '';
-            stepNavBar.innerHTML = '';
-
-            appConfig.steps.forEach((step, index) => {
-                const stepNum = index + 1;
-
-                // Build Sidebar Config Card
-                const card = document.createElement('div');
-                card.className = "bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3 relative";
-                card.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
-                        <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                            <span class="w-5 h-5 rounded-full bg-pink-500/20 text-pink-400 text-xs flex items-center justify-center">${stepNum}</span>
-                            Step ${stepNum} မေးခွန်း & ခလုတ် Config
-                        </h3>
-                        ${appConfig.steps.length > 2 ? `
-                            <button onclick="removeStep(${index})" class="text-xs text-rose-400 hover:text-rose-300 font-bold px-2 py-1 bg-rose-950/50 rounded-lg">
-                                <i class="fa-solid fa-trash mr-1"></i> ဖျက်မည်
-                            </button>
-                        ` : ''}
+                <!-- Single Color Picker Settings -->
+                <div id="bg-single-controls" class="space-y-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+                    <label class="block text-xs text-slate-300 font-semibold">Choose Solid Background Color</label>
+                    <div class="flex items-center gap-3">
+                        <input type="color" id="bg-single-color" onchange="updateBgCustomization()" value="#0f172a" class="w-10 h-10 rounded cursor-pointer border border-slate-700 bg-transparent p-0.5">
+                        <input type="text" id="bg-single-hex" oninput="syncColorFromInput(this.value, 'bg-single-color')" value="#0f172a" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 uppercase font-mono focus:outline-none focus:border-amber-400">
                     </div>
+                </div>
 
+                <!-- Gradient Color Picker Settings -->
+                <div id="bg-gradient-controls" class="hidden space-y-4 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">စာသား (Question Text)</label>
-                        <input type="text" value="${step.text}" oninput="updateStepDataInline(${index}, 'text', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500">
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-xs text-emerald-400 mb-1">ဤ Step အတွက် Yes စာသား</label>
-                            <input type="text" value="${step.yesText !== undefined ? step.yesText : ''}" placeholder="Default (Yes)" oninput="updateStepDataInline(${index}, 'yesText', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-rose-400 mb-1">ဤ Step အတွက် No စာသား</label>
-                            <input type="text" value="${step.noText !== undefined ? step.noText : ''}" placeholder="Default (No)" oninput="updateStepDataInline(${index}, 'noText', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-rose-500">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">No ခလုတ် ၏ Interactive Behavior (ခလုတ် ပြုမူပုံ ၁၀ မျိုး)</label>
-                        <select onchange="updateStepDataInline(${index}, 'behavior', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-pink-300 font-bold focus:outline-none focus:border-pink-500">
-                            ${behaviorOptions.map(opt => `<option value="${opt.id}" ${step.behavior === opt.id ? 'selected' : ''}>${opt.name}</option>`).join('')}
+                        <label class="block text-xs text-slate-300 font-semibold mb-2">Gradient Type / Direction</label>
+                        <select id="bg-gradient-dir" onchange="updateBgCustomization()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 focus:outline-none focus:border-amber-400">
+                            <option value="to bottom right">Diagonal (Top Left to Bottom Right)</option>
+                            <option value="to right">Horizontal (Left to Right)</option>
+                            <option value="to bottom">Vertical (Top to Bottom)</option>
+                            <option value="circle at center">Radial Glow (Center Circle)</option>
                         </select>
                     </div>
 
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1">Color 1 (Start)</label>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="bg-gradient-c1" onchange="updateBgCustomization()" value="#2e1065" class="w-8 h-8 rounded cursor-pointer border border-slate-700 bg-transparent p-0.5">
+                                <input type="text" id="bg-gradient-hex1" oninput="syncColorFromInput(this.value, 'bg-gradient-c1')" value="#2e1065" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-[11px] text-amber-200 uppercase font-mono">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1">Color 2 (End)</label>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="bg-gradient-c2" onchange="updateBgCustomization()" value="#05020d" class="w-8 h-8 rounded cursor-pointer border border-slate-700 bg-transparent p-0.5">
+                                <input type="text" id="bg-gradient-hex2" oninput="syncColorFromInput(this.value, 'bg-gradient-c2')" value="#05020d" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-[11px] text-amber-200 uppercase font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preset Gradient Palette Quick Choice -->
                     <div>
-                        <label class="block text-xs text-slate-400 mb-1">GIF ရွေးချယ်ပါ သို့မဟုတ် Link ထည့်ပါ</label>
-                        <div class="flex gap-1.5 overflow-x-auto pb-1 mb-2">
-                            ${presetGifs.map(gifUrl => `
-                                <img src="${gifUrl}" class="gif-thumb ${step.gif === gifUrl ? 'selected' : ''}" onclick="selectPresetGifForStep(${index}, '${gifUrl}', this)">
-                            `).join('')}
-                        </div>
-                        <input type="text" value="${step.gif}" oninput="updateStepDataInline(${index}, 'gif', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-pink-500" placeholder="Custom GIF URL">
-                    </div>
-                `;
-                stepsContainer.appendChild(card);
-
-                // Build Step Nav Button for Preview
-                const navBtn = document.createElement('button');
-                navBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition text-center whitespace-nowrap ${currentActiveStepView === stepNum ? 'bg-pink-600 text-white shadow' : 'bg-slate-700 hover:bg-pink-600 text-white'}`;
-                navBtn.innerText = `Step ${stepNum}`;
-                navBtn.onclick = () => previewStep(stepNum);
-                stepNavBar.appendChild(navBtn);
-            });
-
-            // Add Bouquet & Letter Nav Buttons to Preview Bar
-            const bouquetNav = document.createElement('button');
-            bouquetNav.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition text-center whitespace-nowrap ${currentActiveStepView === 'falling' ? 'bg-pink-600 text-white shadow' : 'bg-slate-700 hover:bg-pink-600 text-white'}`;
-            bouquetNav.innerText = `Bouquet`;
-            bouquetNav.onclick = () => previewStep('falling');
-            stepNavBar.appendChild(bouquetNav);
-
-            const letterNav = document.createElement('button');
-            letterNav.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition text-center whitespace-nowrap ${currentActiveStepView === 'letter' ? 'bg-pink-600 text-white shadow' : 'bg-slate-700 hover:bg-pink-600 text-white'}`;
-            letterNav.innerText = `Letter`;
-            letterNav.onclick = () => previewStep('letter');
-            stepNavBar.appendChild(letterNav);
-
-            renderPreviewCardsDOM();
-        }
-
-        function selectPresetGifForStep(index, gifUrl, imgElement) {
-            appConfig.steps[index].gif = gifUrl;
-            if(imgElement && imgElement.parentNode) {
-                imgElement.parentNode.querySelectorAll('.gif-thumb').forEach(el => el.classList.remove('selected'));
-                imgElement.classList.add('selected');
-            }
-            updateConfig();
-        }
-
-        function addNewStep() {
-            const nextIndex = appConfig.steps.length + 1;
-            appConfig.steps.push({
-                id: nextIndex,
-                text: `မေးခွန်းအသစ် ${nextIndex}… 💕`,
-                gif: presetGifs[nextIndex % presetGifs.length],
-                behavior: "fleeing",
-                yesText: "",
-                noText: ""
-            });
-            renderStepsEditor();
-            previewStep(nextIndex);
-        }
-
-        function removeStep(index) {
-            if (appConfig.steps.length <= 2) {
-                alert("အနည်းဆုံး Step ၂ ခု ရှိရပါမည်!");
-                return;
-            }
-            appConfig.steps.splice(index, 1);
-            renderStepsEditor();
-            previewStep(1);
-        }
-
-        function updateStepDataInline(index, key, val) {
-            appConfig.steps[index][key] = val;
-            updateConfig();
-        }
-
-        // TAB SWITCHER
-        function switchTab(tabName) {
-            document.getElementById('tab-content').classList.add('hidden');
-            document.getElementById('tab-buttons').classList.add('hidden');
-            document.getElementById('tab-design').classList.add('hidden');
-            document.getElementById('tab-settings').classList.add('hidden');
-            
-            ['content', 'buttons', 'design', 'settings'].forEach(t => {
-                const btn = document.getElementById(`tab-btn-${t}`);
-                if (btn) btn.className = "flex-1 py-2 text-xs font-bold rounded-lg transition text-slate-400 hover:text-white";
-            });
-
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabName}`).className = "flex-1 py-2 text-xs font-bold rounded-lg transition bg-pink-600 text-white shadow";
-        }
-
-        // UPDATE CONFIG FROM USER INPUT
-        function updateConfig() {
-            // Button Styles
-            appConfig.yesText = document.getElementById('cfg-yes-text').value;
-            appConfig.yesFontSize = document.getElementById('cfg-yes-fontsize').value;
-            appConfig.yesBg = document.getElementById('cfg-yes-bg').value;
-            appConfig.yesColor = document.getElementById('cfg-yes-color').value;
-
-            appConfig.noText = document.getElementById('cfg-no-text').value;
-            appConfig.noFontSize = document.getElementById('cfg-no-fontsize').value;
-            appConfig.noBg = document.getElementById('cfg-no-bg').value;
-            appConfig.noColor = document.getElementById('cfg-no-color').value;
-
-            appConfig.questionFontSize = document.getElementById('cfg-question-fontsize').value;
-            document.getElementById('cfg-question-fontsize-val').innerText = appConfig.questionFontSize + 'px';
-
-            // Letter Config
-            appConfig.letterTitle = document.getElementById('cfg-letter-title').value;
-            appConfig.letterP1 = document.getElementById('cfg-letter-p1').value;
-            appConfig.letterP2 = document.getElementById('cfg-letter-p2').value;
-            appConfig.letterP3 = document.getElementById('cfg-letter-p3').value;
-            appConfig.letterSig = document.getElementById('cfg-letter-sig').value;
-            
-            appConfig.envelopeImg = document.getElementById('cfg-envelope-img').value;
-            appConfig.formspreeUrl = document.getElementById('cfg-formspree-url').value;
-            
-            const rawWarnings = document.getElementById('cfg-warnings').value;
-            appConfig.warnings = rawWarnings.split('\n').filter(w => w.trim() !== '');
-
-            renderPreviewCardsDOM();
-        }
-
-        // RENDER DYNAMIC PREVIEW DOM CARDS
-        function renderPreviewCardsDOM() {
-            const cardHolder = document.getElementById('preview-card-holder');
-            cardHolder.innerHTML = '';
-
-            // Render Questions Steps
-            appConfig.steps.forEach((step, index) => {
-                const stepNum = index + 1;
-                const nextTarget = (stepNum === appConfig.steps.length) ? 'falling' : (stepNum + 1);
-
-                const card = document.createElement('div');
-                card.className = `interactive-card ${appConfig.cardStyle} step-view ${currentActiveStepView === stepNum ? 'active' : ''}`;
-                card.id = `prev-step-${stepNum}`;
-
-                const yesStyle = `background: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size: ${appConfig.yesFontSize}px;`;
-                const noStyle = `background: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size: ${appConfig.noFontSize}px;`;
-
-                const activeYesLabel = (step.yesText && step.yesText.trim() !== '') ? step.yesText : appConfig.yesText;
-                const activeNoLabel = (step.noText && step.noText.trim() !== '') ? step.noText : appConfig.noText;
-
-                card.innerHTML = `
-                    <img class="gif-box" src="${step.gif}" alt="Gif ${stepNum}">
-                    <h2 class="font-bold leading-relaxed" style="font-size: ${appConfig.questionFontSize}px;">
-                        ${step.text}
-                    </h2>
-                    <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative btn-container-step" id="btn-container-${stepNum}">
-                        <button class="btn-custom-yes" style="${yesStyle}" id="btn-yes-prev-${stepNum}" onclick="handleYesClick('${nextTarget}')">${activeYesLabel}</button>
-                        <div class="btn-no-wrapper-preview" id="btn-no-wrapper-prev-${stepNum}">
-                            <button class="btn-custom-no ${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="${noStyle}" id="btn-no-prev-${stepNum}">${activeNoLabel}</button>
-                        </div>
-                    </div>
-                `;
-
-                cardHolder.appendChild(card);
-
-                // Attach Behavior Event Listeners
-                setTimeout(() => attachBehaviorEvents(stepNum, step.behavior, nextTarget, activeYesLabel), 50);
-            });
-
-            // STEP 3.5: FALLING BOUQUET CARD
-            const fallingCard = document.createElement('div');
-            fallingCard.className = `step-view w-full ${currentActiveStepView === 'falling' ? 'active' : ''}`;
-            fallingCard.id = `prev-step-falling`;
-            fallingCard.innerHTML = `
-                <div class="falling-envelope-container" onclick="openLetterPrev()">
-                    <img id="prev-envelope-img" class="no-frame-gif" src="${appConfig.envelopeImg}" alt="Envelope/Bouquet">
-                    <div class="tap-hint-badge">✨ Tap to Open ✨</div>
-                </div>
-            `;
-            cardHolder.appendChild(fallingCard);
-
-            // STEP 4: LOVE LETTER CARD
-            const letterCard = document.createElement('div');
-            letterCard.className = `step-view w-full ${currentActiveStepView === 'letter' ? 'active' : ''}`;
-            letterCard.id = `prev-step-letter`;
-            letterCard.innerHTML = `
-                <div class="w-full max-w-[380px] mx-auto p-2 flex justify-center items-center">
-                    <div id="prev-paper-container" class="paper-sheet ${appConfig.paperStyle} paper-letter-pop">
-                        <div class="paperclip"></div>
-                        <div class="text-sm leading-relaxed text-left">
-                            <div id="prev-letter-title" class="paper-title text-center text-lg font-bold mb-3 pb-2">
-                                ${appConfig.letterTitle}
-                            </div>
-                            <p class="mb-2">${appConfig.letterP1}</p>
-                            <p class="mb-2">${appConfig.letterP2}</p>
-                            <p class="mb-2">${appConfig.letterP3}</p>
-                            <div class="paper-sig text-right font-bold text-sm mt-4">
-                                ${appConfig.letterSig}
-                            </div>
+                        <label class="block text-[11px] text-slate-400 mb-1">Quick Gradient Presets</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button type="button" onclick="applyGradientPreset('to bottom right', '#2e1065', '#05020d')" class="h-7 rounded-lg border border-slate-700 shadow-sm" style="background: linear-gradient(to bottom right, #2e1065, #05020d)" title="Deep Purple"></button>
+                            <button type="button" onclick="applyGradientPreset('to bottom right', '#831843', '#1e1b4b')" class="h-7 rounded-lg border border-slate-700 shadow-sm" style="background: linear-gradient(to bottom right, #831843, #1e1b4b)" title="Romantic Rose"></button>
+                            <button type="button" onclick="applyGradientPreset('to bottom right', '#0f172a', '#1e3a8a')" class="h-7 rounded-lg border border-slate-700 shadow-sm" style="background: linear-gradient(to bottom right, #0f172a, #1e3a8a)" title="Midnight Blue"></button>
+                            <button type="button" onclick="applyGradientPreset('to bottom right', '#78350f', '#292524')" class="h-7 rounded-lg border border-slate-700 shadow-sm" style="background: linear-gradient(to bottom right, #78350f, #292524)" title="Golden Glow"></button>
                         </div>
                     </div>
                 </div>
-            `;
-            cardHolder.appendChild(letterCard);
-        }
+            </div>
 
-        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (ကတ်ပြားအတွင်းသာ ရွေ့လျားစေရန် တိကျစွာ ထိန်းချုပ်ခြင်း)
-        let stateNoScales = {};
-        let stateGuiltIndices = {};
-        let stateTeleportCounts = {};
+            <!-- TAB 3: TEXT & STAMP PHOTO CONTENT -->
+            <div id="tab-sec-content" class="hidden space-y-4">
+                <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-slate-800 pb-2">✏️ Text & Corner Stamp Photo</h3>
 
-        function attachBehaviorEvents(stepNum, behavior, nextTarget, activeYesLabel) {
-            const noBtn = document.getElementById(`btn-no-prev-${stepNum}`);
-            const noWrapper = document.getElementById(`btn-no-wrapper-prev-${stepNum}`);
-            const yesBtn = document.getElementById(`btn-yes-prev-${stepNum}`);
-            const cardEl = document.getElementById(`prev-step-${stepNum}`);
+                <!-- CORNER STAMP PHOTO EDIT SECTION -->
+                <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 space-y-2">
+                    <label class="block text-xs font-bold text-amber-300">🖼️ Corner Stamp / Sticker Photo (Edit Image)</label>
+                    <input type="text" id="input-stamp-url" oninput="updateStudioState()" value="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80" placeholder="Enter Photo Image URL..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 focus:outline-none focus:border-amber-400">
+                    <p class="text-[10px] text-slate-400">This small photo appears at the bottom-right corner of the note paper. Tapping it opens an enlarged view!</p>
+                </div>
 
-            if (!noBtn || !noWrapper || !cardEl) return;
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Font Family</label>
+                    <select id="input-font-family" onchange="updateStudioState()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 focus:outline-none focus:border-amber-400">
+                        <option value="font-serif-custom">Playfair Display (Serif Classic)</option>
+                        <option value="font-cursive">Great Vibes (Cursive Elegant)</option>
+                        <option value="font-padauk">Padauk (Myanmar Supported)</option>
+                        <option value="font-['Poppins']">Poppins (Modern Clean)</option>
+                        <option value="font-['Dancing_Script']">Dancing Script (Handwritten)</option>
+                        <option value="font-['Cinzel']">Cinzel (Luxury Formal)</option>
+                        <option value="font-['Caveat']">Caveat (Cute Casual)</option>
+                    </select>
+                </div>
 
-            const newNoBtn = noBtn.cloneNode(true);
-            noBtn.parentNode.replaceChild(newNoBtn, noBtn);
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Start Screen Hint Text</label>
+                    <input type="text" id="input-start-hint" oninput="updateStudioState()" value="✨ Click the bouquet ✨" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400">
+                </div>
 
-            // 1. FLEEING (ကတ်ပြား ဘောင်အတွင်း၌သာ နေရာရွှေ့မည်၊ နှိပ်/တို့ထိလျှင် ပြေးမည်)
-            if (behavior === 'fleeing') {
-                const triggerFlee = (e) => {
-                    if (e) e.preventDefault();
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    moveButtonInsideCardStrict(newNoBtn, cardEl);
-                };
-                newNoBtn.onclick = triggerFlee;
-            }
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Card Header Title</label>
+                    <input type="text" id="input-card-title" oninput="updateStudioState()" value="Happy Birthday" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400">
+                </div>
 
-            // 2. SHRINKING
-            else if (behavior === 'shrinking') {
-                stateNoScales[stepNum] = { yesScale: 1, noScale: 1 };
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    stateNoScales[stepNum].yesScale += 0.35;
-                    stateNoScales[stepNum].noScale -= 0.22;
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Greeting Headline</label>
+                    <input type="text" id="input-greeting" oninput="updateStudioState()" value="🎂 Happy Birthday, Babe! 🎂" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400">
+                </div>
 
-                    yesBtn.style.transform = `scale(${stateNoScales[stepNum].yesScale})`;
-                    if (stateNoScales[stepNum].noScale <= 0.1) {
-                        newNoBtn.style.display = 'none';
-                    } else {
-                        newNoBtn.style.transform = `scale(${stateNoScales[stepNum].noScale})`;
-                    }
-                };
-            }
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Main Birthday Wish Body (Supports Burmese or English)</label>
+                    <textarea id="input-main-msg" oninput="updateStudioState()" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400">Wishing you a day filled with love, joy, and endless laughter. Thank you for being my constant source of happiness! 💖</textarea>
+                </div>
 
-            // 3. SWAP PLACES
-            else if (behavior === 'swap') {
-                const swapFunc = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    const parent = yesBtn.parentNode;
-                    if (parent.children[0] === yesBtn) {
-                        parent.appendChild(yesBtn);
-                    } else {
-                        parent.insertBefore(yesBtn, parent.children[0]);
-                    }
-                };
-                newNoBtn.onclick = swapFunc;
-            }
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Sub-Message / Wish Note</label>
+                    <input type="text" id="input-sub-msg" oninput="updateStudioState()" value="May all your dreams come true. Take good care of yourself always! ✨" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400">
+                </div>
 
-            // 4. TELEPORT / REAPPEARING (ကတ်ပြားပေါ်အတွင်း၌သာ နေရာပြောင်းမည်)
-            else if (behavior === 'teleport') {
-                stateTeleportCounts[stepNum] = 0;
-                const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!", "Nice try!"];
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    stateTeleportCounts[stepNum]++;
-                    const text = teleTexts[stateTeleportCounts[stepNum] % teleTexts.length];
-                    newNoBtn.innerText = text;
-                    moveButtonInsideCardStrict(newNoBtn, cardEl);
-                };
-            }
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Left Sign Footer</label>
+                        <input type="text" id="input-sign-left" oninput="updateStudioState()" value="With All My Love ❤️" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Right Sign Footer</label>
+                        <input type="text" id="input-sign-right" oninput="updateStudioState()" value="✨ Forever Yours ✨" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400">
+                    </div>
+                </div>
+            </div>
 
-            // 5. FAKE LOADING / DISABLED
-            else if (behavior === 'loading') {
-                const stepObj = appConfig.steps[stepNum - 1];
-                const defaultNoVal = (stepObj && stepObj.noText && stepObj.noText.trim() !== '') ? stepObj.noText : appConfig.noText;
-                newNoBtn.onclick = () => {
-                    newNoBtn.disabled = true;
-                    newNoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...`;
-                    setTimeout(() => {
-                        showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                        alert("Error 404: 'No' is not available. Server says you must click Yes!");
-                        newNoBtn.innerHTML = defaultNoVal;
-                        newNoBtn.disabled = false;
-                    }, 1200);
-                };
-            }
+            <!-- TAB 4: AUDIO SELECTION -->
+            <div id="tab-sec-audio" class="hidden space-y-4">
+                <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-slate-800 pb-2">🎵 Background Music Options</h3>
+                
+                <div class="space-y-2" id="audio-preset-list"></div>
 
-            // 6. ORBITING
-            else if (behavior === 'orbiting') {
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                };
-            }
+                <div class="pt-2 border-t border-slate-800">
+                    <label class="block text-xs text-slate-400 mb-1">Custom Audio Direct URL (.mp3 / .m4a)</label>
+                    <input type="text" id="input-custom-audio" onchange="setCustomAudio(this.value)" placeholder="https://example.com/song.mp3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 focus:outline-none focus:border-amber-400">
+                </div>
+            </div>
 
-            // 7. GUILT-TRIP
-            else if (behavior === 'guilttrip') {
-                stateGuiltIndices[stepNum] = 0;
-                const guiltTexts = ["Are you sure?", "Really?", "Think of us!", "Click Yes instead!"];
-                const guiltClick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    let idx = stateGuiltIndices[stepNum];
-                    if (idx < guiltTexts.length) {
-                        newNoBtn.innerText = guiltTexts[idx];
-                        stateGuiltIndices[stepNum]++;
-                    } else {
-                        newNoBtn.innerText = activeYesLabel;
-                        newNoBtn.style.background = appConfig.yesBg;
-                        newNoBtn.style.color = appConfig.yesColor;
-                        newNoBtn.onclick = () => handleYesClick(nextTarget);
-                    }
-                };
-                newNoBtn.onclick = guiltClick;
-            }
+        </section>
 
-            // 8. POP-UP TRAP
-            else if (behavior === 'popuptrap') {
-                newNoBtn.onclick = () => {
-                    alert("Alert 1: Really?");
-                    alert("Alert 2: Are you strictly sure?");
-                    alert("Alert 3: Okay, fine! Re-directing to YES...");
-                    handleYesClick(nextTarget);
-                };
-            }
-
-            // 9. GRAVITY FALL
-            else if (behavior === 'gravity') {
-                const gravDrop = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    newNoBtn.classList.add('falling-btn');
-                    setTimeout(() => {
-                        newNoBtn.style.display = 'none';
-                    }, 1200);
-                };
-                newNoBtn.onclick = gravDrop;
-            }
-
-            // 10. SPLIT / DISSECTING BUTTON
-            else if (behavior === 'split') {
-                const triggerSplit = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    const letters = ["Y", "E", "S"];
-                    const rect = newNoBtn.getBoundingClientRect();
-                    const targetRect = yesBtn.getBoundingClientRect();
-
-                    letters.forEach((char, i) => {
-                        const particle = document.createElement('div');
-                        particle.className = 'split-letter-particle';
-                        particle.innerText = char;
-                        particle.style.left = `${rect.left + (i * 20)}px`;
-                        particle.style.top = `${rect.top}px`;
-                        document.body.appendChild(particle);
-
-                        setTimeout(() => {
-                            particle.style.left = `${targetRect.left + 20}px`;
-                            particle.style.top = `${targetRect.top}px`;
-                            particle.style.transform = 'scale(1.5)';
-                            particle.style.opacity = '0';
-                        }, 50);
-
-                        setTimeout(() => particle.remove(), 700);
-                    });
-
-                    newNoBtn.style.opacity = '0';
-                    setTimeout(() => newNoBtn.style.display = 'none', 300);
-                };
-                newNoBtn.onclick = triggerSplit;
-            }
-        }
-
-        // ကတ်ပြား ဘောင်အတွင်း၌သာ အတိအကျ ရွေ့လျားစေသော လုပ်ဆောင်ချက် (Screen အပြင်/နှိပ်လို့မရတဲ့နေရာသို့ လုံးဝမရောက်ပါ)
-        function moveButtonInsideCardStrict(btnEl, cardEl) {
-            if (!btnEl.classList.contains('escaped-btn-card')) {
-                btnEl.classList.add('escaped-btn-card');
-            }
-            const cardRect = cardEl.getBoundingClientRect();
-            const btnRect = btnEl.getBoundingClientRect();
-
-            const padding = 20;
-            const maxX = cardRect.width - btnRect.width - padding;
-            const maxY = cardRect.height - btnRect.height - padding;
-
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-
-            btnEl.style.left = `${randomX}px`;
-            btnEl.style.top = `${randomY}px`;
-        }
-
-        function setEnvelopeImg(url, element) {
-            document.getElementById('cfg-envelope-img').value = url;
-            if (element) {
-                document.querySelectorAll('.env-thumb').forEach(el => el.classList.remove('selected'));
-                element.classList.add('selected');
-            }
-            updateConfig();
-        }
-
-        function updateEnvelopeCustomImg() {
-            updateConfig();
-        }
-
-        function setCardStyle(styleClass) {
-            appConfig.cardStyle = styleClass;
-            updateConfig();
-        }
-
-        function setPaperStyle(styleClass) {
-            appConfig.paperStyle = styleClass;
-            updateConfig();
-        }
-
-        function setTheme(themeKey) {
-            if (themes[themeKey]) {
-                appConfig.bgGradient = themes[themeKey];
-                document.getElementById('preview-body').style.background = appConfig.bgGradient;
-            }
-        }
-
-        // PREVIEW STEP SWITCHER
-        function previewStep(stepTarget) {
-            currentActiveStepView = stepTarget;
-            document.querySelectorAll('.step-view').forEach(s => s.classList.remove('active'));
+        <!-- LIVE INTERACTIVE CANVAS (RIGHT) -->
+        <section class="lg:col-span-7 flex flex-col bg-slate-900/60 rounded-2xl border border-slate-800 p-4 relative min-h-[550px] overflow-hidden">
             
-            const targetEl = document.getElementById(`prev-step-${stepTarget}`);
-            if (targetEl) targetEl.classList.add('active');
+            <!-- Canvas Toolbar -->
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 z-30">
+                <div class="flex items-center gap-2">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-xs font-semibold text-slate-300 uppercase tracking-wider">Interactive Live Canvas</span>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <button onclick="playFullFlowPreview()" class="text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1.5 rounded-lg flex items-center gap-1 shadow-md transition">
+                        ▶ Replay Full Flow
+                    </button>
+                    <button onclick="directOpenCardModal()" class="text-xs bg-purple-600 hover:bg-purple-700 text-white font-medium px-3 py-1.5 rounded-lg transition">
+                        📜 View Paper Card
+                    </button>
+                </div>
+            </div>
 
-            const stepNavBar = document.getElementById('step-nav-bar');
-            if(stepNavBar) {
-                const buttons = stepNavBar.querySelectorAll('button');
-                buttons.forEach(btn => {
-                    if(btn.innerText.trim() === `Step ${stepTarget}` || 
-                      (stepTarget === 'falling' && btn.innerText.trim() === 'Bouquet') ||
-                      (stepTarget === 'letter' && btn.innerText.trim() === 'Letter')) {
-                        btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition text-center whitespace-nowrap bg-pink-600 text-white shadow";
-                    } else {
-                        btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition text-center whitespace-nowrap bg-slate-700 hover:bg-pink-600 text-white";
-                    }
-                });
-            }
-        }
+            <!-- Dynamic Interactive Preview Container -->
+            <div id="preview-stage" class="flex-1 relative rounded-xl my-2 overflow-hidden flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 transition-all duration-300">
+                
+                <!-- Background Sparkles -->
+                <div id="sparkle-stage" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
 
-        // PREVIEW INTERACTIVE ACTIONS
-        let isTestMode = false;
-        function toggleTestMode(enable) {
-            isTestMode = enable;
-            const testBtn = document.getElementById('mode-test-btn');
-            const editBtn = document.getElementById('mode-edit-btn');
+                <!-- STEP 1: BOUQUET START SCREEN -->
+                <div id="preview-step-start" class="absolute inset-0 z-20 flex flex-col items-center justify-center cursor-pointer transition-all duration-500 p-4 text-center" onclick="proceedToStep2()">
+                    <span class="text-xs uppercase tracking-widest text-amber-400 font-bold mb-2 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">Step 1: Start Screen</span>
+                    <h2 id="prev-start-hint" class="text-amber-200 text-base sm:text-lg font-bold drop-shadow-md mb-4 pulse-glow">✨ Click the bouquet ✨</h2>
+                    <img id="prev-bouquet-img" src="" class="w-44 sm:w-52 h-auto object-contain hover:scale-105 transition-transform duration-300 filter drop-shadow-lg">
+                    <p class="text-[11px] text-slate-400 mt-4">(Clicking this simulates playing background music)</p>
+                </div>
 
-            if (enable) {
-                testBtn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white shadow ring-2 ring-pink-400/50";
-                editBtn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white";
-                previewStep(1);
-            } else {
-                testBtn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400 hover:text-white";
-                editBtn.className = "px-3 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white shadow";
-                previewStep(1);
-            }
-        }
+                <!-- STEP 2: FLOATING PHOTO / ENVELOPE STAGE (NO BORDER) -->
+                <div id="preview-step-floating" class="hidden absolute inset-0 z-20 transition-all duration-500">
+                    <div class="absolute top-4 text-center z-10 px-4 w-full">
+                        <span class="text-[10px] uppercase tracking-widest text-purple-300 font-bold bg-purple-500/20 px-2.5 py-0.5 rounded-full border border-purple-400/30">Step 2: Floating Envelope</span>
+                        <h2 class="text-amber-200 text-sm sm:text-base font-bold drop-shadow-md mt-1">✨ Tap The Floating Envelope ✨</h2>
+                    </div>
 
-        function getRandomWarning() {
-            if (!appConfig.warnings || appConfig.warnings.length === 0) return "⚠️ No နှိပ်လို့ မရပါဘူးနော်!";
-            return appConfig.warnings[Math.floor(Math.random() * appConfig.warnings.length)];
-        }
+                    <!-- Floating Card Element (NO BORDER styling) -->
+                    <div id="prev-falling-card" class="anim-floating-card z-30 flex flex-col items-center justify-center cursor-pointer" onclick="proceedToStep3()">
+                        <img id="prev-envelope-img" src="" class="w-36 sm:w-44 h-auto object-contain shadow-2xl rounded-lg">
+                        <span class="pulse-glow mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-slate-900 font-bold text-xs shadow-lg border border-amber-200">
+                            Click Me ✨
+                        </span>
+                    </div>
+                </div>
 
-        let popupTimerPrev;
-        function showPopupWarningPrev(wrapperId) {
-            const wrapper = document.getElementById(wrapperId);
-            if (!wrapper) return;
+                <!-- STEP 3: NOTE PAPER CARD MODAL -->
+                <div id="preview-step-card" class="hidden absolute inset-0 z-40 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-all duration-500">
+                    
+                    <div id="prev-paper-element" class="paper-vintage relative w-full max-w-sm p-6 sm:p-7 rounded-xl shadow-2xl transition-all duration-300 transform scale-100">
+
+                        <!-- Card Header -->
+                        <div class="text-center mb-4 pt-2">
+                            <span id="prev-card-title" class="text-2xl sm:text-3xl font-serif-custom title-text block">Happy Birthday</span>
+                            <div class="w-16 h-0.5 bg-amber-800/30 mx-auto mt-2"></div>
+                        </div>
+
+                        <!-- Card Message -->
+                        <div class="space-y-3 text-center leading-relaxed my-4 pb-4">
+                            <p id="prev-greeting" class="text-base sm:text-lg font-bold heading-text">🎂 Happy Birthday, Babe! 🎂</p>
+                            <p id="prev-main-msg" class="text-xs sm:text-sm font-medium px-2">Wishing you a day filled with love, joy, and endless laughter. Thank you for being my constant source of happiness! 💖</p>
+                            <p id="prev-sub-msg" class="text-xs italic pt-1 opacity-90">May all your dreams come true. Take good care of yourself always! ✨</p>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="mt-4 pt-3 border-t border-black/10 flex items-center justify-between text-[11px]">
+                            <span id="prev-sign-left" class="font-cursive text-sm">With All My Love ❤️</span>
+                            <span id="prev-sign-right">✨ Forever Yours ✨</span>
+                        </div>
+
+                        <!-- CORNER STAMP / STICKER PHOTO (TAP TO EXPAND) -->
+                        <div class="corner-stamp-wrapper" onclick="openEnlargedStampModal(event)" title="Click to view full photo">
+                            <div class="stamp-tape"></div>
+                            <div class="stamp-polaroid-frame">
+                                <img id="prev-stamp-img" src="" class="w-10 h-10 object-cover rounded">
+                            </div>
+                        </div>
+
+                        <!-- Close Button -->
+                        <button onclick="closeCardModal()" class="absolute top-2 right-2 bg-rose-600 text-white rounded-full p-1 shadow-md hover:bg-rose-700 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- ENLARGED FULL STAMP PHOTO PREVIEW MODAL -->
+                <div id="stamp-full-modal" class="hidden absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300">
+                    <div class="relative bg-white/10 p-3 rounded-2xl max-w-xs w-full text-center border border-white/20 shadow-2xl">
+                        <img id="stamp-full-img" src="" class="w-full h-auto max-h-[60vh] object-contain rounded-xl shadow-lg border border-amber-300/40">
+                        <p class="text-xs text-amber-200 mt-3 font-semibold">✨ Memory Photo Preview ✨</p>
+                        <button onclick="closeEnlargedStampModal()" class="mt-3 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold px-4 py-1.5 rounded-full transition shadow-md">
+                            Close Preview
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="text-center text-[11px] text-slate-400 mt-1">
+                Tip: Click "Replay Full Flow" to test transition or tap the bottom-right corner photo to view full size!
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- JS SCRIPT FOR STUDIO LOGIC AND DATA -->
+    <script>
+        /* --- 10 BOUQUET PRESETS DATA --- */
+        const BOUQUETS = [
+            { id: 'b1', name: 'Animated Sparkle', url: 'https://cdn.pixabay.com/animation/2026/03/15/04/38/04-38-14-772_512.gif' },
+            { id: 'b2', name: 'Romantic Red Roses', url: 'https://images.unsplash.com/photo-1561181286-d3fee7d55364?auto=format&fit=crop&w=400&q=80' },
+            { id: 'b3', name: 'Pastel Tulip Bouquet', url: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=400&q=80' },
+            { id: 'b4', name: 'Bright Sunflowers', url: 'https://images.unsplash.com/photo-1597848212624-a19eb35e2651?auto=format&fit=crop&w=400&q=80' },
+            { id: 'b5', name: 'Lavender Dreams', url: 'https://images.unsplash.com/photo-1528183429752-a97d0bf99b5a?auto=format&fit=crop&w=400&q=80' },
+            { id: 'b6', name: 'Elegant Pink Peonies', url: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?auto=format&fit=crop&w=400&q=80' },
+            { id: 'b7', name: 'White Lilies Luxury', url: 'https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?auto=format&fit=crop&w=400&q=80' },
+            { id: 'b8', name: 'Vintage Floral Mix', url: 'https://images.unsplash.com/photo-1508610048659-a06b669e3321?auto=format&fit=crop&w=400&q=80' },
+            { id: 'b9', name: 'Cute Animated Flowers', url: 'https://cdn.pixabay.com/animation/2023/03/20/12/35/12-35-13-180_512.gif' },
+            { id: 'b10', name: 'Golden Celebration Bouquet', url: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80' }
+        ];
+
+        /* --- 10 ENVELOPE / PHOTO PRESETS DATA --- */
+        const ENVELOPES = [
+            { id: 'e1', name: 'Golden Sparkle Envelope', url: 'https://user34427.na.imgto.link/public/20260921/1000021860.avif' },
+            { id: 'e2', name: 'Classic Pink Love Envelope', url: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80' },
+            { id: 'e3', name: 'Vintage Sealed Letter', url: 'https://images.unsplash.com/photo-1579202673506-ca3ce28943ef?auto=format&fit=crop&w=400&q=80' },
+            { id: 'e4', name: 'Romantic Rose Envelope', url: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=400&q=80' },
+            { id: 'e5', name: 'Cute Heart Letter', url: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=400&q=80' },
+            { id: 'e6', name: 'Luxury Gold Envelope', url: 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=400&q=80' },
+            { id: 'e7', name: 'Birthday Gift Card Cover', url: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&w=400&q=80' },
+            { id: 'e8', name: 'Floral Envelope Card', url: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=400&q=80' },
+            { id: 'e9', name: 'Aesthetic Pastel Envelope', url: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=400&q=80' },
+            { id: 'e10', name: 'Starry Night Card', url: 'https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=400&q=80' }
+        ];
+
+        /* --- 10 PAPER CARD DESIGN PRESETS --- */
+        const PAPER_DESIGNS = [
+            { id: 'p1', name: 'Vintage Parchment', cssClass: 'paper-vintage' },
+            { id: 'p2', name: 'Rose Gold Soft Paper', cssClass: 'paper-rosegold' },
+            { id: 'p3', name: 'Midnight Dark Elegant', cssClass: 'paper-midnight' },
+            { id: 'p4', name: 'Pastel Pink Love Note', cssClass: 'paper-pink' },
+            { id: 'p5', name: 'Floral Border Paper', cssClass: 'paper-floral' },
+            { id: 'p6', name: 'Golden Luxury Paper', cssClass: 'paper-golden' },
+            { id: 'p7', name: 'Classic Lined Notebook', cssClass: 'paper-notebook' },
+            { id: 'p8', name: 'Cozy Kraft Paper', cssClass: 'paper-kraft' },
+            { id: 'p9', name: 'Aesthetic Glassmorphism', cssClass: 'paper-glass' },
+            { id: 'p10', name: 'Lavender Dream', cssClass: 'paper-lavender' }
+        ];
+
+        /* --- BACKGROUND AUDIO PRESETS DATA WITH NO-MUSIC OPTION --- */
+        const AUDIO_PRESETS = [
+            { name: '🚫 No Music / Muted (သီချင်း မပါပါ)', url: '' },
+            { name: 'Soft Birthday Piano (Default)', url: 'https://www.image2url.com/r2/default/audio/1789288232634-9a89e91e-e43f-4d68-b101-bf9b607f0f76.m4a' },
+            { name: 'Acoustic Romantic Guitar', url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-acoustic-guitar-112349.mp3' },
+            { name: 'Upbeat Happy Birthday Melody', url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a8d11c.mp3?filename=happy-birthday-10022.mp3' },
+            { name: 'Lofi Sweet Dreams Melodic', url: 'https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f7e7f1.mp3?filename=sweet-lofi-122899.mp3' }
+        ];
+
+        /* STUDIO STATE MANAGEMENT */
+        let state = {
+            bouquet: BOUQUETS[0].url,
+            bouquetName: BOUQUETS[0].name,
+            envelope: ENVELOPES[0].url,
+            envelopeName: ENVELOPES[0].name,
+            paperClass: PAPER_DESIGNS[0].cssClass,
+            paperName: PAPER_DESIGNS[0].name,
+            audioUrl: AUDIO_PRESETS[1].url,
+            audioName: AUDIO_PRESETS[1].name,
+            stampUrl: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80',
             
-            const oldPopup = wrapper.querySelector('.popup-warning-preview');
-            if (oldPopup) oldPopup.remove();
+            // Background Configuration State
+            bgType: 'gradient', // 'single' or 'gradient'
+            bgSingleColor: '#0f172a',
+            bgGradientDir: 'to bottom right',
+            bgGradientC1: '#2e1065',
+            bgGradientC2: '#05020d'
+        };
 
-            const popup = document.createElement('div');
-            popup.className = 'popup-warning-preview';
-            popup.innerText = getRandomWarning();
-            wrapper.appendChild(popup);
+        // Initialize Studio Controls on Load
+        window.onload = function() {
+            renderBouquetGrid();
+            renderEnvelopeGrid();
+            renderPaperGrid();
+            renderAudioList();
+            updateStudioState();
+            createSparkles();
+            updateBgCustomization();
+        };
 
-            clearTimeout(popupTimerPrev);
-            popupTimerPrev = setTimeout(() => { popup.remove(); }, 1200);
+        /* RENDER BOUQUET SELECTION GRID */
+        function renderBouquetGrid() {
+            const grid = document.getElementById('bouquet-grid');
+            grid.innerHTML = BOUQUETS.map((b, idx) => `
+                <div onclick="selectBouquet('${b.url}', '${b.name}')" class="cursor-pointer group relative rounded-lg border-2 overflow-hidden transition-all duration-200 ${state.bouquet === b.url ? 'border-amber-400 scale-105 shadow-md' : 'border-slate-800 hover:border-slate-600'}">
+                    <img src="${b.url}" alt="${b.name}" class="w-full h-12 object-cover">
+                    <span class="absolute bottom-0 inset-x-0 bg-black/70 text-[9px] text-center truncate px-1 text-slate-200">${idx+1}</span>
+                </div>
+            `).join('');
         }
 
-        function handleYesClick(targetStep) {
-            if (!isNaN(targetStep)) {
-                previewStep(parseInt(targetStep));
+        function selectBouquet(url, name) {
+            state.bouquet = url;
+            state.bouquetName = name;
+            document.getElementById('bouquet-selected-name').innerText = `Selected: ${name}`;
+            document.getElementById('custom-bouquet-url').value = '';
+            renderBouquetGrid();
+            updateStudioState();
+        }
+
+        function setCustomBouquet(url) {
+            if(!url) return;
+            state.bouquet = url;
+            state.bouquetName = 'Custom Image URL';
+            document.getElementById('bouquet-selected-name').innerText = `Selected: Custom URL`;
+            updateStudioState();
+        }
+
+        /* RENDER ENVELOPE SELECTION GRID */
+        function renderEnvelopeGrid() {
+            const grid = document.getElementById('envelope-grid');
+            grid.innerHTML = ENVELOPES.map((e, idx) => `
+                <div onclick="selectEnvelope('${e.url}', '${e.name}')" class="cursor-pointer group relative rounded-lg border-2 overflow-hidden transition-all duration-200 ${state.envelope === e.url ? 'border-rose-400 scale-105 shadow-md' : 'border-slate-800 hover:border-slate-600'}">
+                    <img src="${e.url}" alt="${e.name}" class="w-full h-12 object-cover">
+                    <span class="absolute bottom-0 inset-x-0 bg-black/70 text-[9px] text-center truncate px-1 text-slate-200">${idx+1}</span>
+                </div>
+            `).join('');
+        }
+
+        function selectEnvelope(url, name) {
+            state.envelope = url;
+            state.envelopeName = name;
+            document.getElementById('envelope-selected-name').innerText = `Selected: ${name}`;
+            document.getElementById('custom-envelope-url').value = '';
+            renderEnvelopeGrid();
+            updateStudioState();
+        }
+
+        function setCustomEnvelope(url) {
+            if(!url) return;
+            state.envelope = url;
+            state.envelopeName = 'Custom Cover URL';
+            document.getElementById('envelope-selected-name').innerText = `Selected: Custom URL`;
+            updateStudioState();
+        }
+
+        /* RENDER PAPER DESIGN GRID */
+        function renderPaperGrid() {
+            const grid = document.getElementById('paper-grid');
+            grid.innerHTML = PAPER_DESIGNS.map((p, idx) => `
+                <div onclick="selectPaper('${p.cssClass}', '${p.name}')" class="cursor-pointer rounded-lg border-2 p-2 text-center text-[10px] font-semibold transition-all duration-200 ${p.cssClass} ${state.paperClass === p.cssClass ? 'border-amber-400 scale-105 ring-2 ring-amber-400/50' : 'border-slate-700 opacity-80 hover:opacity-100'}">
+                    <div class="truncate">${idx+1}. ${p.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function selectPaper(cssClass, name) {
+            state.paperClass = cssClass;
+            state.paperName = name;
+            document.getElementById('paper-selected-name').innerText = `Selected: ${name}`;
+            renderPaperGrid();
+            updateStudioState();
+        }
+
+        /* RENDER AUDIO PRESET LIST */
+        function renderAudioList() {
+            const list = document.getElementById('audio-preset-list');
+            list.innerHTML = AUDIO_PRESETS.map((a, idx) => `
+                <div onclick="selectAudio('${a.url}', '${a.name}')" class="cursor-pointer flex items-center justify-between p-2.5 rounded-lg border ${state.audioUrl === a.url ? 'bg-amber-500/10 border-amber-500/40 text-amber-200' : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'}">
+                    <span class="text-xs font-medium">${a.name}</span>
+                    ${state.audioUrl === a.url ? '<span class="text-xs font-bold text-amber-400">✓ Active</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        function selectAudio(url, name) {
+            state.audioUrl = url;
+            state.audioName = name;
+            document.getElementById('input-custom-audio').value = '';
+            renderAudioList();
+        }
+
+        function setCustomAudio(url) {
+            state.audioUrl = url;
+            state.audioName = 'Custom Audio URL';
+            renderAudioList();
+        }
+
+        /* --- BACKGROUND CUSTOMIZATION LOGIC --- */
+        function setBgType(type) {
+            state.bgType = type;
+            const singleBtn = document.getElementById('bg-type-single-btn');
+            const gradientBtn = document.getElementById('bg-type-gradient-btn');
+            const singleControls = document.getElementById('bg-single-controls');
+            const gradientControls = document.getElementById('bg-gradient-controls');
+
+            if (type === 'single') {
+                singleBtn.className = "py-2 text-xs font-semibold rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition";
+                gradientBtn.className = "py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 transition hover:bg-slate-700";
+                singleControls.classList.remove('hidden');
+                gradientControls.classList.add('hidden');
             } else {
-                previewStep(targetStep);
+                gradientBtn.className = "py-2 text-xs font-semibold rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition";
+                singleBtn.className = "py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 transition hover:bg-slate-700";
+                gradientControls.classList.remove('hidden');
+                singleControls.classList.add('hidden');
+            }
+            updateBgCustomization();
+        }
+
+        function syncColorFromInput(hex, pickerId) {
+            if (/^#[0-9A-F]{6}$/i.test(hex)) {
+                document.getElementById(pickerId).value = hex;
+                updateBgCustomization();
             }
         }
 
-        function openLetterPrev() {
-            previewStep('letter');
+        function applyGradientPreset(dir, c1, c2) {
+            document.getElementById('bg-gradient-dir').value = dir;
+            document.getElementById('bg-gradient-c1').value = c1;
+            document.getElementById('bg-gradient-hex1').value = c1;
+            document.getElementById('bg-gradient-c2').value = c2;
+            document.getElementById('bg-gradient-hex2').value = c2;
+            updateBgCustomization();
         }
 
-        // GENERATE STANDALONE HTML CODE FOR EXPORT (Export ထွက်မည့် HTML ကုဒ်တွင်လည်း ကတ်ပြားအတွင်းသာ ရွေ့ရန် အပြည့်အစုံ ပါဝင်သည်)
-        function generateCompleteHTML() {
-            const warningsArrayJSON = JSON.stringify(appConfig.warnings);
-            const stepsDataJSON = JSON.stringify(appConfig.steps);
+        function updateBgCustomization() {
+            state.bgSingleColor = document.getElementById('bg-single-color').value;
+            document.getElementById('bg-single-hex').value = state.bgSingleColor;
 
-            return `<!DOCTYPE html>
-<html lang="my">
+            state.bgGradientDir = document.getElementById('bg-gradient-dir').value;
+            state.bgGradientC1 = document.getElementById('bg-gradient-c1').value;
+            document.getElementById('bg-gradient-hex1').value = state.bgGradientC1;
+            state.bgGradientC2 = document.getElementById('bg-gradient-c2').value;
+            document.getElementById('bg-gradient-hex2').value = state.bgGradientC2;
+
+            const stage = document.getElementById('preview-stage');
+            if (state.bgType === 'single') {
+                stage.style.background = state.bgSingleColor;
+            } else {
+                if (state.bgGradientDir.includes('circle')) {
+                    stage.style.background = `radial-gradient(${state.bgGradientDir}, ${state.bgGradientC1}, ${state.bgGradientC2})`;
+                } else {
+                    stage.style.background = `linear-gradient(${state.bgGradientDir}, ${state.bgGradientC1}, ${state.bgGradientC2})`;
+                }
+            }
+        }
+
+        /* UPDATE LIVE CANVAS STATE */
+        function updateStudioState() {
+            const fontClass = document.getElementById('input-font-family').value;
+            
+            // Corner Stamp Image Sync
+            state.stampUrl = document.getElementById('input-stamp-url').value || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80';
+            document.getElementById('prev-stamp-img').src = state.stampUrl;
+            document.getElementById('stamp-full-img').src = state.stampUrl;
+
+            // Start Hint & Bouquet
+            document.getElementById('prev-start-hint').innerText = document.getElementById('input-start-hint').value;
+            document.getElementById('prev-start-hint').className = `text-amber-200 text-base sm:text-lg font-bold drop-shadow-md mb-4 pulse-glow ${fontClass}`;
+            document.getElementById('prev-bouquet-img').src = state.bouquet;
+
+            // Envelope image
+            document.getElementById('prev-envelope-img').src = state.envelope;
+
+            // Paper element update
+            const paperEl = document.getElementById('prev-paper-element');
+            paperEl.className = `${state.paperClass} relative w-full max-w-sm p-6 sm:p-7 rounded-xl shadow-2xl transition-all duration-300 transform scale-100 ${fontClass}`;
+
+            // Text elements inside card
+            document.getElementById('prev-card-title').innerText = document.getElementById('input-card-title').value;
+            document.getElementById('prev-greeting').innerText = document.getElementById('input-greeting').value;
+            document.getElementById('prev-main-msg').innerText = document.getElementById('input-main-msg').value;
+            document.getElementById('prev-sub-msg').innerText = document.getElementById('input-sub-msg').value;
+            document.getElementById('prev-sign-left').innerText = document.getElementById('input-sign-left').value;
+            document.getElementById('prev-sign-right').innerText = document.getElementById('input-sign-right').value;
+        }
+
+        /* ENLARGED STAMP MODAL HANDLERS */
+        function openEnlargedStampModal(e) {
+            e.stopPropagation();
+            document.getElementById('stamp-full-modal').classList.remove('hidden');
+        }
+
+        function closeEnlargedStampModal() {
+            document.getElementById('stamp-full-modal').classList.add('hidden');
+        }
+
+        /* PREVIEW STEP TRANSITION FLOWS */
+        function proceedToStep2() {
+            document.getElementById('preview-step-start').classList.add('hidden');
+            document.getElementById('preview-step-floating').classList.remove('hidden');
+        }
+
+        function proceedToStep3() {
+            document.getElementById('preview-step-card').classList.remove('hidden');
+        }
+
+        function closeCardModal() {
+            document.getElementById('preview-step-card').classList.add('hidden');
+        }
+
+        function directOpenCardModal() {
+            document.getElementById('preview-step-start').classList.add('hidden');
+            document.getElementById('preview-step-floating').classList.remove('hidden');
+            document.getElementById('preview-step-card').classList.remove('hidden');
+        }
+
+        function playFullFlowPreview() {
+            document.getElementById('preview-step-card').classList.add('hidden');
+            document.getElementById('preview-step-floating').classList.add('hidden');
+            document.getElementById('preview-step-start').classList.remove('hidden');
+
+            // Reset animation
+            const cardNode = document.getElementById('prev-falling-card');
+            cardNode.style.animation = 'none';
+            cardNode.offsetHeight; /* trigger reflow */
+            cardNode.style.animation = null;
+        }
+
+        function switchControlTab(tab) {
+            document.getElementById('tab-sec-presets').classList.add('hidden');
+            document.getElementById('tab-sec-background').classList.add('hidden');
+            document.getElementById('tab-sec-content').classList.add('hidden');
+            document.getElementById('tab-sec-audio').classList.add('hidden');
+
+            document.getElementById('tab-btn-presets').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700";
+            document.getElementById('tab-btn-background').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700";
+            document.getElementById('tab-btn-content').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700";
+            document.getElementById('tab-btn-audio').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700";
+
+            if(tab === 'presets') {
+                document.getElementById('tab-sec-presets').classList.remove('hidden');
+                document.getElementById('tab-btn-presets').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30";
+            } else if(tab === 'background') {
+                document.getElementById('tab-sec-background').classList.remove('hidden');
+                document.getElementById('tab-btn-background').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30";
+            } else if(tab === 'content') {
+                document.getElementById('tab-sec-content').classList.remove('hidden');
+                document.getElementById('tab-btn-content').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30";
+            } else {
+                document.getElementById('tab-sec-audio').classList.remove('hidden');
+                document.getElementById('tab-btn-audio').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30";
+            }
+        }
+
+        function createSparkles() {
+            const container = document.getElementById('sparkle-stage');
+            if(!container) return;
+            for(let i = 0; i < 20; i++) {
+                const s = document.createElement('div');
+                s.className = 'sparkle-particle';
+                const size = Math.random() * 5 + 2;
+                s.style.width = `${size}px`;
+                s.style.height = `${size}px`;
+                s.style.left = `${Math.random() * 100}%`;
+                s.style.top = `${Math.random() * 100}%`;
+                s.style.setProperty('--duration', `${Math.random() * 5 + 4}s`);
+                container.appendChild(s);
+            }
+        }
+
+        function resetAllDefaults() {
+            selectBouquet(BOUQUETS[0].url, BOUQUETS[0].name);
+            selectEnvelope(ENVELOPES[0].url, ENVELOPES[0].name);
+            selectPaper(PAPER_DESIGNS[0].cssClass, PAPER_DESIGNS[0].name);
+            selectAudio(AUDIO_PRESETS[1].url, AUDIO_PRESETS[1].name);
+            
+            // Reset Background
+            setBgType('gradient');
+            applyGradientPreset('to bottom right', '#2e1065', '#05020d');
+
+            document.getElementById('input-stamp-url').value = 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80';
+            document.getElementById('input-font-family').value = 'font-serif-custom';
+            document.getElementById('input-start-hint').value = '✨ Click the bouquet ✨';
+            document.getElementById('input-card-title').value = 'Happy Birthday';
+            document.getElementById('input-greeting').value = '🎂 Happy Birthday, Babe! 🎂';
+            document.getElementById('input-main-msg').value = 'Wishing you a day filled with love, joy, and endless laughter. Thank you for being my constant source of happiness! 💖';
+            document.getElementById('input-sub-msg').value = 'May all your dreams come true. Take good care of yourself always! ✨';
+            document.getElementById('input-sign-left').value = 'With All My Love ❤️';
+            document.getElementById('input-sign-right').value = '✨ Forever Yours ✨';
+            
+            updateStudioState();
+            playFullFlowPreview();
+        }
+
+        /* --- EXPORT GENERATED STANDALONE HTML FILE --- */
+        function generateAndExportHTML() {
+            const fontClass = document.getElementById('input-font-family').value;
+            const startHint = document.getElementById('input-start-hint').value;
+            const cardTitle = document.getElementById('input-card-title').value;
+            const greeting = document.getElementById('input-greeting').value;
+            const mainMsg = document.getElementById('input-main-msg').value;
+            const subMsg = document.getElementById('input-sub-msg').value;
+            const signLeft = document.getElementById('input-sign-left').value;
+            const signRight = document.getElementById('input-sign-right').value;
+            const stampImgUrl = state.stampUrl;
+
+            // Dynamic Background CSS
+            let backgroundStyleCSS = '';
+            if (state.bgType === 'single') {
+                backgroundStyleCSS = `background: ${state.bgSingleColor};`;
+            } else {
+                if (state.bgGradientDir.includes('circle')) {
+                    backgroundStyleCSS = `background: radial-gradient(${state.bgGradientDir}, ${state.bgGradientC1}, ${state.bgGradientC2});`;
+                } else {
+                    backgroundStyleCSS = `background: linear-gradient(${state.bgGradientDir}, ${state.bgGradientC1}, ${state.bgGradientC2});`;
+                }
+            }
+
+            // Audio tag logic
+            const audioTagHTML = state.audioUrl 
+                ? `<audio id="bgMusic" loop src="${state.audioUrl}"></audio>` 
+                : `<!-- No music selected -->`;
+
+            // Audio play trigger JS logic
+            const audioPlayJS = state.audioUrl 
+                ? `const audio = document.getElementById('bgMusic'); if(audio) audio.play().catch(err => console.log(err));` 
+                : `// Muted / No music mode`;
+
+            // Generate full standalone HTML template
+            const standaloneHTML = `<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Love Surprise</title>
+    <title>${cardTitle}</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Padauk:wght@400;700&family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"><\/script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@400;500;600;700&family=Dancing+Script:wght@600&family=Cinzel:wght@600&family=Caveat:wght@600&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pyidaungsu', 'Padauk', sans-serif; }
         body {
-            background: ${appConfig.bgGradient};
-            background-size: 400% 400%;
-            animation: gradientBG 12s ease infinite;
-            display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; padding: 15px;
-        }
-        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .card-container { width: 100%; max-width: 440px; min-height: 520px; display: flex; justify-content: center; align-items: center; position: relative; }
-        
-        .interactive-card {
-            padding: 35px 25px; border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15), inset 0 0 20px rgba(255,255,255,0.6);
-            text-align: center; width: 100%; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 2px solid rgba(255, 255, 255, 0.8); transition: all 0.4s ease; position: relative;
+            font-family: 'Poppins', sans-serif;
+            ${backgroundStyleCSS}
             overflow: hidden;
+            height: 100vh;
+            touch-action: manipulation;
         }
 
-        .env-glass { background: rgba(255, 255, 255, 0.75); color: #be123c; }
-        .env-romantic-red { background: linear-gradient(135deg, rgba(225, 29, 72, 0.9), rgba(159, 18, 57, 0.95)); color: #ffffff; border-color: rgba(254, 205, 211, 0.5); }
-        .env-pastel-pink { background: rgba(252, 231, 243, 0.92); color: #9d174d; border-color: rgba(244, 114, 182, 0.6); }
-        .env-classic-gold { background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95)); color: #78350f; border-color: rgba(245, 158, 11, 0.5); }
-        .env-dark-velvet { background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95)); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); }
+        .font-cursive { font-family: 'Great Vibes', cursive; }
+        .font-serif-custom { font-family: 'Playfair Display', serif; }
+        .font-padauk { font-family: 'Padauk', sans-serif; }
 
-        .step { display: none; flex-direction: column; align-items: center; gap: 22px; animation: fadeIn 0.4s ease-in-out forwards; width: 100%; }
-        .step.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        img.gif-box { width: 180px; height: 180px; object-fit: cover; border-radius: 22px; box-shadow: 0 10px 25px rgba(220,38,38,0.2); border: 4px solid rgba(255,255,255,0.9); }
-        
-        .btn-group { display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; min-height: 110px; position: relative; padding: 10px; }
-        
-        .btn-custom-yes {
-            padding: 14px 34px; font-weight: 800; border-radius: 50px; cursor: pointer;
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.25s ease;
-            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4); border: none; display: inline-flex; justify-content: center; align-items: center; z-index: 5;
-        }
-        .btn-custom-yes:hover { transform: translateY(-3px) scale(1.06); }
-
-        .btn-custom-no {
-            padding: 14px 34px; font-weight: 800; border-radius: 50px; cursor: pointer;
-            transition: transform 0.25s, box-shadow 0.25s, opacity 0.3s;
-            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4); border: none; display: inline-flex; justify-content: center; align-items: center; z-index: 5;
+        @keyframes floatDownToCenter {
+            0% { transform: translate(-50%, -100vh) rotate(-12deg); opacity: 0; }
+            20% { opacity: 1; }
+            35% { transform: translate(-35%, -15vh) rotate(8deg); }
+            65% { transform: translate(-60%, 10vh) rotate(-6deg); }
+            85% { transform: translate(-45%, 22vh) rotate(4deg); }
+            100% { transform: translate(-50%, 25vh) rotate(-2deg); }
         }
 
-        .btn-no-wrapper { position: relative; display: inline-flex; justify-content: center; align-items: center; }
-        
-        .popup-warning {
-            position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: rgba(255, 228, 230, 0.95);
-            color: #e11d48; border: 2px solid #f43f5e; padding: 8px 14px; border-radius: 12px; font-size: 0.85rem;
-            font-weight: 700; white-space: nowrap; box-shadow: 0 6px 18px rgba(225, 29, 72, 0.25); z-index: 10000;
-            pointer-events: none; backdrop-filter: blur(4px); animation: popupBounce 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        @keyframes centerSwaying {
+            0%, 100% { transform: translate(-50%, 25vh) rotate(-2deg) scale(1); }
+            50% { transform: translate(-50%, 21vh) rotate(2deg) scale(1.03); }
         }
-        .popup-warning::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 6px; border-style: solid; border-color: #f43f5e transparent transparent transparent; }
-        @keyframes popupBounce { 0% { opacity: 0; transform: translate(-50%, 10px) scale(0.8); } 100% { opacity: 1; transform: translate(-50%, 0) scale(1); } }
-        
-        .escaped-btn-card { position: absolute !important; transition: all 0.2s ease-in-out; z-index: 50; }
 
-        @keyframes orbitAnimation { 0% { transform: rotate(0deg) translateX(70px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); } }
-        .orbiting-btn { animation: orbitAnimation 2.2s linear infinite; }
-
-        @keyframes gravityFallAnim { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(600px) rotate(180deg); opacity: 0; } }
-        .falling-btn { animation: gravityFallAnim 1.2s ease-in forwards !important; }
-
-        .split-letter-particle { position: absolute; font-weight: 900; color: #ec4899; font-size: 1.5rem; pointer-events: none; z-index: 10000; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-        .falling-envelope-container {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; padding: 20px; user-select: none;
-            animation: fallAndSway 3.2s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatGentle 2.6s ease-in-out infinite 3.2s;
+        .free-floating-image {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            animation: floatDownToCenter 6s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+                       centerSwaying 4s ease-in-out infinite 6s;
+            cursor: pointer;
+            transition: filter 0.3s ease, transform 0.5s ease;
+            user-select: none;
+            -webkit-user-drag: none;
         }
-        @keyframes fallAndSway { 0% { transform: translateY(-280px) rotate(-18deg); opacity: 0; } 30% { transform: translateY(-120px) rotate(14deg); opacity: 1; } 60% { transform: translateY(20px) rotate(-10deg); } 85% { transform: translateY(-8px) rotate(6deg); } 100% { transform: translateY(0px) rotate(0deg); opacity: 1; } }
-        @keyframes floatGentle { 0%, 100% { transform: translateY(0px) rotate(-4deg); } 50% { transform: translateY(-14px) rotate(4deg); } }
-        .no-frame-gif { width: 210px; height: auto; background: transparent !important; filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.22)); transition: transform 0.3s ease; }
-        .falling-envelope-container:hover .no-frame-gif { transform: scale(1.08); }
-        .tap-hint-badge { margin-top: 18px; background: rgba(255, 255, 255, 0.88); color: #be123c; font-weight: 700; font-size: 1.05rem; padding: 8px 20px; border-radius: 30px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); border: 1.5px solid rgba(255, 255, 255, 0.9); animation: pulseHint 1.6s infinite ease-in-out; }
-        @keyframes pulseHint { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.06); opacity: 1; } }
-        
-        .paper-letter-wrapper { position: relative; width: 100%; max-width: 380px; margin: 0 auto; padding: 10px; display: flex; justify-content: center; align-items: center; z-index: 10; }
-        .paper-letter-pop { animation: popInLetter 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes popInLetter { 0% { opacity: 0; transform: scale(0.3) rotate(-12deg); } 70% { transform: scale(1.04) rotate(-2deg); } 100% { opacity: 1; transform: scale(1) rotate(-2deg); } }
-        
-        .paper-sheet { position: relative; width: 100%; padding: 32px 22px 28px 22px; border-radius: 16px; box-shadow: -8px 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255, 255, 255, 0.8); }
-        
-        .paper-classic { background-color: rgba(255, 253, 248, 0.96); color: #2b2b2b; }
-        .paper-classic .letter-title { color: #b91c1c; border-bottom: 2px dashed #fca5a5; }
-        .paper-classic .letter-signature { color: #9f1239; }
 
-        .paper-rose { background-color: rgba(255, 241, 242, 0.97); color: #881337; }
-        .paper-rose .letter-title { color: #be123c; border-bottom: 2px dashed #fda4af; }
-        .paper-rose .letter-signature { color: #e11d48; }
+        /* NO BORDER styling on Envelope */
+        .free-floating-image img {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
 
-        .paper-vintage { background-color: rgba(254, 243, 199, 0.97); color: #451a03; border-color: #fde68a; }
-        .paper-vintage .letter-title { color: #78350f; border-bottom: 2px dashed #fcd34d; }
-        .paper-vintage .letter-signature { color: #92400e; }
+        .free-floating-image:hover img {
+            filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.75));
+        }
 
-        .paper-grid { background-color: rgba(255, 255, 255, 0.97); color: #1e293b; background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px); background-size: 16px 16px; }
-        .paper-grid .letter-title { color: #0284c7; border-bottom: 2px dashed #38bdf8; }
-        .paper-grid .letter-signature { color: #0369a1; }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
 
-        .paper-dark { background-color: rgba(15, 23, 42, 0.96); color: #f1f5f9; border-color: #334155; }
-        .paper-dark .letter-title { color: #fb7185; border-bottom: 2px dashed #f43f5e; }
-        .paper-dark .letter-signature { color: #fda4af; }
+        .click-hint { animation: pulseGlow 1.8s infinite; }
 
-        .paperclip { position: absolute; top: 12px; right: 28px; width: 18px; height: 45px; border: 3px solid #4a4a4a; border-radius: 12px; z-index: 6; transform: rotate(8deg); }
-        .letter-content { font-family: 'Pyidaungsu', sans-serif; line-height: 1.8; font-size: 0.95rem; text-align: left; }
-        .letter-title { text-align: center; font-size: 1.3rem; font-weight: 700; margin-bottom: 14px; padding-bottom: 8px; }
-        .letter-signature { text-align: right; margin-top: 18px; font-weight: 700; font-size: 1rem; }
+        /* --- PRESET PAPER DESIGNS --- */
+        .paper-vintage {
+            background: #f4efd8;
+            background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0), linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 15px 15px, 100% 24px;
+            color: #292524; border: 1px solid #d6d3d1;
+        }
+        .paper-vintage .title-text { color: #78350f; }
+        .paper-vintage .heading-text { color: #9f1239; }
+
+        .paper-rosegold {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            color: #4a2c3a; border: 1px solid #fbcfe8;
+        }
+        .paper-rosegold .title-text { color: #9d174d; }
+        .paper-rosegold .heading-text { color: #be185d; }
+
+        .paper-midnight {
+            background: linear-gradient(145deg, #0f172a, #1e1b4b);
+            color: #f1f5f9; border: 1px solid #3b82f6;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+        .paper-midnight .title-text { color: #fbbf24; }
+        .paper-midnight .heading-text { color: #38bdf8; }
+
+        .paper-pink {
+            background: #fdf2f8;
+            background-image: radial-gradient(#f472b6 0.5px, transparent 0.5px);
+            background-size: 12px 12px; color: #831843; border: 2px solid #fbcfe8;
+        }
+        .paper-pink .title-text { color: #db2777; }
+        .paper-pink .heading-text { color: #be185d; }
+
+        .paper-floral {
+            background: #fffdfa; border: 8px solid #fef3c7;
+            outline: 2px dashed #f59e0b; outline-offset: -5px; color: #374151;
+        }
+        .paper-floral .title-text { color: #d97706; }
+        .paper-floral .heading-text { color: #b45309; }
+
+        .paper-golden {
+            background: linear-gradient(135deg, #1c1917, #292524);
+            color: #fef3c7; border: 2px solid #d97706;
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.3);
+        }
+        .paper-golden .title-text { color: #fbbf24; }
+        .paper-golden .heading-text { color: #fef08a; }
+
+        .paper-notebook {
+            background: #ffffff;
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 100% 26px; color: #1f2937; border: 1px solid #d1d5db;
+            border-left: 4px solid #ef4444;
+        }
+        .paper-notebook .title-text { color: #1e40af; }
+        .paper-notebook .heading-text { color: #dc2626; }
+
+        .paper-kraft {
+            background: #d7ba89;
+            background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
+            background-size: 8px 8px; color: #3b250f; border: 1px solid #b8955d;
+        }
+        .paper-kraft .title-text { color: #581c87; }
+        .paper-kraft .heading-text { color: #7f1d1d; }
+
+        .paper-glass {
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .paper-glass .title-text { color: #fef08a; }
+        .paper-glass .heading-text { color: #f472b6; }
+
+        .paper-lavender {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            color: #3b0764; border: 1px solid #c084fc;
+        }
+        .paper-lavender .title-text { color: #7e22ce; }
+        .paper-lavender .heading-text { color: #a21caf; }
+
+        /* Stamp Tape Polaroid Styling */
+        .corner-stamp-wrapper {
+            position: absolute;
+            bottom: -8px;
+            right: -8px;
+            transform: rotate(6deg);
+            transition: transform 0.2s ease, filter 0.2s ease;
+            cursor: pointer;
+            z-index: 25;
+        }
+        .corner-stamp-wrapper:hover {
+            transform: rotate(0deg) scale(1.1);
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.35));
+        }
+        .stamp-polaroid-frame {
+            background: #ffffff;
+            padding: 4px 4px 14px 4px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .stamp-tape {
+            position: absolute;
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-3deg);
+            width: 32px;
+            height: 12px;
+            background: rgba(254, 240, 138, 0.75);
+            backdrop-filter: blur(2px);
+            border: 1px dashed rgba(217, 119, 6, 0.4);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 30;
+        }
+
+        .sparkle {
+            position: absolute;
+            background: radial-gradient(circle, #fff 10%, rgba(255,215,0,0.8) 60%, transparent 100%);
+            border-radius: 50%; pointer-events: none;
+            animation: floatUp var(--duration) linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        .blurred-content { filter: blur(6px); pointer-events: none; transition: filter 0.5s ease; }
     </style>
 </head>
-<body>
-    <div class="card-container" id="app-card-container">
-        <!-- Dynamic Steps Rendered via JS -->
+<body class="relative flex items-center justify-center min-h-screen select-none overflow-hidden ${fontClass}">
+
+    ${audioTagHTML}
+
+    <!-- Start Screen -->
+    <div id="startScreen" class="absolute inset-0 z-40 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700" onclick="startExperience()">
+        <h1 class="text-amber-200 text-lg md:text-xl font-bold tracking-wide drop-shadow-md mb-6 click-hint text-center px-4">
+            ${startHint}
+        </h1>
+        <img src="${state.bouquet}" alt="Bouquet" class="w-48 sm:w-56 h-auto object-contain hover:scale-105 transition-transform duration-300">
+    </div>
+
+    <!-- Main Floating Screen -->
+    <div id="mainContent" class="hidden w-full h-full transition-all duration-500">
+        <div id="sparkle-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+        <div class="absolute w-80 h-80 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute w-72 h-72 bg-amber-500/20 rounded-full blur-3xl pointer-events-none -top-10 -left-10"></div>
+
+        <div class="absolute top-8 text-center z-10 px-4 w-full">
+            <h1 class="text-amber-200 text-base md:text-lg font-bold tracking-wide drop-shadow-md">✨ Tap The Envelope ✨</h1>
+            <p class="text-xs text-purple-300/80 mt-1">Tap the floating photo to open birthday wish</p>
+        </div>
+
+        <div id="fallingCard" class="free-floating-image z-20 flex flex-col items-center justify-center" onclick="openWishCard()">
+            <img src="${state.envelope}" alt="Birthday Special" class="w-40 sm:w-48 h-auto object-contain pointer-events-auto rounded-lg">
+            <span class="click-hint mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/90 text-slate-900 font-bold text-xs tracking-wider shadow-lg border border-amber-200">
+                <svg class="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                Click Me ✨
+            </span>
+        </div>
+    </div>
+
+    <!-- Note Paper Card Modal -->
+    <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="closeWishCardOnBg(event)">
+        
+        <div class="${state.paperClass} relative w-full max-w-md p-6 sm:p-8 rounded-xl z-10 shadow-2xl transform scale-90 transition-transform duration-500" id="modalCard">
+
+            <div class="text-center mb-4 pt-3">
+                <span class="text-3xl sm:text-4xl title-text block">${cardTitle}</span>
+                <div class="w-20 h-0.5 bg-amber-800/20 mx-auto mt-2"></div>
+            </div>
+
+            <div class="space-y-3 text-center leading-relaxed my-4 pb-4">
+                <p class="text-lg sm:text-xl font-bold heading-text drop-shadow-sm">${greeting}</p>
+                <p class="text-sm sm:text-base font-medium px-2 opacity-95">${mainMsg}</p>
+                <p class="text-xs sm:text-sm italic pt-1 opacity-80">${subMsg}</p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-black/10 flex items-center justify-between text-xs">
+                <span class="font-cursive text-base">${signLeft}</span>
+                <span>${signRight}</span>
+            </div>
+
+            <!-- CORNER STAMP / POLAROID PHOTO -->
+            <div class="corner-stamp-wrapper" onclick="openEnlargedStampModal(event)" title="Click to expand photo">
+                <div class="stamp-tape"></div>
+                <div class="stamp-polaroid-frame">
+                    <img src="${stampImgUrl}" class="w-11 h-11 object-cover rounded">
+                </div>
+            </div>
+
+            <button onclick="closeWishCard()" class="absolute top-3 right-3 z-30 bg-rose-600 text-white rounded-full p-1.5 shadow-md hover:bg-rose-700 transition-colors focus:outline-none">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- ENLARGED FULL STAMP PHOTO PREVIEW MODAL -->
+    <div id="stampFullModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300">
+        <div class="relative bg-white/10 p-4 rounded-2xl max-w-xs w-full text-center border border-white/20 shadow-2xl">
+            <img src="${stampImgUrl}" class="w-full h-auto max-h-[65vh] object-contain rounded-xl shadow-lg border border-amber-300/40">
+            <p class="text-xs text-amber-200 mt-3 font-semibold">✨ Memory Photo Preview ✨</p>
+            <button onclick="closeEnlargedStampModal()" class="mt-3 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold px-4 py-1.5 rounded-full transition shadow-md">
+                Close Preview
+            </button>
+        </div>
     </div>
 
     <script>
-        const formspreeUrl = "${appConfig.formspreeUrl}";
-        const warnings = ${warningsArrayJSON};
-        const steps = ${stepsDataJSON};
-        
-        const defaultYesText = "${appConfig.yesText}";
-        const yesBg = "${appConfig.yesBg}";
-        const yesColor = "${appConfig.yesColor}";
-        const yesFontSize = "${appConfig.yesFontSize}";
+        function startExperience() {
+            ${audioPlayJS}
 
-        const defaultNoText = "${appConfig.noText}";
-        const noBg = "${appConfig.noBg}";
-        const noColor = "${appConfig.noColor}";
-        const noFontSize = "${appConfig.noFontSize}";
+            const startScreen = document.getElementById('startScreen');
+            const mainContent = document.getElementById('mainContent');
 
-        const questionFontSize = "${appConfig.questionFontSize}";
-
-        const cardStyle = "${appConfig.cardStyle}";
-        const paperStyle = "${appConfig.paperStyle}";
-        const envelopeImg = "${appConfig.envelopeImg}";
-
-        const letterTitle = "${appConfig.letterTitle}";
-        const letterP1 = "${appConfig.letterP1}";
-        const letterP2 = "${appConfig.letterP2}";
-        const letterP3 = "${appConfig.letterP3}";
-        const letterSig = "${appConfig.letterSig}";
-
-        function getRandomWarning() {
-            if(!warnings || warnings.length === 0) return "⚠️ No နှိပ်လို့ မရပါဘူးနော်!";
-            return warnings[Math.floor(Math.random() * warnings.length)];
+            startScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                startScreen.style.display = 'none';
+                mainContent.classList.remove('hidden');
+                createSparkles();
+            }, 700);
         }
 
-        function sendToFormspree(userResponse, stepName) {
-            if (!formspreeUrl) return;
-            fetch(formspreeUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Accept": "application/json" },
-                body: JSON.stringify({ Step: stepName, Answer: userResponse, Timestamp: new Date().toLocaleString() })
-            }).catch(error => console.log("Error sending data:", error));
-        }
-
-        let popupTimer;
-        function showPopupWarning(wrapperId) {
-            const wrapper = document.getElementById(wrapperId);
-            if (!wrapper) return;
-            const oldPopup = wrapper.querySelector('.popup-warning');
-            if (oldPopup) oldPopup.remove();
-            const popup = document.createElement('div');
-            popup.className = 'popup-warning';
-            popup.innerText = getRandomWarning();
-            wrapper.appendChild(popup);
-            clearTimeout(popupTimer);
-            popupTimer = setTimeout(() => { popup.remove(); }, 1200);
-        }
-
-        function renderApp() {
-            const container = document.getElementById('app-card-container');
-            container.innerHTML = '';
-
-            steps.forEach((step, idx) => {
-                const stepNum = idx + 1;
-                const nextTarget = (stepNum === steps.length) ? 'falling' : (stepNum + 1);
-
-                const card = document.createElement('div');
-                card.className = \`interactive-card \${cardStyle} step \${stepNum === 1 ? 'active' : ''}\`;
-                card.id = \`step-\${stepNum}\`;
-
-                const yesStyle = \`background: \${yesBg}; color: \${yesColor}; font-size: \${yesFontSize}px;\`;
-                const noStyle = \`background: \${noBg}; color: \${noColor}; font-size: \${noFontSize}px;\`;
-
-                const stepYesLabel = (step.yesText && step.yesText.trim() !== '') ? step.yesText : defaultYesText;
-                const stepNoLabel = (step.noText && step.noText.trim() !== '') ? step.noText : defaultNoText;
-
-                card.innerHTML = \`
-                    <img class="gif-box" src="\${step.gif}" alt="Gif \${stepNum}">
-                    <h2 class="font-bold leading-relaxed" style="font-size: \${questionFontSize}px;">\${step.text}</h2>
-                    <div class="btn-group">
-                        <button class="btn-custom-yes" style="\${yesStyle}" id="btn-yes-\${stepNum}" onclick="nextStep('\${nextTarget}')">\${stepYesLabel}</button>
-                        <div class="btn-no-wrapper" id="btn-no-wrapper-\${stepNum}">
-                            <button class="btn-custom-no \${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="\${noStyle}" id="btn-no-\${stepNum}">\${stepNoLabel}</button>
-                        </div>
-                    </div>
-                \`;
-                container.appendChild(card);
-
-                setTimeout(() => attachBehaviorEventsApp(stepNum, step.behavior, nextTarget, stepYesLabel), 50);
-            });
-
-            // Falling Bouquet Step
-            const fallingCard = document.createElement('div');
-            fallingCard.className = 'step';
-            fallingCard.id = 'step-falling';
-            fallingCard.style.width = '100%';
-            fallingCard.innerHTML = \`
-                <div class="falling-envelope-container" onclick="openLetter()">
-                    <img class="no-frame-gif" src="\${envelopeImg}" alt="Bouquet/Envelope">
-                    <div class="tap-hint-badge">✨ Tap to Open ✨</div>
-                </div>
-            \`;
-            container.appendChild(fallingCard);
-
-            // Love Letter Step
-            const letterCard = document.createElement('div');
-            letterCard.className = 'step';
-            letterCard.id = 'step-letter';
-            letterCard.style.width = '100%';
-            letterCard.innerHTML = \`
-                <div class="paper-letter-wrapper paper-letter-pop">
-                    <div class="paper-sheet \${paperStyle}">
-                        <div class="paperclip"></div>
-                        <div class="letter-content">
-                            <div class="letter-title">\${letterTitle}</div>
-                            <p>\${letterP1}</p><br>
-                            <p>\${letterP2}</p><br>
-                            <p>\${letterP3}</p>
-                            <div class="letter-signature">\${letterSig}</div>
-                        </div>
-                    </div>
-                </div>
-            \`;
-            container.appendChild(letterCard);
-        }
-
-        let stateNoScalesApp = {};
-        let stateGuiltIndicesApp = {};
-        let stateTeleportCountsApp = {};
-
-        function attachBehaviorEventsApp(stepNum, behavior, nextTarget, stepYesLabel) {
-            const noBtn = document.getElementById(\`btn-no-\${stepNum}\`);
-            const yesBtn = document.getElementById(\`btn-yes-\${stepNum}\`);
-            const cardEl = document.getElementById(\`step-\${stepNum}\`);
-            if (!noBtn || !cardEl) return;
-
-            if (behavior === 'fleeing') {
-                const triggerFlee = (e) => {
-                    if (e) e.preventDefault();
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    moveButtonInsideCardStrictApp(noBtn, cardEl);
-                };
-                noBtn.onclick = triggerFlee;
-            } else if (behavior === 'shrinking') {
-                stateNoScalesApp[stepNum] = { yesScale: 1, noScale: 1 };
-                noBtn.onclick = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    stateNoScalesApp[stepNum].yesScale += 0.35;
-                    stateNoScalesApp[stepNum].noScale -= 0.22;
-                    yesBtn.style.transform = \`scale(\${stateNoScalesApp[stepNum].yesScale})\`;
-                    if (stateNoScalesApp[stepNum].noScale <= 0.1) {
-                        noBtn.style.display = 'none';
-                    } else {
-                        noBtn.style.transform = \`scale(\${stateNoScalesApp[stepNum].noScale})\`;
-                    }
-                };
-            } else if (behavior === 'swap') {
-                const swapFunc = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    const parent = yesBtn.parentNode;
-                    if (parent.children[0] === yesBtn) parent.appendChild(yesBtn);
-                    else parent.insertBefore(yesBtn, parent.children[0]);
-                };
-                noBtn.onclick = swapFunc;
-            } else if (behavior === 'teleport') {
-                stateTeleportCountsApp[stepNum] = 0;
-                const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!", "Nice try!"];
-                noBtn.onclick = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    stateTeleportCountsApp[stepNum]++;
-                    noBtn.innerText = teleTexts[stateTeleportCountsApp[stepNum] % teleTexts.length];
-                    moveButtonInsideCardStrictApp(noBtn, cardEl);
-                };
-            } else if (behavior === 'loading') {
-                const stepObj = steps[stepNum - 1];
-                const activeNoVal = (stepObj && stepObj.noText && stepObj.noText.trim() !== '') ? stepObj.noText : defaultNoText;
-                noBtn.onclick = () => {
-                    noBtn.disabled = true;
-                    noBtn.innerHTML = \`<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...\`;
-                    setTimeout(() => {
-                        showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                        alert("Error 404: 'No' is not available. Server says you must click Yes!");
-                        noBtn.innerHTML = activeNoVal;
-                        noBtn.disabled = false;
-                    }, 1200);
-                };
-            } else if (behavior === 'orbiting') {
-                noBtn.onclick = () => { showPopupWarning(\`btn-no-wrapper-\${stepNum}\`); };
-            } else if (behavior === 'guilttrip') {
-                stateGuiltIndicesApp[stepNum] = 0;
-                const guiltTexts = ["Are you sure?", "Really?", "Think of us!", "Click Yes instead!"];
-                const guiltClick = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    let idx = stateGuiltIndicesApp[stepNum];
-                    if (idx < guiltTexts.length) {
-                        noBtn.innerText = guiltTexts[idx];
-                        stateGuiltIndicesApp[stepNum]++;
-                    } else {
-                        noBtn.innerText = stepYesLabel;
-                        noBtn.style.background = yesBg;
-                        noBtn.style.color = yesColor;
-                        noBtn.onclick = () => nextStep(nextTarget);
-                    }
-                };
-                noBtn.onclick = guiltClick;
-            } else if (behavior === 'popuptrap') {
-                noBtn.onclick = () => {
-                    alert("Alert 1: Really?");
-                    alert("Alert 2: Are you strictly sure?");
-                    alert("Alert 3: Okay, fine! Re-directing to YES...");
-                    nextStep(nextTarget);
-                };
-            } else if (behavior === 'gravity') {
-                const gravDrop = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    noBtn.classList.add('falling-btn');
-                    setTimeout(() => { noBtn.style.display = 'none'; }, 1200);
-                };
-                noBtn.onclick = gravDrop;
-            } else if (behavior === 'split') {
-                const triggerSplit = () => {
-                    showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    const letters = ["Y", "E", "S"];
-                    const rect = noBtn.getBoundingClientRect();
-                    const targetRect = yesBtn.getBoundingClientRect();
-
-                    letters.forEach((char, i) => {
-                        const particle = document.createElement('div');
-                        particle.className = 'split-letter-particle';
-                        particle.innerText = char;
-                        particle.style.left = \`\${rect.left + (i * 20)}px\`;
-                        particle.style.top = \`\${rect.top}px\`;
-                        document.body.appendChild(particle);
-
-                        setTimeout(() => {
-                            particle.style.left = \`\${targetRect.left + 20}px\`;
-                            particle.style.top = \`\${targetRect.top}px\`;
-                            particle.style.transform = 'scale(1.5)';
-                            particle.style.opacity = '0';
-                        }, 50);
-
-                        setTimeout(() => particle.remove(), 700);
-                    });
-
-                    noBtn.style.opacity = '0';
-                    setTimeout(() => noBtn.style.display = 'none', 300);
-                };
-                noBtn.onclick = triggerSplit;
+        function createSparkles() {
+            const container = document.getElementById('sparkle-container');
+            if (!container) return;
+            for (let i = 0; i < 35; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                const size = Math.random() * 6 + 3;
+                sparkle.style.width = \`\${size}px\`;
+                sparkle.style.height = \`\${size}px\`;
+                sparkle.style.left = \`\${Math.random() * 100}%\`;
+                sparkle.style.setProperty('--duration', \`\${Math.random() * 6 + 6}s\`);
+                sparkle.style.animationDelay = \`\${Math.random() * 5}s\`;
+                container.appendChild(sparkle);
             }
         }
 
-        function moveButtonInsideCardStrictApp(btnEl, cardEl) {
-            if (!btnEl.classList.contains('escaped-btn-card')) {
-                btnEl.classList.add('escaped-btn-card');
-            }
-            const cardRect = cardEl.getBoundingClientRect();
-            const btnRect = btnEl.getBoundingClientRect();
+        function openWishCard() {
+            const modal = document.getElementById('wishModal');
+            const modalCard = document.getElementById('modalCard');
+            const mainContent = document.getElementById('mainContent');
 
-            const padding = 20;
-            const maxX = cardRect.width - btnRect.width - padding;
-            const maxY = cardRect.height - btnRect.height - padding;
-
-            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
-
-            btnEl.style.left = \`\${randomX}px\`;
-            btnEl.style.top = \`\${randomY}px\`;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100', 'pointer-events-auto');
+            modalCard.classList.remove('scale-90');
+            modalCard.classList.add('scale-100');
+            mainContent.classList.add('blurred-content');
         }
 
-        function nextStep(stepTarget) {
-            document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
-            let targetEl;
-            if (!isNaN(stepTarget)) {
-                const targetNum = parseInt(stepTarget);
-                targetEl = document.getElementById(\`step-\${targetNum}\`);
-                sendToFormspree("Yes", \`Step \${targetNum - 1}\`);
-            } else if (stepTarget === 'falling') {
-                targetEl = document.getElementById('step-falling');
-                sendToFormspree("Yes", \`Final Question Step\`);
-            } else {
-                targetEl = document.getElementById('step-letter');
-            }
-            if (targetEl) targetEl.classList.add('active');
+        function closeWishCard() {
+            const modal = document.getElementById('wishModal');
+            const modalCard = document.getElementById('modalCard');
+            const mainContent = document.getElementById('mainContent');
+
+            modal.classList.remove('opacity-100', 'pointer-events-auto');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-90');
+            mainContent.classList.remove('blurred-content');
         }
 
-        function openLetter() {
-            sendToFormspree("Opened Letter", "Love Letter Step");
-            nextStep('letter');
+        function closeWishCardOnBg(e) {
+            if (e.target.id === 'wishModal') closeWishCard();
         }
 
-        window.onload = renderApp;
+        function openEnlargedStampModal(e) {
+            e.stopPropagation();
+            document.getElementById('stampFullModal').classList.remove('hidden');
+        }
+
+        function closeEnlargedStampModal() {
+            document.getElementById('stampFullModal').classList.add('hidden');
+        }
     <\/script>
 </body>
 </html>`;
-        }
 
-        // EXPORT MODAL HANDLERS
-        function exportHTML() {
-            const htmlCode = generateCompleteHTML();
-            document.getElementById('export-code-area').value = htmlCode;
-            document.getElementById('export-modal').classList.remove('hidden');
-        }
-
-        function closeExportModal() {
-            document.getElementById('export-modal').classList.add('hidden');
-        }
-
-        function copyGeneratedCode() {
-            const codeArea = document.getElementById('export-code-area');
-            codeArea.select();
-            document.execCommand('copy');
-            alert('Code များကို Clipboard သို့ ကူးယူပြီးပါပြီ!');
-        }
-
-        // AUTO DOWNLOAD AS index.html
-        function downloadHTMLFile() {
-            const htmlCode = generateCompleteHTML();
-            const blob = new Blob([htmlCode], { type: 'text/html' });
+            // Trigger file download
+            const blob = new Blob([standaloneHTML], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'index.html'; // AUTO INDEX.HTML
+            a.download = 'Birthday_Wish_Card.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-        }
-
-        // AUTOMATIC GITHUB DEPLOYMENT & LIVE LINK GENERATOR
-        async function autoDeployToGitHub() {
-            const token = getActiveGitHubToken();
-            const repoName = document.getElementById('gh-repo').value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '-');
-            const statusEl = document.getElementById('deploy-status');
-            const linkContainer = document.getElementById('gh-link-container');
-            const linkInput = document.getElementById('gh-generated-link');
-            const deployBtn = document.getElementById('btn-deploy-gh');
-
-            if (!token) {
-                alert('ကျေးဇူးပြု၍ epostcard သို့မဟုတ် mm သို့မဟုတ် epostcardmm ဟု စာရိုက်ထည့်ပေးပါ');
-                return;
-            }
-            if (!repoName) {
-                alert('Repository Name ထည့်သွင်းပေးပါ။');
-                return;
-            }
-
-            try {
-                deployBtn.disabled = true;
-                deployBtn.classList.add('opacity-50');
-                statusEl.className = "text-xs text-amber-400 font-medium";
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> User account စစ်ဆေးနေသည်...`;
-
-                // 1. Get authenticated user info
-                const userRes = await fetch('https://api.github.com/user', {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-
-                if (!userRes.ok) throw new Error('GitHub Token မမှန်ကန်ပါ သို့မဟုတ် Auth မအောင်မြင်ပါ။');
-                const userData = await userRes.json();
-                const username = userData.login;
-
-                // 2. Check or Create Repository
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Repository (${repoName}) ဖန်တီးနေသည်...`;
-                
-                let repoRes = await fetch(`https://api.github.com/repos/${username}/${repoName}`, {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-
-                if (repoRes.status === 404) {
-                    // Create Repo
-                    const createRes = await fetch('https://api.github.com/user/repos', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github.v3+json'
-                        },
-                        body: JSON.stringify({
-                            name: repoName,
-                            description: 'Interactive Love Surprise App',
-                            auto_init: true
-                        })
-                    });
-                    if (!createRes.ok) throw new Error('Repository ဖန်တီး၍ မရပါ!');
-                    await new Promise(r => setTimeout(r, 2000));
-                }
-
-                // 3. Upload/Update index.html File
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> index.html ကို Upload တင်နေသည်...`;
-                const htmlContent = generateCompleteHTML();
-                const base64Content = btoa(unescape(encodeURIComponent(htmlContent)));
-
-                let sha = null;
-                const fileCheckRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-                if (fileCheckRes.ok) {
-                    const fileData = await fileCheckRes.json();
-                    sha = fileData.sha;
-                }
-
-                const uploadBody = {
-                    message: 'Auto update index.html via Builder',
-                    content: base64Content
-                };
-                if (sha) uploadBody.sha = sha;
-
-                const uploadRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
-                    method: `PUT`,
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': `application/json`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify(uploadBody)
-                });
-
-                if (!uploadRes.ok) throw new Error('index.html ဖိုင် Upload တင်ခြင်း မအောင်မြင်ပါ။');
-
-                // 4. Enable GitHub Pages
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> GitHub Pages ကို Activate လုပ်နေသည်...`;
-                await fetch(`https://api.github.com/repos/${username}/${repoName}/pages`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        source: { branch: 'main', path: '/' }
-                    })
-                }).catch(() => {});
-
-                // 5. Build Final Live Link
-                const generatedPagesUrl = `https://${username}.github.io/${repoName}/`;
-                linkInput.value = generatedPagesUrl;
-                linkContainer.classList.remove('hidden');
-
-                statusEl.className = "text-xs text-emerald-400 font-bold";
-                statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Upload အောင်မြင်ပါပြီ!`;
-
-            } catch (err) {
-                statusEl.className = "text-xs text-rose-400 font-bold";
-                statusEl.innerText = `Error: ${err.message}`;
-            } finally {
-                deployBtn.disabled = false;
-                deployBtn.classList.remove('opacity-50');
-            }
-        }
-
-        function copyGitHubLink() {
-            const linkInput = document.getElementById('gh-generated-link');
-            linkInput.select();
-            document.execCommand('copy');
-            alert('GitHub Pages Live Link ကို ကူးယူပြီးပါပြီ!\n' + linkInput.value);
         }
     </script>
 </body>
