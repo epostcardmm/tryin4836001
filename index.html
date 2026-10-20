@@ -467,7 +467,7 @@
                 </div>
 
                 <!-- STEP 3: NOTE PAPER CARD MODAL -->
-                <div id="preview-step-card" class="hidden absolute inset-0 z-40 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-all duration-500">
+                <div id="preview-step-card" class="hidden absolute inset-0 z-40 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all duration-500">
                     
                     <div id="prev-paper-element" class="paper-vintage relative w-full max-w-sm p-6 sm:p-7 rounded-xl shadow-2xl transition-all duration-300 transform scale-100">
                         <!-- Paperclip -->
@@ -505,19 +505,19 @@
                         </button>
                     </div>
 
+                    <!-- ENLARGED CORNER PHOTO OVERLAY (Nested inside Step 3 for clean layering) -->
+                    <div id="corner-full-modal" class="hidden absolute inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer rounded-xl" onclick="closeCornerFullModal()">
+                        <div class="bg-white p-3 rounded-2xl shadow-2xl max-w-xs w-full text-center relative border border-slate-200" onclick="event.stopPropagation()">
+                            <img id="prev-corner-full-img" src="" class="w-full h-auto max-h-72 object-contain rounded-xl">
+                            <p class="text-xs text-slate-700 font-semibold mt-2.5">✨ Corner Memory Stamp ✨</p>
+                            <button onclick="closeCornerFullModal()" class="absolute -top-3 -right-3 bg-rose-600 text-white rounded-full p-1.5 shadow-lg hover:bg-rose-700 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
 
-            </div>
-
-            <!-- ENLARGED CORNER PHOTO MODAL (High z-index to stay on top) -->
-            <div id="corner-full-modal" class="hidden absolute inset-0 z-60 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer" onclick="closeCornerFullModal()">
-                <div class="bg-white p-3 rounded-xl shadow-2xl max-w-xs w-full text-center relative" onclick="event.stopPropagation()">
-                    <img id="prev-corner-full-img" src="" class="w-full h-auto max-h-72 object-contain rounded-lg">
-                    <p class="text-xs text-slate-700 font-medium mt-2">✨ Corner Memory Stamp ✨</p>
-                    <button onclick="closeCornerFullModal()" class="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full p-1 shadow">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                    </button>
-                </div>
             </div>
 
             <div class="text-center text-[11px] text-slate-400 mt-1">
@@ -858,6 +858,7 @@
 
         function closeCardModal() {
             document.getElementById('preview-step-card').classList.add('hidden');
+            closeCornerFullModal();
         }
 
         function directOpenCardModal() {
@@ -872,7 +873,7 @@
         }
 
         function openCornerFullModal(e) {
-            e.stopPropagation();
+            if(e) e.stopPropagation();
             document.getElementById('corner-full-modal').classList.remove('hidden');
         }
 
@@ -881,6 +882,7 @@
         }
 
         function playFullFlowPreview() {
+            closeCornerFullModal();
             document.getElementById('preview-step-card').classList.add('hidden');
             document.getElementById('preview-step-floating').classList.add('hidden');
             document.getElementById('preview-step-start').classList.remove('hidden');
@@ -1180,7 +1182,7 @@
     </div>
 
     <!-- Note Paper Card Modal -->
-    <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="closeWishCardOnBg(event)">
+    <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="closeWishCardOnBg(event)">
         
         <div class="${state.paperClass} relative w-full max-w-md p-6 sm:p-8 rounded-xl z-10 shadow-2xl transform scale-90 transition-transform duration-500" id="modalCard">
             <div class="paperclip"></div>
@@ -1214,13 +1216,13 @@
         </div>
     </div>
 
-    <!-- Enlarged Corner Photo Modal in Export (z-70 to stay on top of everything) -->
-    <div id="exportCornerModal" class="hidden fixed inset-0 z-70 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer" onclick="closeExportCornerModal()">
-        <div class="bg-white p-3 rounded-xl shadow-2xl max-w-xs w-full text-center relative" onclick="event.stopPropagation()">
-            <img src="${state.cornerStamp}" class="w-full h-auto max-h-72 object-contain rounded-lg">
-            <p class="text-xs text-slate-700 font-medium mt-2">✨ Corner Memory Stamp ✨</p>
-            <button onclick="closeExportCornerModal()" class="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full p-1 shadow">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    <!-- Enlarged Corner Photo Modal in Export (Fixed Full Screen Overlay) -->
+    <div id="exportCornerModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer" onclick="closeExportCornerModal()">
+        <div class="bg-white p-3.5 rounded-2xl shadow-2xl max-w-xs w-full text-center relative border border-slate-200" onclick="event.stopPropagation()">
+            <img src="${state.cornerStamp}" class="w-full h-auto max-h-80 object-contain rounded-xl">
+            <p class="text-xs text-slate-700 font-semibold mt-2.5">✨ Corner Memory Stamp ✨</p>
+            <button onclick="closeExportCornerModal()" class="absolute -top-3 -right-3 bg-rose-600 text-white rounded-full p-1.5 shadow-lg hover:bg-rose-700 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
     </div>
@@ -1281,6 +1283,7 @@
             modalCard.classList.remove('scale-100');
             modalCard.classList.add('scale-90');
             mainContent.classList.remove('blurred-content');
+            closeExportCornerModal();
         }
 
         function closeWishCardOnBg(e) {
@@ -1288,7 +1291,7 @@
         }
 
         function openCornerFullModal(e) {
-            e.stopPropagation();
+            if(e) e.stopPropagation();
             document.getElementById('exportCornerModal').classList.remove('hidden');
         }
 
