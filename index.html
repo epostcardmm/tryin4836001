@@ -26,7 +26,6 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(245, 158, 11, 0.6); }
 
         /* --- PRESET PAPER DESIGNS --- */
-        /* 1. Vintage Parchment */
         .paper-vintage {
             background: #f4efd8;
             background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0), linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
@@ -37,7 +36,6 @@
         .paper-vintage .title-text { color: #78350f; }
         .paper-vintage .heading-text { color: #9f1239; }
 
-        /* 2. Rose Gold Soft Paper */
         .paper-rosegold {
             background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
             color: #4a2c3a;
@@ -46,7 +44,6 @@
         .paper-rosegold .title-text { color: #9d174d; }
         .paper-rosegold .heading-text { color: #be185d; }
 
-        /* 3. Midnight Dark Elegant */
         .paper-midnight {
             background: linear-gradient(145deg, #0f172a, #1e1b4b);
             color: #f1f5f9;
@@ -56,7 +53,6 @@
         .paper-midnight .title-text { color: #fbbf24; }
         .paper-midnight .heading-text { color: #38bdf8; }
 
-        /* 4. Pastel Pink Love Note */
         .paper-pink {
             background: #fdf2f8;
             background-image: radial-gradient(#f472b6 0.5px, transparent 0.5px);
@@ -67,7 +63,6 @@
         .paper-pink .title-text { color: #db2777; }
         .paper-pink .heading-text { color: #be185d; }
 
-        /* 5. Floral Border Paper */
         .paper-floral {
             background: #fffdfa;
             border: 8px solid #fef3c7;
@@ -78,7 +73,6 @@
         .paper-floral .title-text { color: #d97706; }
         .paper-floral .heading-text { color: #b45309; }
 
-        /* 6. Golden Luxury Paper */
         .paper-golden {
             background: linear-gradient(135deg, #1c1917, #292524);
             color: #fef3c7;
@@ -88,7 +82,6 @@
         .paper-golden .title-text { color: #fbbf24; }
         .paper-golden .heading-text { color: #fef08a; }
 
-        /* 7. Classic Lined Notebook */
         .paper-notebook {
             background: #ffffff;
             background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
@@ -100,7 +93,6 @@
         .paper-notebook .title-text { color: #1e40af; }
         .paper-notebook .heading-text { color: #dc2626; }
 
-        /* 8. Cozy Kraft Paper */
         .paper-kraft {
             background: #d7ba89;
             background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
@@ -111,7 +103,6 @@
         .paper-kraft .title-text { color: #581c87; }
         .paper-kraft .heading-text { color: #7f1d1d; }
 
-        /* 9. Aesthetic Glassmorphism */
         .paper-glass {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(16px);
@@ -123,7 +114,6 @@
         .paper-glass .title-text { color: #fef08a; }
         .paper-glass .heading-text { color: #f472b6; }
 
-        /* 10. Lavender Dream */
         .paper-lavender {
             background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
             color: #3b0764;
@@ -131,6 +121,18 @@
         }
         .paper-lavender .title-text { color: #7e22ce; }
         .paper-lavender .heading-text { color: #a21caf; }
+
+        /* Paperclip style */
+        .paperclip {
+            position: absolute; top: 10px; right: 24px;
+            width: 14px; height: 42px; border: 2px solid #55555d;
+            border-radius: 10px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 30; pointer-events: none;
+        }
+        .paperclip::after {
+            content: ''; position: absolute; top: 6px; left: 2px;
+            width: 6px; height: 26px; border: 2px solid #55555d; border-radius: 6px;
+        }
 
         /* Animations for Preview Canvas */
         @keyframes previewFloatDown {
@@ -173,44 +175,12 @@
             20% { opacity: 0.8; }
             100% { transform: translateY(-20%) scale(1.2); opacity: 0; }
         }
-
-        /* Stamp Tape Polaroid Styling */
-        .corner-stamp-wrapper {
-            position: absolute;
-            bottom: -8px;
-            right: -8px;
-            transform: rotate(6deg);
-            transition: transform 0.2s ease, filter 0.2s ease;
-            cursor: pointer;
-            z-index: 25;
-        }
-        .corner-stamp-wrapper:hover {
-            transform: rotate(0deg) scale(1.1);
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.3));
-        }
-        .stamp-polaroid-frame {
-            background: #ffffff;
-            padding: 4px 4px 14px 4px;
-            border-radius: 4px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-            border: 1px solid rgba(0,0,0,0.08);
-        }
-        .stamp-tape {
-            position: absolute;
-            top: -6px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-3deg);
-            width: 32px;
-            height: 12px;
-            background: rgba(254, 240, 138, 0.75);
-            backdrop-filter: blur(2px);
-            border: 1px dashed rgba(217, 119, 6, 0.4);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            z-index: 30;
-        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+
+    <!-- Audio Element -->
+    <audio id="liveBgMusic" loop></audio>
 
     <!-- Header Navigation Bar -->
     <header class="bg-slate-900/90 border-b border-slate-800 p-4 sticky top-0 z-50 backdrop-blur-md shadow-xl">
@@ -221,7 +191,7 @@
                     <h1 class="text-xl font-bold bg-gradient-to-r from-amber-300 via-pink-400 to-purple-400 bg-clip-text text-transparent">
                         Birthday Wish Card Studio
                     </h1>
-                    <p class="text-xs text-slate-400">Custom Stamp Photo, No-Border Envelope & 1-Click HTML Generator</p>
+                    <p class="text-xs text-slate-400">Custom Backgrounds, Borderless Envelope, Corner Stamp & HTML Generator</p>
                 </div>
             </div>
             
@@ -245,15 +215,72 @@
             
             <!-- Tab Navigation for Controls -->
             <div class="flex border-b border-slate-800 gap-2 pb-2">
-                <button onclick="switchControlTab('presets')" id="tab-btn-presets" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30">🎨 Presets</button>
-                <button onclick="switchControlTab('background')" id="tab-btn-background" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700">🖼️ Background</button>
-                <button onclick="switchControlTab('content')" id="tab-btn-content" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700">✍️ Content</button>
-                <button onclick="switchControlTab('audio')" id="tab-btn-audio" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700">🎵 Music</button>
+                <button onclick="switchControlTab('presets')" id="tab-btn-presets" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30">🎨 1. Presets & BG</button>
+                <button onclick="switchControlTab('content')" id="tab-btn-content" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700">✍️ 2. Content</button>
+                <button onclick="switchControlTab('audio')" id="tab-btn-audio" class="flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700">🎵 3. Music</button>
             </div>
 
-            <!-- TAB 1: PRESETS SELECTOR -->
+            <!-- TAB 1: PRESETS & BACKGROUND CUSTOMIZER -->
             <div id="tab-sec-presets" class="space-y-6">
                 
+                <!-- BACKGROUND CUSTOMIZER (Single vs Gradient) -->
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs font-bold text-teal-300 uppercase tracking-wider">🌌 Card Background Color</label>
+                        <div class="flex bg-slate-900 p-0.5 rounded-lg border border-slate-800 text-[11px]">
+                            <button onclick="setBgMode('single')" id="bg-mode-single" class="px-2.5 py-1 rounded-md font-semibold bg-teal-500/20 text-teal-300 transition">Single</button>
+                            <button onclick="setBgMode('gradient')" id="bg-mode-gradient" class="px-2.5 py-1 rounded-md text-slate-400 transition">Gradient</button>
+                        </div>
+                    </div>
+
+                    <!-- Single Color Control -->
+                    <div id="bg-single-box" class="flex items-center gap-3 pt-1">
+                        <input type="color" id="input-bg-single" value="#0f0728" oninput="updateStudioState()" class="w-10 h-8 rounded bg-transparent cursor-pointer border border-slate-700">
+                        <span class="text-xs text-slate-300">Choose Single Color</span>
+                    </div>
+
+                    <!-- Gradient Color Control -->
+                    <div id="bg-gradient-box" class="hidden space-y-3 pt-1">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[11px] text-slate-400 mb-1">Color 1 (Start)</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="color" id="input-bg-grad1" value="#2e1065" oninput="updateStudioState()" class="w-8 h-7 rounded bg-transparent cursor-pointer border border-slate-700">
+                                    <input type="text" id="text-bg-grad1" value="#2e1065" oninput="syncColorText(this, 'input-bg-grad1')" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] text-slate-400 mb-1">Color 2 (End)</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="color" id="input-bg-grad2" value="#05020d" oninput="updateStudioState()" class="w-8 h-7 rounded bg-transparent cursor-pointer border border-slate-700">
+                                    <input type="text" id="text-bg-grad2" value="#05020d" oninput="syncColorText(this, 'input-bg-grad2')" class="w-full bg-slate-900 border border-slate-800 rounded px-2 py-1 text-xs text-slate-200">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[11px] text-slate-400 mb-1">Gradient Direction</label>
+                            <select id="input-bg-direction" onchange="updateStudioState()" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-xs text-teal-200 focus:outline-none">
+                                <option value="circle at center">Radial (Center Glow)</option>
+                                <option value="to bottom">Linear (Top to Bottom)</option>
+                                <option value="to right">Linear (Left to Right)</option>
+                                <option value="135deg">Diagonal (135°)</option>
+                            </select>
+                        </div>
+
+                        <!-- Quick Gradient Presets -->
+                        <div>
+                            <span class="block text-[10px] text-slate-400 mb-1.5">Quick Gradients:</span>
+                            <div class="grid grid-cols-4 gap-1.5">
+                                <button onclick="setQuickGradient('#2e1065', '#05020d', 'circle at center')" class="h-6 rounded bg-gradient-to-r from-purple-900 to-slate-950 border border-slate-700 text-[9px] text-slate-300">Midnight</button>
+                                <button onclick="setQuickGradient('#4c0519', '#18181b', 'circle at center')" class="h-6 rounded bg-gradient-to-r from-rose-950 to-zinc-900 border border-slate-700 text-[9px] text-slate-300">Rose Dark</button>
+                                <button onclick="setQuickGradient('#064e3b', '#022c22', 'circle at center')" class="h-6 rounded bg-gradient-to-r from-emerald-900 to-slate-950 border border-slate-700 text-[9px] text-slate-300">Emerald</button>
+                                <button onclick="setQuickGradient('#311042', '#0f172a', '135deg')" class="h-6 rounded bg-gradient-to-r from-indigo-950 to-slate-900 border border-slate-700 text-[9px] text-slate-300">Purple Blue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 10 BOUQUET PRESETS -->
                 <div>
                     <div class="flex justify-between items-center mb-2">
@@ -267,10 +294,10 @@
                     </div>
                 </div>
 
-                <!-- 10 ENVELOPE / PHOTO PRESETS -->
+                <!-- 10 ENVELOPE / PHOTO PRESETS (Borderless) -->
                 <div class="border-t border-slate-800/80 pt-4">
                     <div class="flex justify-between items-center mb-2">
-                        <label class="text-xs font-bold text-rose-300 uppercase tracking-wider">✉️ Envelope / Photo Cover (10 Options)</label>
+                        <label class="text-xs font-bold text-rose-300 uppercase tracking-wider">✉️ Envelope Cover (Border & Shadow Free)</label>
                         <span id="envelope-selected-name" class="text-[11px] text-slate-400">Selected: Golden Sparkle</span>
                     </div>
                     <div class="grid grid-cols-5 gap-2" id="envelope-grid"></div>
@@ -291,83 +318,26 @@
 
             </div>
 
-            <!-- TAB 2: BACKGROUND CUSTOMIZER -->
-            <div id="tab-sec-background" class="hidden space-y-5">
-                <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-slate-800 pb-2">🖼️ Background Customizer</h3>
-
-                <!-- Background Type Toggle Switch -->
-                <div>
-                    <label class="block text-xs text-slate-400 mb-2 font-medium">Select Background Style</label>
-                    <div class="grid grid-cols-2 gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
-                        <button type="button" id="bg-type-single-btn" onclick="setBgType('single')" class="py-2 text-xs font-semibold rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition">
-                            🎨 Single Color
-                        </button>
-                        <button type="button" id="bg-type-gradient-btn" onclick="setBgType('gradient')" class="py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 transition hover:bg-slate-700">
-                            🌈 Gradient Color
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Single Color Picker Settings -->
-                <div id="bg-single-controls" class="space-y-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                    <label class="block text-xs text-slate-300 font-semibold">Choose Solid Background Color</label>
-                    <div class="flex items-center gap-3">
-                        <input type="color" id="bg-single-color" onchange="updateBgCustomization()" value="#0f172a" class="w-10 h-10 rounded cursor-pointer border border-slate-700 bg-transparent p-0.5">
-                        <input type="text" id="bg-single-hex" oninput="syncColorFromInput(this.value, 'bg-single-color')" value="#0f172a" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 uppercase font-mono focus:outline-none focus:border-amber-400">
-                    </div>
-                </div>
-
-                <!-- Gradient Color Picker Settings -->
-                <div id="bg-gradient-controls" class="hidden space-y-4 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
-                    <div>
-                        <label class="block text-xs text-slate-300 font-semibold mb-2">Gradient Type / Direction</label>
-                        <select id="bg-gradient-dir" onchange="updateBgCustomization()" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 focus:outline-none focus:border-amber-400">
-                            <option value="to bottom right">Diagonal (Top Left to Bottom Right)</option>
-                            <option value="to right">Horizontal (Left to Right)</option>
-                            <option value="to bottom">Vertical (Top to Bottom)</option>
-                            <option value="circle at center">Radial Glow (Center Circle)</option>
-                        </select>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[11px] text-slate-400 mb-1">Color 1 (Start)</label>
-                            <div class="flex items-center gap-2">
-                                <input type="color" id="bg-gradient-c1" onchange="updateBgCustomization()" value="#2e1065" class="w-8 h-8 rounded cursor-pointer border border-slate-700 bg-transparent p-0.5">
-                                <input type="text" id="bg-gradient-hex1" oninput="syncColorFromInput(this.value, 'bg-gradient-c1')" value="#2e1065" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-[11px] text-amber-200 uppercase font-mono">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] text-slate-400 mb-1">Color 2 (End)</label>
-                            <div class="flex items-center gap-2">
-                                <input type="color" id="bg-gradient-c2" onchange="updateBgCustomization()" value="#05020d" class="w-8 h-8 rounded cursor-pointer border border-slate-700 bg-transparent p-0.5">
-                                <input type="text" id="bg-gradient-hex2" oninput="syncColorFromInput(this.value, 'bg-gradient-c2')" value="#05020d" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-1.5 text-[11px] text-amber-200 uppercase font-mono">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Preset Gradient Palette Quick Choice -->
-                    <div>
-                        <label class="block text-[11px] text-slate-400 mb-1">Quick Gradient Presets</label>
-                        <div class="grid grid-cols-4 gap-2">
-                            <button type="button" onclick="applyGradientPreset('to bottom right', '#2e1065', '#05020d')" class="h-7 rounded-lg border border-slate-700 shadow-sm" style="background: linear-gradient(to bottom right, #2e1065, #05020d)" title="Deep Purple"></button>
-                            <button type="button" onclick="applyGradientPreset('to bottom right', '#831843', '#1e1b4b')" class="h-7 rounded-lg border border-slate-700 shadow-sm" style="background: linear-gradient(to bottom right, #831843, #1e1b4b)" title="Romantic Rose"></button>
-                            <button type="button" onclick="applyGradientPreset('to bottom right', '#0f172a', '#1e3a8a')" class="h-7 rounded-lg border border-slate-700 shadow-sm" style="background: linear-gradient(to bottom right, #0f172a, #1e3a8a)" title="Midnight Blue"></button>
-                            <button type="button" onclick="applyGradientPreset('to bottom right', '#78350f', '#292524')" class="h-7 rounded-lg border border-slate-700 shadow-sm" style="background: linear-gradient(to bottom right, #78350f, #292524)" title="Golden Glow"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 3: TEXT & STAMP PHOTO CONTENT -->
+            <!-- TAB 2: TEXT & CORNER STAMP CONTENT -->
             <div id="tab-sec-content" class="hidden space-y-4">
-                <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-slate-800 pb-2">✏️ Text & Corner Stamp Photo</h3>
+                <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-slate-800 pb-2">✏️ Text & Corner Photo Stamp</h3>
 
-                <!-- CORNER STAMP PHOTO EDIT SECTION -->
-                <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 space-y-2">
-                    <label class="block text-xs font-bold text-amber-300">🖼️ Corner Stamp / Sticker Photo (Edit Image)</label>
-                    <input type="text" id="input-stamp-url" oninput="updateStudioState()" value="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80" placeholder="Enter Photo Image URL..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 focus:outline-none focus:border-amber-400">
-                    <p class="text-[10px] text-slate-400">This small photo appears at the bottom-right corner of the note paper. Tapping it opens an enlarged view!</p>
+                <!-- Corner Stamp Photo Customizer -->
+                <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-3">
+                    <label class="block text-xs font-bold text-pink-300 uppercase">📌 Bottom-Right Corner Stamp Photo</label>
+                    
+                    <div class="flex items-center gap-3">
+                        <img id="corner-thumb-preview" src="" class="w-12 h-12 object-cover rounded-lg border border-slate-700">
+                        <div class="flex-1 space-y-2">
+                            <input type="text" id="input-corner-url" oninput="updateStudioState()" placeholder="Image URL..." class="w-full bg-slate-900 border border-slate-800 rounded-lg p-1.5 text-xs text-slate-200">
+                            <div>
+                                <label class="inline-block bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] px-3 py-1 rounded cursor-pointer border border-slate-700 transition">
+                                    📁 Upload Photo from Device
+                                    <input type="file" accept="image/*" onchange="handleCornerDeviceUpload(this)" class="hidden">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
@@ -376,7 +346,7 @@
                         <option value="font-serif-custom">Playfair Display (Serif Classic)</option>
                         <option value="font-cursive">Great Vibes (Cursive Elegant)</option>
                         <option value="font-padauk">Padauk (Myanmar Supported)</option>
-                        <option value="font-['Poppins']">Poppins (Modern Clean)</option>
+                        <option value="font-[Poppins]">Poppins (Modern Clean)</option>
                         <option value="font-['Dancing_Script']">Dancing Script (Handwritten)</option>
                         <option value="font-['Cinzel']">Cinzel (Luxury Formal)</option>
                         <option value="font-['Caveat']">Caveat (Cute Casual)</option>
@@ -420,10 +390,22 @@
                 </div>
             </div>
 
-            <!-- TAB 4: AUDIO SELECTION -->
+            <!-- TAB 3: AUDIO SELECTION -->
             <div id="tab-sec-audio" class="hidden space-y-4">
-                <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-slate-800 pb-2">🎵 Background Music Options</h3>
+                <h3 class="text-xs font-bold text-amber-300 uppercase tracking-wider border-b border-slate-800 pb-2">🎵 Background Music Presets</h3>
                 
+                <!-- Live Preview Audio Controls -->
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span id="audio-status-icon" class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+                        <span id="audio-status-text" class="text-xs text-slate-300 font-medium">Audio Muted / Paused</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="previewTestAudio(true)" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs px-3 py-1 rounded">▶ Play Test</button>
+                        <button onclick="previewTestAudio(false)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1 rounded">⏹ Stop</button>
+                    </div>
+                </div>
+
                 <div class="space-y-2" id="audio-preset-list"></div>
 
                 <div class="pt-2 border-t border-slate-800">
@@ -455,7 +437,7 @@
             </div>
 
             <!-- Dynamic Interactive Preview Container -->
-            <div id="preview-stage" class="flex-1 relative rounded-xl my-2 overflow-hidden flex items-center justify-center bg-gradient-to-br from-indigo-950 via-purple-950 to-slate-950 transition-all duration-300">
+            <div id="preview-stage" class="flex-1 relative rounded-xl my-2 overflow-hidden flex items-center justify-center" style="background: radial-gradient(circle at center, #2e1065, #0f0728, #05020d);">
                 
                 <!-- Background Sparkles -->
                 <div id="sparkle-stage" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
@@ -465,19 +447,19 @@
                     <span class="text-xs uppercase tracking-widest text-amber-400 font-bold mb-2 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">Step 1: Start Screen</span>
                     <h2 id="prev-start-hint" class="text-amber-200 text-base sm:text-lg font-bold drop-shadow-md mb-4 pulse-glow">✨ Click the bouquet ✨</h2>
                     <img id="prev-bouquet-img" src="" class="w-44 sm:w-52 h-auto object-contain hover:scale-105 transition-transform duration-300 filter drop-shadow-lg">
-                    <p class="text-[11px] text-slate-400 mt-4">(Clicking this simulates playing background music)</p>
+                    <p class="text-[11px] text-slate-400 mt-4">(Clicking this starts background music & opens envelope stage)</p>
                 </div>
 
-                <!-- STEP 2: FLOATING PHOTO / ENVELOPE STAGE (NO BORDER) -->
+                <!-- STEP 2: FLOATING PHOTO / ENVELOPE STAGE (Borderless & Shadowless) -->
                 <div id="preview-step-floating" class="hidden absolute inset-0 z-20 transition-all duration-500">
                     <div class="absolute top-4 text-center z-10 px-4 w-full">
                         <span class="text-[10px] uppercase tracking-widest text-purple-300 font-bold bg-purple-500/20 px-2.5 py-0.5 rounded-full border border-purple-400/30">Step 2: Floating Envelope</span>
                         <h2 class="text-amber-200 text-sm sm:text-base font-bold drop-shadow-md mt-1">✨ Tap The Floating Envelope ✨</h2>
                     </div>
 
-                    <!-- Floating Card Element (NO BORDER styling) -->
+                    <!-- Floating Card Element (No borders, no shadows) -->
                     <div id="prev-falling-card" class="anim-floating-card z-30 flex flex-col items-center justify-center cursor-pointer" onclick="proceedToStep3()">
-                        <img id="prev-envelope-img" src="" class="w-36 sm:w-44 h-auto object-contain shadow-2xl rounded-lg">
+                        <img id="prev-envelope-img" src="" class="w-36 sm:w-44 h-auto object-contain bg-transparent border-0 outline-0 shadow-none">
                         <span class="pulse-glow mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400 text-slate-900 font-bold text-xs shadow-lg border border-amber-200">
                             Click Me ✨
                         </span>
@@ -488,6 +470,8 @@
                 <div id="preview-step-card" class="hidden absolute inset-0 z-40 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm transition-all duration-500">
                     
                     <div id="prev-paper-element" class="paper-vintage relative w-full max-w-sm p-6 sm:p-7 rounded-xl shadow-2xl transition-all duration-300 transform scale-100">
+                        <!-- Paperclip -->
+                        <div class="paperclip"></div>
 
                         <!-- Card Header -->
                         <div class="text-center mb-4 pt-2">
@@ -496,23 +480,22 @@
                         </div>
 
                         <!-- Card Message -->
-                        <div class="space-y-3 text-center leading-relaxed my-4 pb-4">
+                        <div class="space-y-3 text-center leading-relaxed my-4">
                             <p id="prev-greeting" class="text-base sm:text-lg font-bold heading-text">🎂 Happy Birthday, Babe! 🎂</p>
                             <p id="prev-main-msg" class="text-xs sm:text-sm font-medium px-2">Wishing you a day filled with love, joy, and endless laughter. Thank you for being my constant source of happiness! 💖</p>
                             <p id="prev-sub-msg" class="text-xs italic pt-1 opacity-90">May all your dreams come true. Take good care of yourself always! ✨</p>
                         </div>
 
                         <!-- Card Footer -->
-                        <div class="mt-4 pt-3 border-t border-black/10 flex items-center justify-between text-[11px]">
+                        <div class="mt-6 pt-3 border-t border-black/10 flex items-center justify-between text-[11px]">
                             <span id="prev-sign-left" class="font-cursive text-sm">With All My Love ❤️</span>
                             <span id="prev-sign-right">✨ Forever Yours ✨</span>
                         </div>
 
-                        <!-- CORNER STAMP / STICKER PHOTO (TAP TO EXPAND) -->
-                        <div class="corner-stamp-wrapper" onclick="openEnlargedStampModal(event)" title="Click to view full photo">
-                            <div class="stamp-tape"></div>
-                            <div class="stamp-polaroid-frame">
-                                <img id="prev-stamp-img" src="" class="w-10 h-10 object-cover rounded">
+                        <!-- CORNER STAMP PHOTO (Bottom Right Corner) -->
+                        <div onclick="openCornerFullModal(event)" class="absolute bottom-3 right-3 cursor-pointer group z-20">
+                            <div class="w-11 h-11 p-0.5 bg-white shadow-md rounded border border-slate-300 transform rotate-3 group-hover:rotate-0 transition duration-200">
+                                <img id="prev-corner-stamp" src="" class="w-full h-full object-cover rounded-sm">
                             </div>
                         </div>
 
@@ -524,21 +507,21 @@
 
                 </div>
 
-                <!-- ENLARGED FULL STAMP PHOTO PREVIEW MODAL -->
-                <div id="stamp-full-modal" class="hidden absolute inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300">
-                    <div class="relative bg-white/10 p-3 rounded-2xl max-w-xs w-full text-center border border-white/20 shadow-2xl">
-                        <img id="stamp-full-img" src="" class="w-full h-auto max-h-[60vh] object-contain rounded-xl shadow-lg border border-amber-300/40">
-                        <p class="text-xs text-amber-200 mt-3 font-semibold">✨ Memory Photo Preview ✨</p>
-                        <button onclick="closeEnlargedStampModal()" class="mt-3 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold px-4 py-1.5 rounded-full transition shadow-md">
-                            Close Preview
-                        </button>
-                    </div>
-                </div>
+            </div>
 
+            <!-- ENLARGED CORNER PHOTO MODAL -->
+            <div id="corner-full-modal" class="hidden absolute inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer" onclick="closeCornerFullModal()">
+                <div class="bg-white p-3 rounded-xl shadow-2xl max-w-xs w-full text-center relative" onclick="event.stopPropagation()">
+                    <img id="prev-corner-full-img" src="" class="w-full h-auto max-h-72 object-contain rounded-lg">
+                    <p class="text-xs text-slate-700 font-medium mt-2">✨ Corner Memory Stamp ✨</p>
+                    <button onclick="closeCornerFullModal()" class="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full p-1 shadow">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
             </div>
 
             <div class="text-center text-[11px] text-slate-400 mt-1">
-                Tip: Click "Replay Full Flow" to test transition or tap the bottom-right corner photo to view full size!
+                Tip: Click "Replay Full Flow" anytime to test the transition from Bouquet ➔ Floating Envelope ➔ Wish Card.
             </div>
 
         </section>
@@ -589,33 +572,31 @@
             { id: 'p10', name: 'Lavender Dream', cssClass: 'paper-lavender' }
         ];
 
-        /* --- BACKGROUND AUDIO PRESETS DATA WITH NO-MUSIC OPTION --- */
+        /* --- BACKGROUND AUDIO PRESETS DATA --- */
         const AUDIO_PRESETS = [
-            { name: '🚫 No Music / Muted (သီချင်း မပါပါ)', url: '' },
             { name: 'Soft Birthday Piano (Default)', url: 'https://www.image2url.com/r2/default/audio/1789288232634-9a89e91e-e43f-4d68-b101-bf9b607f0f76.m4a' },
             { name: 'Acoustic Romantic Guitar', url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-acoustic-guitar-112349.mp3' },
             { name: 'Upbeat Happy Birthday Melody', url: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a8d11c.mp3?filename=happy-birthday-10022.mp3' },
-            { name: 'Lofi Sweet Dreams Melodic', url: 'https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f7e7f1.mp3?filename=sweet-lofi-122899.mp3' }
+            { name: 'Lofi Sweet Dreams Melodic', url: 'https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f7e7f1.mp3?filename=sweet-lofi-122899.mp3' },
+            { name: '🚫 No Music / Muted (သီချင်း မပါပါ)', url: '' }
         ];
 
         /* STUDIO STATE MANAGEMENT */
         let state = {
+            bgMode: 'gradient',
+            singleColor: '#0f0728',
+            gradColor1: '#2e1065',
+            gradColor2: '#05020d',
+            gradDirection: 'circle at center',
             bouquet: BOUQUETS[0].url,
             bouquetName: BOUQUETS[0].name,
             envelope: ENVELOPES[0].url,
             envelopeName: ENVELOPES[0].name,
             paperClass: PAPER_DESIGNS[0].cssClass,
             paperName: PAPER_DESIGNS[0].name,
-            audioUrl: AUDIO_PRESETS[1].url,
-            audioName: AUDIO_PRESETS[1].name,
-            stampUrl: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80',
-            
-            // Background Configuration State
-            bgType: 'gradient', // 'single' or 'gradient'
-            bgSingleColor: '#0f172a',
-            bgGradientDir: 'to bottom right',
-            bgGradientC1: '#2e1065',
-            bgGradientC2: '#05020d'
+            cornerStamp: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80',
+            audioUrl: AUDIO_PRESETS[0].url,
+            audioName: AUDIO_PRESETS[0].name
         };
 
         // Initialize Studio Controls on Load
@@ -624,10 +605,45 @@
             renderEnvelopeGrid();
             renderPaperGrid();
             renderAudioList();
+            document.getElementById('input-corner-url').value = state.cornerStamp;
+            document.getElementById('corner-thumb-preview').src = state.cornerStamp;
             updateStudioState();
             createSparkles();
-            updateBgCustomization();
         };
+
+        /* BACKGROUND MODE & COLOR FUNCTIONS */
+        function setBgMode(mode) {
+            state.bgMode = mode;
+            if(mode === 'single') {
+                document.getElementById('bg-mode-single').className = "px-2.5 py-1 rounded-md font-semibold bg-teal-500/20 text-teal-300 transition";
+                document.getElementById('bg-mode-gradient').className = "px-2.5 py-1 rounded-md text-slate-400 transition";
+                document.getElementById('bg-single-box').classList.remove('hidden');
+                document.getElementById('bg-gradient-box').classList.add('hidden');
+            } else {
+                document.getElementById('bg-mode-gradient').className = "px-2.5 py-1 rounded-md font-semibold bg-teal-500/20 text-teal-300 transition";
+                document.getElementById('bg-mode-single').className = "px-2.5 py-1 rounded-md text-slate-400 transition";
+                document.getElementById('bg-gradient-box').classList.remove('hidden');
+                document.getElementById('bg-single-box').classList.add('hidden');
+            }
+            updateStudioState();
+        }
+
+        function syncColorText(inputEl, colorPickerId) {
+            document.getElementById(colorPickerId).value = inputEl.value;
+            updateStudioState();
+        }
+
+        function setQuickGradient(c1, c2, dir) {
+            state.gradColor1 = c1;
+            state.gradColor2 = c2;
+            state.gradDirection = dir;
+            document.getElementById('input-bg-grad1').value = c1;
+            document.getElementById('text-bg-grad1').value = c1;
+            document.getElementById('input-bg-grad2').value = c2;
+            document.getElementById('text-bg-grad2').value = c2;
+            document.getElementById('input-bg-direction').value = dir;
+            setBgMode('gradient');
+        }
 
         /* RENDER BOUQUET SELECTION GRID */
         function renderBouquetGrid() {
@@ -708,8 +724,8 @@
             const list = document.getElementById('audio-preset-list');
             list.innerHTML = AUDIO_PRESETS.map((a, idx) => `
                 <div onclick="selectAudio('${a.url}', '${a.name}')" class="cursor-pointer flex items-center justify-between p-2.5 rounded-lg border ${state.audioUrl === a.url ? 'bg-amber-500/10 border-amber-500/40 text-amber-200' : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'}">
-                    <span class="text-xs font-medium">${a.name}</span>
-                    ${state.audioUrl === a.url ? '<span class="text-xs font-bold text-amber-400">✓ Active</span>' : ''}
+                    <span class="text-xs font-medium">${idx+1}. ${a.name}</span>
+                    ${state.audioUrl === a.url ? '<span class="text-xs">✓ Active</span>' : ''}
                 </div>
             `).join('');
         }
@@ -719,94 +735,102 @@
             state.audioName = name;
             document.getElementById('input-custom-audio').value = '';
             renderAudioList();
+            updateStudioAudioPlayer();
         }
 
         function setCustomAudio(url) {
+            if(!url) return;
             state.audioUrl = url;
             state.audioName = 'Custom Audio URL';
             renderAudioList();
+            updateStudioAudioPlayer();
         }
 
-        /* --- BACKGROUND CUSTOMIZATION LOGIC --- */
-        function setBgType(type) {
-            state.bgType = type;
-            const singleBtn = document.getElementById('bg-type-single-btn');
-            const gradientBtn = document.getElementById('bg-type-gradient-btn');
-            const singleControls = document.getElementById('bg-single-controls');
-            const gradientControls = document.getElementById('bg-gradient-controls');
-
-            if (type === 'single') {
-                singleBtn.className = "py-2 text-xs font-semibold rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition";
-                gradientBtn.className = "py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 transition hover:bg-slate-700";
-                singleControls.classList.remove('hidden');
-                gradientControls.classList.add('hidden');
+        function updateStudioAudioPlayer() {
+            const audioEl = document.getElementById('liveBgMusic');
+            if(state.audioUrl) {
+                audioEl.src = state.audioUrl;
+                audioEl.load();
             } else {
-                gradientBtn.className = "py-2 text-xs font-semibold rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 transition";
-                singleBtn.className = "py-2 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 transition hover:bg-slate-700";
-                gradientControls.classList.remove('hidden');
-                singleControls.classList.add('hidden');
-            }
-            updateBgCustomization();
-        }
-
-        function syncColorFromInput(hex, pickerId) {
-            if (/^#[0-9A-F]{6}$/i.test(hex)) {
-                document.getElementById(pickerId).value = hex;
-                updateBgCustomization();
+                audioEl.pause();
+                audioEl.src = '';
             }
         }
 
-        function applyGradientPreset(dir, c1, c2) {
-            document.getElementById('bg-gradient-dir').value = dir;
-            document.getElementById('bg-gradient-c1').value = c1;
-            document.getElementById('bg-gradient-hex1').value = c1;
-            document.getElementById('bg-gradient-c2').value = c2;
-            document.getElementById('bg-gradient-hex2').value = c2;
-            updateBgCustomization();
+        function previewTestAudio(isPlaying) {
+            const audioEl = document.getElementById('liveBgMusic');
+            const statusIcon = document.getElementById('audio-status-icon');
+            const statusText = document.getElementById('audio-status-text');
+
+            if(isPlaying && state.audioUrl) {
+                audioEl.src = state.audioUrl;
+                audioEl.play().then(() => {
+                    statusIcon.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                    statusText.innerText = "Playing Audio Live...";
+                }).catch(e => {
+                    alert("Playback blocked or invalid URL. Tap anywhere on the preview first.");
+                });
+            } else {
+                audioEl.pause();
+                statusIcon.className = "w-2.5 h-2.5 rounded-full bg-rose-500";
+                statusText.innerText = "Audio Muted / Paused";
+            }
         }
 
-        function updateBgCustomization() {
-            state.bgSingleColor = document.getElementById('bg-single-color').value;
-            document.getElementById('bg-single-hex').value = state.bgSingleColor;
-
-            state.bgGradientDir = document.getElementById('bg-gradient-dir').value;
-            state.bgGradientC1 = document.getElementById('bg-gradient-c1').value;
-            document.getElementById('bg-gradient-hex1').value = state.bgGradientC1;
-            state.bgGradientC2 = document.getElementById('bg-gradient-c2').value;
-            document.getElementById('bg-gradient-hex2').value = state.bgGradientC2;
-
-            const stage = document.getElementById('preview-stage');
-            if (state.bgType === 'single') {
-                stage.style.background = state.bgSingleColor;
-            } else {
-                if (state.bgGradientDir.includes('circle')) {
-                    stage.style.background = `radial-gradient(${state.bgGradientDir}, ${state.bgGradientC1}, ${state.bgGradientC2})`;
-                } else {
-                    stage.style.background = `linear-gradient(${state.bgGradientDir}, ${state.bgGradientC1}, ${state.bgGradientC2})`;
-                }
+        /* CORNER PHOTO DEVICE UPLOAD */
+        function handleCornerDeviceUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    state.cornerStamp = e.target.result;
+                    document.getElementById('input-corner-url').value = e.target.result;
+                    document.getElementById('corner-thumb-preview').src = e.target.result;
+                    updateStudioState();
+                };
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
         /* UPDATE LIVE CANVAS STATE */
         function updateStudioState() {
             const fontClass = document.getElementById('input-font-family').value;
-            
-            // Corner Stamp Image Sync
-            state.stampUrl = document.getElementById('input-stamp-url').value || 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80';
-            document.getElementById('prev-stamp-img').src = state.stampUrl;
-            document.getElementById('stamp-full-img').src = state.stampUrl;
+            const stage = document.getElementById('preview-stage');
 
+            // Apply Background Styling
+            if(state.bgMode === 'single') {
+                state.singleColor = document.getElementById('input-bg-single').value;
+                stage.style.background = state.singleColor;
+            } else {
+                state.gradColor1 = document.getElementById('input-bg-grad1').value;
+                state.gradColor2 = document.getElementById('input-bg-grad2').value;
+                state.gradDirection = document.getElementById('input-bg-direction').value;
+                if(state.gradDirection.includes('circle')) {
+                    stage.style.background = `radial-gradient(${state.gradDirection}, ${state.gradColor1}, ${state.gradColor2})`;
+                } else {
+                    stage.style.background = `linear-gradient(${state.gradDirection}, ${state.gradColor1}, ${state.gradColor2})`;
+                }
+            }
+            
             // Start Hint & Bouquet
             document.getElementById('prev-start-hint').innerText = document.getElementById('input-start-hint').value;
             document.getElementById('prev-start-hint').className = `text-amber-200 text-base sm:text-lg font-bold drop-shadow-md mb-4 pulse-glow ${fontClass}`;
             document.getElementById('prev-bouquet-img').src = state.bouquet;
 
-            // Envelope image
-            document.getElementById('prev-envelope-img').src = state.envelope;
+            // Envelope image (Borderless and shadowless)
+            const envImg = document.getElementById('prev-envelope-img');
+            envImg.src = state.envelope;
+            envImg.className = "w-36 sm:w-44 h-auto object-contain bg-transparent border-0 outline-0 shadow-none";
 
             // Paper element update
             const paperEl = document.getElementById('prev-paper-element');
             paperEl.className = `${state.paperClass} relative w-full max-w-sm p-6 sm:p-7 rounded-xl shadow-2xl transition-all duration-300 transform scale-100 ${fontClass}`;
+
+            // Corner Stamp
+            const cornerUrlInput = document.getElementById('input-corner-url').value;
+            if(cornerUrlInput) state.cornerStamp = cornerUrlInput;
+            document.getElementById('prev-corner-stamp').src = state.cornerStamp;
+            document.getElementById('prev-corner-full-img').src = state.cornerStamp;
+            document.getElementById('corner-thumb-preview').src = state.cornerStamp;
 
             // Text elements inside card
             document.getElementById('prev-card-title').innerText = document.getElementById('input-card-title').value;
@@ -817,18 +841,13 @@
             document.getElementById('prev-sign-right').innerText = document.getElementById('input-sign-right').value;
         }
 
-        /* ENLARGED STAMP MODAL HANDLERS */
-        function openEnlargedStampModal(e) {
-            e.stopPropagation();
-            document.getElementById('stamp-full-modal').classList.remove('hidden');
-        }
-
-        function closeEnlargedStampModal() {
-            document.getElementById('stamp-full-modal').classList.add('hidden');
-        }
-
         /* PREVIEW STEP TRANSITION FLOWS */
         function proceedToStep2() {
+            const audioEl = document.getElementById('liveBgMusic');
+            if(state.audioUrl) {
+                audioEl.src = state.audioUrl;
+                audioEl.play().catch(e => console.log("Audio play error", e));
+            }
             document.getElementById('preview-step-start').classList.add('hidden');
             document.getElementById('preview-step-floating').classList.remove('hidden');
         }
@@ -842,9 +861,23 @@
         }
 
         function directOpenCardModal() {
+            const audioEl = document.getElementById('liveBgMusic');
+            if(state.audioUrl) {
+                audioEl.src = state.audioUrl;
+                audioEl.play().catch(e => {});
+            }
             document.getElementById('preview-step-start').classList.add('hidden');
             document.getElementById('preview-step-floating').classList.remove('hidden');
             document.getElementById('preview-step-card').classList.remove('hidden');
+        }
+
+        function openCornerFullModal(e) {
+            e.stopPropagation();
+            document.getElementById('corner-full-modal').classList.remove('hidden');
+        }
+
+        function closeCornerFullModal() {
+            document.getElementById('corner-full-modal').classList.add('hidden');
         }
 
         function playFullFlowPreview() {
@@ -852,30 +885,24 @@
             document.getElementById('preview-step-floating').classList.add('hidden');
             document.getElementById('preview-step-start').classList.remove('hidden');
 
-            // Reset animation
             const cardNode = document.getElementById('prev-falling-card');
             cardNode.style.animation = 'none';
-            cardNode.offsetHeight; /* trigger reflow */
+            cardNode.offsetHeight;
             cardNode.style.animation = null;
         }
 
         function switchControlTab(tab) {
             document.getElementById('tab-sec-presets').classList.add('hidden');
-            document.getElementById('tab-sec-background').classList.add('hidden');
             document.getElementById('tab-sec-content').classList.add('hidden');
             document.getElementById('tab-sec-audio').classList.add('hidden');
 
             document.getElementById('tab-btn-presets').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700";
-            document.getElementById('tab-btn-background').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700";
             document.getElementById('tab-btn-content').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700";
             document.getElementById('tab-btn-audio').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-slate-800 text-slate-400 hover:bg-slate-700";
 
             if(tab === 'presets') {
                 document.getElementById('tab-sec-presets').classList.remove('hidden');
                 document.getElementById('tab-btn-presets').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30";
-            } else if(tab === 'background') {
-                document.getElementById('tab-sec-background').classList.remove('hidden');
-                document.getElementById('tab-btn-background').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30";
             } else if(tab === 'content') {
                 document.getElementById('tab-sec-content').classList.remove('hidden');
                 document.getElementById('tab-btn-content').className = "flex-1 text-xs font-semibold py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30";
@@ -905,13 +932,9 @@
             selectBouquet(BOUQUETS[0].url, BOUQUETS[0].name);
             selectEnvelope(ENVELOPES[0].url, ENVELOPES[0].name);
             selectPaper(PAPER_DESIGNS[0].cssClass, PAPER_DESIGNS[0].name);
-            selectAudio(AUDIO_PRESETS[1].url, AUDIO_PRESETS[1].name);
+            selectAudio(AUDIO_PRESETS[0].url, AUDIO_PRESETS[0].name);
+            setQuickGradient('#2e1065', '#05020d', 'circle at center');
             
-            // Reset Background
-            setBgType('gradient');
-            applyGradientPreset('to bottom right', '#2e1065', '#05020d');
-
-            document.getElementById('input-stamp-url').value = 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=400&q=80';
             document.getElementById('input-font-family').value = 'font-serif-custom';
             document.getElementById('input-start-hint').value = '✨ Click the bouquet ✨';
             document.getElementById('input-card-title').value = 'Happy Birthday';
@@ -935,31 +958,19 @@
             const subMsg = document.getElementById('input-sub-msg').value;
             const signLeft = document.getElementById('input-sign-left').value;
             const signRight = document.getElementById('input-sign-right').value;
-            const stampImgUrl = state.stampUrl;
 
-            // Dynamic Background CSS
-            let backgroundStyleCSS = '';
-            if (state.bgType === 'single') {
-                backgroundStyleCSS = `background: ${state.bgSingleColor};`;
+            // Compute background CSS string for export
+            let exportBgCss = '';
+            if(state.bgMode === 'single') {
+                exportBgCss = `background: ${state.singleColor};`;
             } else {
-                if (state.bgGradientDir.includes('circle')) {
-                    backgroundStyleCSS = `background: radial-gradient(${state.bgGradientDir}, ${state.bgGradientC1}, ${state.bgGradientC2});`;
+                if(state.gradDirection.includes('circle')) {
+                    exportBgCss = `background: radial-gradient(${state.gradDirection}, ${state.gradColor1}, ${state.gradColor2});`;
                 } else {
-                    backgroundStyleCSS = `background: linear-gradient(${state.bgGradientDir}, ${state.bgGradientC1}, ${state.bgGradientC2});`;
+                    exportBgCss = `background: linear-gradient(${state.gradDirection}, ${state.gradColor1}, ${state.gradColor2});`;
                 }
             }
 
-            // Audio tag logic
-            const audioTagHTML = state.audioUrl 
-                ? `<audio id="bgMusic" loop src="${state.audioUrl}"></audio>` 
-                : `<!-- No music selected -->`;
-
-            // Audio play trigger JS logic
-            const audioPlayJS = state.audioUrl 
-                ? `const audio = document.getElementById('bgMusic'); if(audio) audio.play().catch(err => console.log(err));` 
-                : `// Muted / No music mode`;
-
-            // Generate full standalone HTML template
             const standaloneHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -973,7 +984,7 @@
     <style>
         body {
             font-family: 'Poppins', sans-serif;
-            ${backgroundStyleCSS}
+            ${exportBgCss}
             overflow: hidden;
             height: 100vh;
             touch-action: manipulation;
@@ -1009,7 +1020,7 @@
             -webkit-user-drag: none;
         }
 
-        /* NO BORDER styling on Envelope */
+        /* Borderless and shadowless envelope in export */
         .free-floating-image img {
             border: none !important;
             outline: none !important;
@@ -1018,7 +1029,7 @@
         }
 
         .free-floating-image:hover img {
-            filter: drop-shadow(0 0 18px rgba(251, 191, 36, 0.75));
+            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.7));
         }
 
         @keyframes pulseGlow {
@@ -1108,39 +1119,15 @@
         .paper-lavender .title-text { color: #7e22ce; }
         .paper-lavender .heading-text { color: #a21caf; }
 
-        /* Stamp Tape Polaroid Styling */
-        .corner-stamp-wrapper {
-            position: absolute;
-            bottom: -8px;
-            right: -8px;
-            transform: rotate(6deg);
-            transition: transform 0.2s ease, filter 0.2s ease;
-            cursor: pointer;
-            z-index: 25;
+        .paperclip {
+            position: absolute; top: 10px; right: 24px;
+            width: 14px; height: 42px; border: 2px solid #55555d;
+            border-radius: 10px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 30; pointer-events: none;
         }
-        .corner-stamp-wrapper:hover {
-            transform: rotate(0deg) scale(1.1);
-            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.35));
-        }
-        .stamp-polaroid-frame {
-            background: #ffffff;
-            padding: 4px 4px 14px 4px;
-            border-radius: 4px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-            border: 1px solid rgba(0,0,0,0.08);
-        }
-        .stamp-tape {
-            position: absolute;
-            top: -6px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-3deg);
-            width: 32px;
-            height: 12px;
-            background: rgba(254, 240, 138, 0.75);
-            backdrop-filter: blur(2px);
-            border: 1px dashed rgba(217, 119, 6, 0.4);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            z-index: 30;
+        .paperclip::after {
+            content: ''; position: absolute; top: 6px; left: 2px;
+            width: 6px; height: 26px; border: 2px solid #55555d; border-radius: 6px;
         }
 
         .sparkle {
@@ -1162,7 +1149,7 @@
 </head>
 <body class="relative flex items-center justify-center min-h-screen select-none overflow-hidden ${fontClass}">
 
-    ${audioTagHTML}
+    <audio id="bgMusic" loop src="${state.audioUrl}"></audio>
 
     <!-- Start Screen -->
     <div id="startScreen" class="absolute inset-0 z-40 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700" onclick="startExperience()">
@@ -1180,11 +1167,11 @@
 
         <div class="absolute top-8 text-center z-10 px-4 w-full">
             <h1 class="text-amber-200 text-base md:text-lg font-bold tracking-wide drop-shadow-md">✨ Tap The Envelope ✨</h1>
-            <p class="text-xs text-purple-300/80 mt-1">Tap the floating photo to open birthday wish</p>
+            <p class="text-xs text-purple-300/80 mt-1">Tap the floating envelope to open birthday wish</p>
         </div>
 
         <div id="fallingCard" class="free-floating-image z-20 flex flex-col items-center justify-center" onclick="openWishCard()">
-            <img src="${state.envelope}" alt="Birthday Special" class="w-40 sm:w-48 h-auto object-contain pointer-events-auto rounded-lg">
+            <img src="${state.envelope}" alt="Birthday Special" class="w-40 sm:w-48 h-auto object-contain pointer-events-auto bg-transparent border-0 outline-0 shadow-none">
             <span class="click-hint mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/90 text-slate-900 font-bold text-xs tracking-wider shadow-lg border border-amber-200">
                 <svg class="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
                 Click Me ✨
@@ -1196,28 +1183,28 @@
     <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="closeWishCardOnBg(event)">
         
         <div class="${state.paperClass} relative w-full max-w-md p-6 sm:p-8 rounded-xl z-10 shadow-2xl transform scale-90 transition-transform duration-500" id="modalCard">
+            <div class="paperclip"></div>
 
             <div class="text-center mb-4 pt-3">
                 <span class="text-3xl sm:text-4xl title-text block">${cardTitle}</span>
                 <div class="w-20 h-0.5 bg-amber-800/20 mx-auto mt-2"></div>
             </div>
 
-            <div class="space-y-3 text-center leading-relaxed my-4 pb-4">
+            <div class="space-y-3 text-center leading-relaxed my-4">
                 <p class="text-lg sm:text-xl font-bold heading-text drop-shadow-sm">${greeting}</p>
                 <p class="text-sm sm:text-base font-medium px-2 opacity-95">${mainMsg}</p>
                 <p class="text-xs sm:text-sm italic pt-1 opacity-80">${subMsg}</p>
             </div>
 
-            <div class="mt-4 pt-3 border-t border-black/10 flex items-center justify-between text-xs">
+            <div class="mt-6 pt-3 border-t border-black/10 flex items-center justify-between text-xs">
                 <span class="font-cursive text-base">${signLeft}</span>
                 <span>${signRight}</span>
             </div>
 
-            <!-- CORNER STAMP / POLAROID PHOTO -->
-            <div class="corner-stamp-wrapper" onclick="openEnlargedStampModal(event)" title="Click to expand photo">
-                <div class="stamp-tape"></div>
-                <div class="stamp-polaroid-frame">
-                    <img src="${stampImgUrl}" class="w-11 h-11 object-cover rounded">
+            <!-- Corner Stamp in Export Modal -->
+            <div onclick="openCornerFullModal(event)" class="absolute bottom-3 right-3 cursor-pointer group z-20">
+                <div class="w-11 h-11 p-0.5 bg-white shadow-md rounded border border-slate-300 transform rotate-3 group-hover:rotate-0 transition duration-200">
+                    <img src="${state.cornerStamp}" class="w-full h-full object-cover rounded-sm">
                 </div>
             </div>
 
@@ -1227,20 +1214,23 @@
         </div>
     </div>
 
-    <!-- ENLARGED FULL STAMP PHOTO PREVIEW MODAL -->
-    <div id="stampFullModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-all duration-300">
-        <div class="relative bg-white/10 p-4 rounded-2xl max-w-xs w-full text-center border border-white/20 shadow-2xl">
-            <img src="${stampImgUrl}" class="w-full h-auto max-h-[65vh] object-contain rounded-xl shadow-lg border border-amber-300/40">
-            <p class="text-xs text-amber-200 mt-3 font-semibold">✨ Memory Photo Preview ✨</p>
-            <button onclick="closeEnlargedStampModal()" class="mt-3 bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-bold px-4 py-1.5 rounded-full transition shadow-md">
-                Close Preview
+    <!-- Enlarged Corner Photo Modal in Export -->
+    <div id="exportCornerModal" class="hidden fixed inset-0 z-60 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer" onclick="closeExportCornerModal()">
+        <div class="bg-white p-3 rounded-xl shadow-2xl max-w-xs w-full text-center relative" onclick="event.stopPropagation()">
+            <img src="${state.cornerStamp}" class="w-full h-auto max-h-72 object-contain rounded-lg">
+            <p class="text-xs text-slate-700 font-medium mt-2">✨ Corner Memory Stamp ✨</p>
+            <button onclick="closeExportCornerModal()" class="absolute -top-2 -right-2 bg-rose-600 text-white rounded-full p-1 shadow">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
     </div>
 
     <script>
         function startExperience() {
-            ${audioPlayJS}
+            const audio = document.getElementById('bgMusic');
+            if (audio.src && audio.src !== window.location.href) {
+                audio.play().catch(err => console.log("Audio play error", err));
+            }
 
             const startScreen = document.getElementById('startScreen');
             const mainContent = document.getElementById('mainContent');
@@ -1297,13 +1287,13 @@
             if (e.target.id === 'wishModal') closeWishCard();
         }
 
-        function openEnlargedStampModal(e) {
+        function openCornerFullModal(e) {
             e.stopPropagation();
-            document.getElementById('stampFullModal').classList.remove('hidden');
+            document.getElementById('exportCornerModal').classList.remove('hidden');
         }
 
-        function closeEnlargedStampModal() {
-            document.getElementById('stampFullModal').classList.add('hidden');
+        function closeExportCornerModal() {
+            document.getElementById('exportCornerModal').classList.add('hidden');
         }
     <\/script>
 </body>
