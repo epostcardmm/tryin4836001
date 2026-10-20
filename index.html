@@ -43,7 +43,7 @@
             border: 2px solid rgba(255, 255, 255, 0.85);
             transition: all 0.4s ease;
             position: relative;
-            overflow: hidden; /* No ခလုတ် Card အပြင်ဘက်သို့ ထွက်မသွားစေရန် ထိန်းချုပ်ခြင်း */
+            overflow: hidden; /* No ခလုတ် ကတ်ပြားအပြင် မထွက်စေရန် ထိန်းချုပ်ခြင်း */
         }
 
         /* Envelope / Card Styles */
@@ -176,10 +176,11 @@
             100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
         }
 
-        /* Card Frame အတွင်းမှာသာ ရွှေ့ရန်ပြင်ဆင်ထားသော class */
+        /* ကတ်ပြားအတွင်းမှာသာ ရွှေ့ရန်ပြင်ဆင်ထားသော class (Absolute Positioning ဖြင့် ကတ်ပြားအတွင်း ကန့်သတ်ခြင်း) */
         .escaped-btn-card {
-            position: relative !important;
-            transition: transform 0.2s ease-in-out, left 0.2s ease-in-out, top 0.2s ease-in-out;
+            position: absolute !important;
+            transition: all 0.2s ease-in-out;
+            z-index: 50;
         }
 
         /* Orbiting Animation */
@@ -1138,11 +1139,11 @@
                 const nextTarget = (stepNum === appConfig.steps.length) ? 'falling' : (stepNum + 1);
 
                 const card = document.createElement('div');
-                card.className = `interactive-card ${appConfig.cardStyle} step-view${currentActiveStepView === stepNum ? 'active' : ''}`;
+                card.className = `interactive-card ${appConfig.cardStyle} step-view ${currentActiveStepView === stepNum ? 'active' : ''}`;
                 card.id = `prev-step-${stepNum}`;
 
-                const yesStyle = `background: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size:${appConfig.yesFontSize}px;`;
-                const noStyle = `background: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size:${appConfig.noFontSize}px;`;
+                const yesStyle = `background: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size: ${appConfig.yesFontSize}px;`;
+                const noStyle = `background: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size: ${appConfig.noFontSize}px;`;
 
                 const activeYesLabel = (step.yesText && step.yesText.trim() !== '') ? step.yesText : appConfig.yesText;
                 const activeNoLabel = (step.noText && step.noText.trim() !== '') ? step.noText : appConfig.noText;
@@ -1152,7 +1153,7 @@
                     <h2 class="font-bold leading-relaxed" style="font-size: ${appConfig.questionFontSize}px;">
                         ${step.text}
                     </h2>
-                    <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative btn-container-step">
+                    <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative btn-container-step" id="btn-container-${stepNum}">
                         <button class="btn-custom-yes" style="${yesStyle}" id="btn-yes-prev-${stepNum}" onclick="handleYesClick('${nextTarget}')">${activeYesLabel}</button>
                         <div class="btn-no-wrapper-preview" id="btn-no-wrapper-prev-${stepNum}">
                             <button class="btn-custom-no ${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="${noStyle}" id="btn-no-prev-${stepNum}">${activeNoLabel}</button>
@@ -1162,7 +1163,7 @@
 
                 cardHolder.appendChild(card);
 
-                // Attach Behavior Event Listeners (နှိပ်မှ အလုပ်လုပ်စေရန် ပြင်ဆင်ထားသည်)
+                // Attach Behavior Event Listeners
                 setTimeout(() => attachBehaviorEvents(stepNum, step.behavior, nextTarget, activeYesLabel), 50);
             });
 
@@ -1203,7 +1204,7 @@
             cardHolder.appendChild(letterCard);
         }
 
-        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (Click-triggered & Card-contained)
+        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (ကတ်ပြားအတွင်းသာ ရွေ့လျားစေရန် တိကျစွာ ထိန်းချုပ်ခြင်း)
         let stateNoScales = {};
         let stateGuiltIndices = {};
         let stateTeleportCounts = {};
@@ -1216,16 +1217,15 @@
 
             if (!noBtn || !noWrapper || !cardEl) return;
 
-            // Remove existing listeners
             const newNoBtn = noBtn.cloneNode(true);
             noBtn.parentNode.replaceChild(newNoBtn, noBtn);
 
-            // 1. FLEEING (Card Frame အတွင်းတွင်သာ အပြည့်ပြေးမည်)
+            // 1. FLEEING (ကတ်ပြား ဘောင်အတွင်း၌သာ နေရာရွှေ့မည်၊ နှိပ်/တို့ထိလျှင် ပြေးမည်)
             if (behavior === 'fleeing') {
                 const triggerFlee = (e) => {
                     if (e) e.preventDefault();
                     showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    moveButtonInsideCard(newNoBtn, cardEl);
+                    moveButtonInsideCardStrict(newNoBtn, cardEl);
                 };
                 newNoBtn.onclick = triggerFlee;
             }
@@ -1261,7 +1261,7 @@
                 newNoBtn.onclick = swapFunc;
             }
 
-            // 4. TELEPORT / REAPPEARING (Card Frame အတွင်း၌သာ နေရာပြောင်းမည်)
+            // 4. TELEPORT / REAPPEARING (ကတ်ပြားပေါ်အတွင်း၌သာ နေရာပြောင်းမည်)
             else if (behavior === 'teleport') {
                 stateTeleportCounts[stepNum] = 0;
                 const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!", "Nice try!"];
@@ -1270,7 +1270,7 @@
                     stateTeleportCounts[stepNum]++;
                     const text = teleTexts[stateTeleportCounts[stepNum] % teleTexts.length];
                     newNoBtn.innerText = text;
-                    moveButtonInsideCard(newNoBtn, cardEl);
+                    moveButtonInsideCardStrict(newNoBtn, cardEl);
                 };
             }
 
@@ -1372,21 +1372,23 @@
             }
         }
 
-        // ကတ်ပြား (Card Frame) အတွင်းဘက်၌သာ လွတ်လပ်စွာပြေးနိုင်ရန် တွက်ချက်ပေးသော Function
-        function moveButtonInsideCard(btnEl, cardEl) {
+        // ကတ်ပြား ဘောင်အတွင်း၌သာ အတိအကျ ရွေ့လျားစေသော လုပ်ဆောင်ချက် (Screen အပြင်/နှိပ်လို့မရတဲ့နေရာသို့ လုံးဝမရောက်ပါ)
+        function moveButtonInsideCardStrict(btnEl, cardEl) {
             if (!btnEl.classList.contains('escaped-btn-card')) {
                 btnEl.classList.add('escaped-btn-card');
             }
             const cardRect = cardEl.getBoundingClientRect();
             const btnRect = btnEl.getBoundingClientRect();
-            
-            const maxRangeX = (cardRect.width / 2) - 50;
-            const maxRangeY = (cardRect.height / 2) - 80;
 
-            const randomX = (Math.random() - 0.5) * maxRangeX * 1.2;
-            const randomY = (Math.random() - 0.5) * maxRangeY * 1.2;
-            
-            btnEl.style.transform = `translate(${randomX}px,${randomY}px)`;
+            const padding = 20;
+            const maxX = cardRect.width - btnRect.width - padding;
+            const maxY = cardRect.height - btnRect.height - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            btnEl.style.left = `${randomX}px`;
+            btnEl.style.top = `${randomY}px`;
         }
 
         function setEnvelopeImg(url, element) {
@@ -1494,7 +1496,7 @@
             previewStep('letter');
         }
 
-        // GENERATE STANDALONE HTML CODE FOR EXPORT
+        // GENERATE STANDALONE HTML CODE FOR EXPORT (Export ထွက်မည့် HTML ကုဒ်တွင်လည်း ကတ်ပြားအတွင်းသာ ရွေ့ရန် အပြည့်အစုံ ပါဝင်သည်)
         function generateCompleteHTML() {
             const warningsArrayJSON = JSON.stringify(appConfig.warnings);
             const stepsDataJSON = JSON.stringify(appConfig.steps);
@@ -1536,7 +1538,7 @@
         .env-classic-gold { background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95)); color: #78350f; border-color: rgba(245, 158, 11, 0.5); }
         .env-dark-velvet { background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95)); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); }
 
-        .step { display: none; flex-direction: column; align-items: center; gap: 22px; animation: fadeIn 0.4s ease-in-out forwards; }
+        .step { display: none; flex-direction: column; align-items: center; gap: 22px; animation: fadeIn 0.4s ease-in-out forwards; width: 100%; }
         .step.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         img.gif-box { width: 180px; height: 180px; object-fit: cover; border-radius: 22px; box-shadow: 0 10px 25px rgba(220,38,38,0.2); border: 4px solid rgba(255,255,255,0.9); }
@@ -1567,7 +1569,7 @@
         .popup-warning::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 6px; border-style: solid; border-color: #f43f5e transparent transparent transparent; }
         @keyframes popupBounce { 0% { opacity: 0; transform: translate(-50%, 10px) scale(0.8); } 100% { opacity: 1; transform: translate(-50%, 0) scale(1); } }
         
-        .escaped-btn-card { position: relative !important; transition: transform 0.2s ease-in-out; }
+        .escaped-btn-card { position: absolute !important; transition: all 0.2s ease-in-out; z-index: 50; }
 
         @keyframes orbitAnimation { 0% { transform: rotate(0deg) translateX(70px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); } }
         .orbiting-btn { animation: orbitAnimation 2.2s linear infinite; }
@@ -1762,7 +1764,7 @@
                 const triggerFlee = (e) => {
                     if (e) e.preventDefault();
                     showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    moveButtonInsideCardApp(noBtn, cardEl);
+                    moveButtonInsideCardStrictApp(noBtn, cardEl);
                 };
                 noBtn.onclick = triggerFlee;
             } else if (behavior === 'shrinking') {
@@ -1793,7 +1795,7 @@
                     showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
                     stateTeleportCountsApp[stepNum]++;
                     noBtn.innerText = teleTexts[stateTeleportCountsApp[stepNum] % teleTexts.length];
-                    moveButtonInsideCardApp(noBtn, cardEl);
+                    moveButtonInsideCardStrictApp(noBtn, cardEl);
                 };
             } else if (behavior === 'loading') {
                 const stepObj = steps[stepNum - 1];
@@ -1873,18 +1875,22 @@
             }
         }
 
-        function moveButtonInsideCardApp(btnEl, cardEl) {
+        function moveButtonInsideCardStrictApp(btnEl, cardEl) {
             if (!btnEl.classList.contains('escaped-btn-card')) {
                 btnEl.classList.add('escaped-btn-card');
             }
             const cardRect = cardEl.getBoundingClientRect();
-            const maxRangeX = (cardRect.width / 2) - 50;
-            const maxRangeY = (cardRect.height / 2) - 80;
+            const btnRect = btnEl.getBoundingClientRect();
 
-            const randomX = (Math.random() - 0.5) * maxRangeX * 1.2;
-            const randomY = (Math.random() - 0.5) * maxRangeY * 1.2;
-            
-            btnEl.style.transform = \`translate(\${randomX}px, \${randomY}px)\`;
+            const padding = 20;
+            const maxX = cardRect.width - btnRect.width - padding;
+            const maxY = cardRect.height - btnRect.height - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            btnEl.style.left = \`\${randomX}px\`;
+            btnEl.style.top = \`\${randomY}px\`;
         }
 
         function nextStep(stepTarget) {
@@ -1909,6 +1915,170 @@
         }
 
         window.onload = renderApp;
+    <\/script>
+</body>
+</html>`;
+        }
+
+        // EXPORT MODAL HANDLERS
+        function exportHTML() {
+            const htmlCode = generateCompleteHTML();
+            document.getElementById('export-code-area').value = htmlCode;
+            document.getElementById('export-modal').classList.remove('hidden');
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.add('hidden');
+        }
+
+        function copyGeneratedCode() {
+            const codeArea = document.getElementById('export-code-area');
+            codeArea.select();
+            document.execCommand('copy');
+            alert('Code များကို Clipboard သို့ ကူးယူပြီးပါပြီ!');
+        }
+
+        // AUTO DOWNLOAD AS index.html
+        function downloadHTMLFile() {
+            const htmlCode = generateCompleteHTML();
+            const blob = new Blob([htmlCode], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html'; // AUTO INDEX.HTML
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // AUTOMATIC GITHUB DEPLOYMENT & LIVE LINK GENERATOR
+        async function autoDeployToGitHub() {
+            const token = getActiveGitHubToken();
+            const repoName = document.getElementById('gh-repo').value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '-');
+            const statusEl = document.getElementById('deploy-status');
+            const linkContainer = document.getElementById('gh-link-container');
+            const linkInput = document.getElementById('gh-generated-link');
+            const deployBtn = document.getElementById('btn-deploy-gh');
+
+            if (!token) {
+                alert('ကျေးဇူးပြု၍ epostcard သို့မဟုတ် mm သို့မဟုတ် epostcardmm ဟု စာရိုက်ထည့်ပေးပါ');
+                return;
+            }
+            if (!repoName) {
+                alert('Repository Name ထည့်သွင်းပေးပါ။');
+                return;
+            }
+
+            try {
+                deployBtn.disabled = true;
+                deployBtn.classList.add('opacity-50');
+                statusEl.className = "text-xs text-amber-400 font-medium";
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> User account စစ်ဆေးနေသည်...`;
+
+                // 1. Get authenticated user info
+                const userRes = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (!userRes.ok) throw new Error('GitHub Token မမှန်ကန်ပါ သို့မဟုတ် Auth မအောင်မြင်ပါ။');
+                const userData = await userRes.json();
+                const username = userData.login;
+
+                // 2. Check or Create Repository
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Repository (${repoName}) ဖန်တီးနေသည်...`;
+                
+                let repoRes = await fetch(`https://api.github.com/repos/${username}/${repoName}`, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (repoRes.status === 404) {
+                    // Create Repo
+                    const createRes = await fetch('https://api.github.com/user/repos', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: JSON.stringify({
+                            name: repoName,
+                            description: 'Interactive Love Surprise App',
+                            auto_init: true
+                        })
+                    });
+                    if (!createRes.ok) throw new Error('Repository ဖန်တီး၍ မရပါ!');
+                    await new Promise(r => setTimeout(r, 2000));
+                }
+
+                // 3. Upload/Update index.html File
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> index.html ကို Upload တင်နေသည်...`;
+                const htmlContent = generateCompleteHTML();
+                const base64Content = btoa(unescape(encodeURIComponent(htmlContent)));
+
+                let sha = null;
+                const fileCheckRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (fileCheckRes.ok) {
+                    const fileData = await fileCheckRes.json();
+                    sha = fileData.sha;
+                }
+
+                const uploadBody = {
+                    message: 'Auto update index.html via Builder',
+                    content: base64Content
+                };
+                if (sha) uploadBody.sha = sha;
+
+                const uploadRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
+                    method: `PUT`,
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': `application/json`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify(uploadBody)
+                });
+
+                if (!uploadRes.ok) throw new Error('index.html ဖိုင် Upload တင်ခြင်း မအောင်မြင်ပါ။');
+
+                // 4. Enable GitHub Pages
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> GitHub Pages ကို Activate လုပ်နေသည်...`;
+                await fetch(`https://api.github.com/repos/${username}/${repoName}/pages`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        source: { branch: 'main', path: '/' }
+                    })
+                }).catch(() => {});
+
+                // 5. Build Final Live Link
+                const generatedPagesUrl = `https://${username}.github.io/${repoName}/`;
+                linkInput.value = generatedPagesUrl;
+                linkContainer.classList.remove('hidden');
+
+                statusEl.className = "text-xs text-emerald-400 font-bold";
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Upload အောင်မြင်ပါပြီ!`;
+
+            } catch (err) {
+                statusEl.className = "text-xs text-rose-400 font-bold";
+                statusEl.innerText = `Error: ${err.message}`;
+            } finally {
+                deployBtn.disabled = false;
+                deployBtn.classList.remove('opacity-50');
+            }
+        }
+
+        function copyGitHubLink() {
+            const linkInput = document.getElementById('gh-generated-link');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('GitHub Pages Live Link ကို ကူးယူပြီးပါပြီ!\n' + linkInput.value);
+        }
     </script>
 </body>
 </html>
