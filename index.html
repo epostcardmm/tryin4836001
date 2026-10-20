@@ -31,9 +31,9 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Card Style (Relative for Card Boundary Escape) */
+        /* Glassmorphism Card Style */
         .interactive-card {
-            padding: 35px 25px;
+            padding: 30px 20px;
             border-radius: 28px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.6);
             text-align: center;
@@ -43,12 +43,7 @@
             border: 2px solid rgba(255, 255, 255, 0.85);
             transition: all 0.4s ease;
             position: relative;
-            overflow: hidden; /* ကတ်ဘောင်အတွင်းသာ အပြည့်ပြေးစေရန် */
-            min-height: 480px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+            overflow: hidden; /* No ခလုတ် Card အပြင်ဘက်သို့ ထွက်မသွားစေရန် ထိန်းချုပ်ခြင်း */
         }
 
         /* Envelope / Card Styles */
@@ -81,7 +76,7 @@
             display: none;
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            gap: 18px;
             animation: fadeIn 0.4s ease-in-out forwards;
         }
 
@@ -126,7 +121,7 @@
             font-weight: 800;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.15s ease-out, left 0.15s ease-out, top 0.15s ease-out;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
             display: inline-flex;
             justify-content: center;
             align-items: center;
@@ -134,7 +129,7 @@
             box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
             padding: 12px 28px;
             user-select: none;
-            z-index: 20;
+            z-index: 5;
         }
 
         .btn-no-wrapper-preview {
@@ -142,12 +137,6 @@
             display: inline-flex;
             justify-content: center;
             align-items: center;
-        }
-
-        /* Card ဧရိယာဘောင်အတွင်းသာ အပြည့်ပြေးရန် Absolute သုံးထားသော Class */
-        .escaped-btn-card {
-            position: absolute !important;
-            transition: all 0.15s ease-out !important;
         }
 
         /* Popup Warning Window */
@@ -187,6 +176,12 @@
             100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
         }
 
+        /* Card Frame အတွင်းမှာသာ ရွှေ့ရန်ပြင်ဆင်ထားသော class */
+        .escaped-btn-card {
+            position: relative !important;
+            transition: transform 0.2s ease-in-out, left 0.2s ease-in-out, top 0.2s ease-in-out;
+        }
+
         /* Orbiting Animation */
         @keyframes orbitAnimation {
             0% { transform: rotate(0deg) translateX(70px) rotate(0deg); }
@@ -199,7 +194,7 @@
         /* Gravity Fall Animation */
         @keyframes gravityFallAnim {
             0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(400px) rotate(180deg); opacity: 0; }
+            100% { transform: translateY(600px) rotate(180deg); opacity: 0; }
         }
         .falling-btn {
             animation: gravityFallAnim 1.2s ease-in forwards !important;
@@ -722,8 +717,8 @@
     </div>
 
     <!-- CODE EXPORT & GITHUB PUBLISH MODAL -->
-    <div id="export-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex justify-center items-center p-4 z-[99999] hidden overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl p-6 space-y-4 shadow-2xl text-slate-100 my-auto relative">
+    <div id="export-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex justify-center items-center p-4 z-50 hidden overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl p-6 space-y-4 shadow-2xl text-slate-100 my-auto">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 class="font-bold text-lg text-pink-400 flex items-center gap-2">
                     <i class="fa-solid fa-code"></i> Standalone HTML Code & Auto Live Link
@@ -844,7 +839,7 @@
 
         // 10 BEHAVIOR DEFINITIONS
         const behaviorOptions = [
-            { id: "fleeing", name: "1. The Fleeing Button (Card ဘောင်အတွင်းသာ ပြေးသော ခလုတ်)" },
+            { id: "fleeing", name: "1. The Fleeing Button (ထွက်ပြေးသွားသော ခလုတ်)" },
             { id: "shrinking", name: "2. The Shrinking Button (သေးသွားသော ခလုတ်)" },
             { id: "swap", name: "3. The Swap Places (နေရာချင်း လဲသွားခြင်း)" },
             { id: "teleport", name: "4. Teleporting / Reappearing Trick (ပျောက်သွားပြီး တခြားမှာ ပေါ်ခြင်း)" },
@@ -856,7 +851,7 @@
             { id: "split", name: "10. Dissecting / Split Button (အစိတ်စိတ်အမွှာမွှာ ကွဲသွားခြင်း)" }
         ];
 
-        // CONFIG APP STATE
+        // CONFIG APP STATE (Step တစ်ခုချင်းစီတွင် yesText နှင့် noText ထည့်သွင်းနိုင်ရန် ပြင်ဆင်ထားသည်)
         const appConfig = {
             steps: [
                 {
@@ -1143,11 +1138,11 @@
                 const nextTarget = (stepNum === appConfig.steps.length) ? 'falling' : (stepNum + 1);
 
                 const card = document.createElement('div');
-                card.className = `interactive-card ${appConfig.cardStyle} step-view ${currentActiveStepView === stepNum ? 'active' : ''}`;
+                card.className = `interactive-card ${appConfig.cardStyle} step-view${currentActiveStepView === stepNum ? 'active' : ''}`;
                 card.id = `prev-step-${stepNum}`;
 
-                const yesStyle = `background: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size: ${appConfig.yesFontSize}px;`;
-                const noStyle = `background: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size: ${appConfig.noFontSize}px;`;
+                const yesStyle = `background: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size:${appConfig.yesFontSize}px;`;
+                const noStyle = `background: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size:${appConfig.noFontSize}px;`;
 
                 const activeYesLabel = (step.yesText && step.yesText.trim() !== '') ? step.yesText : appConfig.yesText;
                 const activeNoLabel = (step.noText && step.noText.trim() !== '') ? step.noText : appConfig.noText;
@@ -1157,7 +1152,7 @@
                     <h2 class="font-bold leading-relaxed" style="font-size: ${appConfig.questionFontSize}px;">
                         ${step.text}
                     </h2>
-                    <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative btn-container-step" id="btn-container-prev-${stepNum}">
+                    <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative btn-container-step">
                         <button class="btn-custom-yes" style="${yesStyle}" id="btn-yes-prev-${stepNum}" onclick="handleYesClick('${nextTarget}')">${activeYesLabel}</button>
                         <div class="btn-no-wrapper-preview" id="btn-no-wrapper-prev-${stepNum}">
                             <button class="btn-custom-no ${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="${noStyle}" id="btn-no-prev-${stepNum}">${activeNoLabel}</button>
@@ -1167,7 +1162,7 @@
 
                 cardHolder.appendChild(card);
 
-                // Attach Behavior Event Listeners (Card Frame ဘောင်အတွင်းသာ ပြေးစေရန်)
+                // Attach Behavior Event Listeners (နှိပ်မှ အလုပ်လုပ်စေရန် ပြင်ဆင်ထားသည်)
                 setTimeout(() => attachBehaviorEvents(stepNum, step.behavior, nextTarget, activeYesLabel), 50);
             });
 
@@ -1208,7 +1203,7 @@
             cardHolder.appendChild(letterCard);
         }
 
-        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (Card Frame Inner Boundary Restricted)
+        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (Click-triggered & Card-contained)
         let stateNoScales = {};
         let stateGuiltIndices = {};
         let stateTeleportCounts = {};
@@ -1222,39 +1217,32 @@
             if (!noBtn || !noWrapper || !cardEl) return;
 
             // Remove existing listeners
-            const newNoWrapper = noWrapper.cloneNode(true);
-            noWrapper.parentNode.replaceChild(newNoWrapper, noWrapper);
-            
-            const currentNoBtn = newNoWrapper.querySelector('button');
+            const newNoBtn = noBtn.cloneNode(true);
+            noBtn.parentNode.replaceChild(newNoBtn, noBtn);
 
-            // 1. FLEEING (Card Frame ဘောင်အတွင်းသာ အတိအကျပြေးမည် + Popup ပေါ်မည်)
+            // 1. FLEEING (Card Frame အတွင်းတွင်သာ အပြည့်ပြေးမည်)
             if (behavior === 'fleeing') {
                 const triggerFlee = (e) => {
-                    if (e && e.type === 'touchstart') {
-                        e.preventDefault();
-                    }
-                    showPopupWarningPrev(newNoWrapper.id);
-                    moveButtonWithinCard(currentNoBtn, cardEl);
+                    if (e) e.preventDefault();
+                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                    moveButtonInsideCard(newNoBtn, cardEl);
                 };
-                
-                newNoWrapper.onmouseover = triggerFlee;
-                newNoWrapper.onclick = triggerFlee;
-                newNoWrapper.ontouchstart = triggerFlee;
+                newNoBtn.onclick = triggerFlee;
             }
 
             // 2. SHRINKING
             else if (behavior === 'shrinking') {
                 stateNoScales[stepNum] = { yesScale: 1, noScale: 1 };
-                currentNoBtn.onclick = () => {
-                    showPopupWarningPrev(newNoWrapper.id);
+                newNoBtn.onclick = () => {
+                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                     stateNoScales[stepNum].yesScale += 0.35;
                     stateNoScales[stepNum].noScale -= 0.22;
 
                     yesBtn.style.transform = `scale(${stateNoScales[stepNum].yesScale})`;
                     if (stateNoScales[stepNum].noScale <= 0.1) {
-                        currentNoBtn.style.display = 'none';
+                        newNoBtn.style.display = 'none';
                     } else {
-                        currentNoBtn.style.transform = `scale(${stateNoScales[stepNum].noScale})`;
+                        newNoBtn.style.transform = `scale(${stateNoScales[stepNum].noScale})`;
                     }
                 };
             }
@@ -1262,7 +1250,7 @@
             // 3. SWAP PLACES
             else if (behavior === 'swap') {
                 const swapFunc = () => {
-                    showPopupWarningPrev(newNoWrapper.id);
+                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                     const parent = yesBtn.parentNode;
                     if (parent.children[0] === yesBtn) {
                         parent.appendChild(yesBtn);
@@ -1270,19 +1258,19 @@
                         parent.insertBefore(yesBtn, parent.children[0]);
                     }
                 };
-                currentNoBtn.onclick = swapFunc;
+                newNoBtn.onclick = swapFunc;
             }
 
-            // 4. TELEPORT / REAPPEARING
+            // 4. TELEPORT / REAPPEARING (Card Frame အတွင်း၌သာ နေရာပြောင်းမည်)
             else if (behavior === 'teleport') {
                 stateTeleportCounts[stepNum] = 0;
                 const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!", "Nice try!"];
-                currentNoBtn.onclick = () => {
-                    showPopupWarningPrev(newNoWrapper.id);
+                newNoBtn.onclick = () => {
+                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                     stateTeleportCounts[stepNum]++;
                     const text = teleTexts[stateTeleportCounts[stepNum] % teleTexts.length];
-                    currentNoBtn.innerText = text;
-                    moveButtonWithinCard(currentNoBtn, cardEl);
+                    newNoBtn.innerText = text;
+                    moveButtonInsideCard(newNoBtn, cardEl);
                 };
             }
 
@@ -1290,22 +1278,22 @@
             else if (behavior === 'loading') {
                 const stepObj = appConfig.steps[stepNum - 1];
                 const defaultNoVal = (stepObj && stepObj.noText && stepObj.noText.trim() !== '') ? stepObj.noText : appConfig.noText;
-                currentNoBtn.onclick = () => {
-                    currentNoBtn.disabled = true;
-                    currentNoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...`;
+                newNoBtn.onclick = () => {
+                    newNoBtn.disabled = true;
+                    newNoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...`;
                     setTimeout(() => {
-                        showPopupWarningPrev(newNoWrapper.id);
+                        showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                         alert("Error 404: 'No' is not available. Server says you must click Yes!");
-                        currentNoBtn.innerHTML = defaultNoVal;
-                        currentNoBtn.disabled = false;
+                        newNoBtn.innerHTML = defaultNoVal;
+                        newNoBtn.disabled = false;
                     }, 1200);
                 };
             }
 
             // 6. ORBITING
             else if (behavior === 'orbiting') {
-                currentNoBtn.onclick = () => {
-                    showPopupWarningPrev(newNoWrapper.id);
+                newNoBtn.onclick = () => {
+                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                 };
             }
 
@@ -1314,24 +1302,24 @@
                 stateGuiltIndices[stepNum] = 0;
                 const guiltTexts = ["Are you sure?", "Really?", "Think of us!", "Click Yes instead!"];
                 const guiltClick = () => {
-                    showPopupWarningPrev(newNoWrapper.id);
+                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                     let idx = stateGuiltIndices[stepNum];
                     if (idx < guiltTexts.length) {
-                        currentNoBtn.innerText = guiltTexts[idx];
+                        newNoBtn.innerText = guiltTexts[idx];
                         stateGuiltIndices[stepNum]++;
                     } else {
-                        currentNoBtn.innerText = activeYesLabel;
-                        currentNoBtn.style.background = appConfig.yesBg;
-                        currentNoBtn.style.color = appConfig.yesColor;
-                        currentNoBtn.onclick = () => handleYesClick(nextTarget);
+                        newNoBtn.innerText = activeYesLabel;
+                        newNoBtn.style.background = appConfig.yesBg;
+                        newNoBtn.style.color = appConfig.yesColor;
+                        newNoBtn.onclick = () => handleYesClick(nextTarget);
                     }
                 };
-                currentNoBtn.onclick = guiltClick;
+                newNoBtn.onclick = guiltClick;
             }
 
             // 8. POP-UP TRAP
             else if (behavior === 'popuptrap') {
-                currentNoBtn.onclick = () => {
+                newNoBtn.onclick = () => {
                     alert("Alert 1: Really?");
                     alert("Alert 2: Are you strictly sure?");
                     alert("Alert 3: Okay, fine! Re-directing to YES...");
@@ -1342,21 +1330,21 @@
             // 9. GRAVITY FALL
             else if (behavior === 'gravity') {
                 const gravDrop = () => {
-                    showPopupWarningPrev(newNoWrapper.id);
-                    currentNoBtn.classList.add('falling-btn');
+                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                    newNoBtn.classList.add('falling-btn');
                     setTimeout(() => {
-                        currentNoBtn.style.display = 'none';
+                        newNoBtn.style.display = 'none';
                     }, 1200);
                 };
-                currentNoBtn.onclick = gravDrop;
+                newNoBtn.onclick = gravDrop;
             }
 
             // 10. SPLIT / DISSECTING BUTTON
             else if (behavior === 'split') {
                 const triggerSplit = () => {
-                    showPopupWarningPrev(newNoWrapper.id);
+                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
                     const letters = ["Y", "E", "S"];
-                    const rect = currentNoBtn.getBoundingClientRect();
+                    const rect = newNoBtn.getBoundingClientRect();
                     const targetRect = yesBtn.getBoundingClientRect();
 
                     letters.forEach((char, i) => {
@@ -1377,33 +1365,28 @@
                         setTimeout(() => particle.remove(), 700);
                     });
 
-                    currentNoBtn.style.opacity = '0';
-                    setTimeout(() => currentNoBtn.style.display = 'none', 300);
+                    newNoBtn.style.opacity = '0';
+                    setTimeout(() => newNoBtn.style.display = 'none', 300);
                 };
-                currentNoBtn.onclick = triggerSplit;
+                newNoBtn.onclick = triggerSplit;
             }
         }
 
-        // Card Frame ဘောင် (White Card Container) အတွင်း၌သာ အတိအကျပြေးစေမည့် Function
-        function moveButtonWithinCard(btnEl, cardEl) {
+        // ကတ်ပြား (Card Frame) အတွင်းဘက်၌သာ လွတ်လပ်စွာပြေးနိုင်ရန် တွက်ချက်ပေးသော Function
+        function moveButtonInsideCard(btnEl, cardEl) {
             if (!btnEl.classList.contains('escaped-btn-card')) {
                 btnEl.classList.add('escaped-btn-card');
             }
             const cardRect = cardEl.getBoundingClientRect();
             const btnRect = btnEl.getBoundingClientRect();
+            
+            const maxRangeX = (cardRect.width / 2) - 50;
+            const maxRangeY = (cardRect.height / 2) - 80;
 
-            const paddingX = 20;
-            const topBoundary = 180; // GIF နဲ့ Question စာသားများကို ကျော်လွန်ပြီးမှ အောက်ဘက်ဧရိယာတွင် ပြေးရန်
-            const bottomBoundary = 30;
-
-            const maxAllowedWidth = cardRect.width - btnRect.width - (paddingX * 2);
-            const maxAllowedHeight = cardRect.height - btnRect.height - topBoundary - bottomBoundary;
-
-            const randomX = Math.max(paddingX, Math.floor(Math.random() * Math.max(40, maxAllowedWidth)));
-            const randomY = Math.max(topBoundary, topBoundary + Math.floor(Math.random() * Math.max(40, maxAllowedHeight)));
-
-            btnEl.style.left = `${randomX}px`;
-            btnEl.style.top = `${randomY}px`;
+            const randomX = (Math.random() - 0.5) * maxRangeX * 1.2;
+            const randomY = (Math.random() - 0.5) * maxRangeY * 1.2;
+            
+            btnEl.style.transform = `translate(${randomX}px,${randomY}px)`;
         }
 
         function setEnvelopeImg(url, element) {
@@ -1543,7 +1526,8 @@
             padding: 35px 25px; border-radius: 30px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.15), inset 0 0 20px rgba(255,255,255,0.6);
             text-align: center; width: 100%; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 2px solid rgba(255, 255, 255, 0.8); transition: all 0.4s ease; position: relative; overflow: hidden; min-height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            border: 2px solid rgba(255, 255, 255, 0.8); transition: all 0.4s ease; position: relative;
+            overflow: hidden;
         }
 
         .env-glass { background: rgba(255, 255, 255, 0.75); color: #be123c; }
@@ -1552,7 +1536,7 @@
         .env-classic-gold { background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95)); color: #78350f; border-color: rgba(245, 158, 11, 0.5); }
         .env-dark-velvet { background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95)); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); }
 
-        .step { display: none; flex-direction: column; align-items: center; width: 100%; animation: fadeIn 0.4s ease-in-out forwards; }
+        .step { display: none; flex-direction: column; align-items: center; gap: 22px; animation: fadeIn 0.4s ease-in-out forwards; }
         .step.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         img.gif-box { width: 180px; height: 180px; object-fit: cover; border-radius: 22px; box-shadow: 0 10px 25px rgba(220,38,38,0.2); border: 4px solid rgba(255,255,255,0.9); }
@@ -1568,14 +1552,12 @@
 
         .btn-custom-no {
             padding: 14px 34px; font-weight: 800; border-radius: 50px; cursor: pointer;
-            transition: transform 0.15s ease-out, left 0.15s ease-out, top 0.15s ease-out;
-            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4); border: none; display: inline-flex; justify-content: center; align-items: center; z-index: 20;
+            transition: transform 0.25s, box-shadow 0.25s, opacity 0.3s;
+            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4); border: none; display: inline-flex; justify-content: center; align-items: center; z-index: 5;
         }
 
         .btn-no-wrapper { position: relative; display: inline-flex; justify-content: center; align-items: center; }
         
-        .escaped-btn-card { position: absolute !important; transition: all 0.15s ease-out !important; }
-
         .popup-warning {
             position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: rgba(255, 228, 230, 0.95);
             color: #e11d48; border: 2px solid #f43f5e; padding: 8px 14px; border-radius: 12px; font-size: 0.85rem;
@@ -1584,11 +1566,13 @@
         }
         .popup-warning::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border-width: 6px; border-style: solid; border-color: #f43f5e transparent transparent transparent; }
         @keyframes popupBounce { 0% { opacity: 0; transform: translate(-50%, 10px) scale(0.8); } 100% { opacity: 1; transform: translate(-50%, 0) scale(1); } }
+        
+        .escaped-btn-card { position: relative !important; transition: transform 0.2s ease-in-out; }
 
         @keyframes orbitAnimation { 0% { transform: rotate(0deg) translateX(70px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); } }
         .orbiting-btn { animation: orbitAnimation 2.2s linear infinite; }
 
-        @keyframes gravityFallAnim { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(400px) rotate(180deg); opacity: 0; } }
+        @keyframes gravityFallAnim { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(600px) rotate(180deg); opacity: 0; } }
         .falling-btn { animation: gravityFallAnim 1.2s ease-in forwards !important; }
 
         .split-letter-particle { position: absolute; font-weight: 900; color: #ec4899; font-size: 1.5rem; pointer-events: none; z-index: 10000; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -1717,7 +1701,7 @@
                 card.innerHTML = \`
                     <img class="gif-box" src="\${step.gif}" alt="Gif \${stepNum}">
                     <h2 class="font-bold leading-relaxed" style="font-size: \${questionFontSize}px;">\${step.text}</h2>
-                    <div class="btn-group" id="btn-group-\${stepNum}">
+                    <div class="btn-group">
                         <button class="btn-custom-yes" style="\${yesStyle}" id="btn-yes-\${stepNum}" onclick="nextStep('\${nextTarget}')">\${stepYesLabel}</button>
                         <div class="btn-no-wrapper" id="btn-no-wrapper-\${stepNum}">
                             <button class="btn-custom-no \${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="\${noStyle}" id="btn-no-\${stepNum}">\${stepNoLabel}</button>
@@ -1770,20 +1754,17 @@
 
         function attachBehaviorEventsApp(stepNum, behavior, nextTarget, stepYesLabel) {
             const noBtn = document.getElementById(\`btn-no-\${stepNum}\`);
-            const noWrapper = document.getElementById(\`btn-no-wrapper-\${stepNum}\`);
             const yesBtn = document.getElementById(\`btn-yes-\${stepNum}\`);
             const cardEl = document.getElementById(\`step-\${stepNum}\`);
-            if (!noBtn || !noWrapper || !cardEl) return;
+            if (!noBtn || !cardEl) return;
 
             if (behavior === 'fleeing') {
                 const triggerFlee = (e) => {
-                    if (e && e.type === 'touchstart') e.preventDefault();
+                    if (e) e.preventDefault();
                     showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    moveButtonWithinCardApp(noBtn, cardEl);
+                    moveButtonInsideCardApp(noBtn, cardEl);
                 };
-                noWrapper.onmouseover = triggerFlee;
-                noWrapper.onclick = triggerFlee;
-                noWrapper.ontouchstart = triggerFlee;
+                noBtn.onclick = triggerFlee;
             } else if (behavior === 'shrinking') {
                 stateNoScalesApp[stepNum] = { yesScale: 1, noScale: 1 };
                 noBtn.onclick = () => {
@@ -1812,7 +1793,7 @@
                     showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
                     stateTeleportCountsApp[stepNum]++;
                     noBtn.innerText = teleTexts[stateTeleportCountsApp[stepNum] % teleTexts.length];
-                    moveButtonWithinCardApp(noBtn, cardEl);
+                    moveButtonInsideCardApp(noBtn, cardEl);
                 };
             } else if (behavior === 'loading') {
                 const stepObj = steps[stepNum - 1];
@@ -1892,25 +1873,18 @@
             }
         }
 
-        function moveButtonWithinCardApp(btnEl, cardEl) {
+        function moveButtonInsideCardApp(btnEl, cardEl) {
             if (!btnEl.classList.contains('escaped-btn-card')) {
                 btnEl.classList.add('escaped-btn-card');
             }
             const cardRect = cardEl.getBoundingClientRect();
-            const btnRect = btnEl.getBoundingClientRect();
+            const maxRangeX = (cardRect.width / 2) - 50;
+            const maxRangeY = (cardRect.height / 2) - 80;
 
-            const paddingX = 20;
-            const topBoundary = 180;
-            const bottomBoundary = 30;
-
-            const maxAllowedWidth = cardRect.width - btnRect.width - (paddingX * 2);
-            const maxAllowedHeight = cardRect.height - btnRect.height - topBoundary - bottomBoundary;
-
-            const randomX = Math.max(paddingX, Math.floor(Math.random() * Math.max(40, maxAllowedWidth)));
-            const randomY = Math.max(topBoundary, topBoundary + Math.floor(Math.random() * Math.max(40, maxAllowedHeight)));
-
-            btnEl.style.left = \`\${randomX}px\`;
-            btnEl.style.top = \`\${randomY}px\`;
+            const randomX = (Math.random() - 0.5) * maxRangeX * 1.2;
+            const randomY = (Math.random() - 0.5) * maxRangeY * 1.2;
+            
+            btnEl.style.transform = \`translate(\${randomX}px, \${randomY}px)\`;
         }
 
         function nextStep(stepTarget) {
@@ -1935,173 +1909,6 @@
         }
 
         window.onload = renderApp;
-    </script>
-</body>
-</html>`;
-        }
-
-        // EXPORT MODAL HANDLERS
-        function exportHTML() {
-            const htmlCode = generateCompleteHTML();
-            document.getElementById('export-code-area').value = htmlCode;
-            document.getElementById('export-modal').classList.remove('hidden');
-        }
-
-        function closeExportModal() {
-            document.getElementById('export-modal').classList.add('hidden');
-        }
-
-        function copyGeneratedCode() {
-            const codeArea = document.getElementById('export-code-area');
-            codeArea.select();
-            document.execCommand('copy');
-            alert('Code များကို Clipboard သို့ ကူးယူပြီးပါပြီ!');
-        }
-
-        // AUTO DOWNLOAD AS index.html
-        function downloadHTMLFile() {
-            const htmlCode = generateCompleteHTML();
-            const blob = new Blob([htmlCode], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'index.html'; // AUTO INDEX.HTML
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        // AUTOMATIC GITHUB DEPLOYMENT & LIVE LINK GENERATOR
-        async function autoDeployToGitHub() {
-            const token = getActiveGitHubToken();
-            const repoName = document.getElementById('gh-repo').value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '-');
-            const statusEl = document.getElementById('deploy-status');
-            const linkContainer = document.getElementById('gh-link-container');
-            const linkInput = document.getElementById('gh-generated-link');
-            const deployBtn = document.getElementById('btn-deploy-gh');
-
-            if (!token) {
-                alert('ကျေးဇူးပြု၍ epostcard သို့မဟုတ် mm သို့မဟုတ် epostcardmm ဟု စာရိုက်ထည့်ပေးပါ');
-                return;
-            }
-            if (!repoName) {
-                alert('Repository Name ထည့်သွင်းပေးပါ။');
-                return;
-            }
-
-            try {
-                deployBtn.disabled = true;
-                deployBtn.classList.add('opacity-50');
-                statusEl.className = "text-xs text-amber-400 font-medium";
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> User account စစ်ဆေးနေသည်...`;
-
-                // 1. Get authenticated user info
-                const userRes = await fetch('https://api.github.com/user', {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-
-                if (!userRes.ok) throw new Error('GitHub Token မမှန်ကန်ပါ သို့မဟုတ် Auth မအောင်မြင်ပါ။');
-                const userData = await userRes.json();
-                const username = userData.login;
-
-                // 2. Check or Create Repository
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Repository (${repoName}) ဖန်တီးနေသည်...`;
-                
-                let repoRes = await fetch(`https://api.github.com/repos/${username}/${repoName}`, {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-
-                if (repoRes.status === 404) {
-                    // Create Repo
-                    const createRes = await fetch('https://api.github.com/user/repos', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github.v3+json'
-                        },
-                        body: JSON.stringify({
-                            name: repoName,
-                            description: 'Interactive Love Surprise App',
-                            auto_init: true
-                        })
-                    });
-                    if (!createRes.ok) throw new Error('Repository ဖန်တီး၍ မရပါ!');
-                    // Wait for repo init
-                    await new Promise(r => setTimeout(r, 2000));
-                }
-
-                // 3. Upload/Update index.html File
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> index.html ကို Upload တင်နေသည်...`;
-                const htmlContent = generateCompleteHTML();
-                const base64Content = btoa(unescape(encodeURIComponent(htmlContent)));
-
-                // Check existing index.html SHA
-                let sha = null;
-                const fileCheckRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-                if (fileCheckRes.ok) {
-                    const fileData = await fileCheckRes.json();
-                    sha = fileData.sha;
-                }
-
-                // Put Content
-                const uploadBody = {
-                    message: 'Auto update index.html via Builder',
-                    content: base64Content
-                };
-                if (sha) uploadBody.sha = sha;
-
-                const uploadRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
-                    method: `PUT`,
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify(uploadBody)
-                });
-
-                if (!uploadRes.ok) throw new Error('index.html ဖိုင် Upload တင်ခြင်း မအောင်မြင်ပါ။');
-
-                // 4. Enable GitHub Pages
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> GitHub Pages ကို Activate လုပ်နေသည်...`;
-                await fetch(`https://api.github.com/repos/${username}/${repoName}/pages`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        source: { branch: 'main', path: '/' }
-                    })
-                }).catch(() => {}); // Ignore error if already enabled
-
-                // 5. Build Final Live Link
-                const generatedPagesUrl = `https://${username}.github.io/${repoName}/`;
-                linkInput.value = generatedPagesUrl;
-                linkContainer.classList.remove('hidden');
-
-                statusEl.className = "text-xs text-emerald-400 font-bold";
-                statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Upload အောင်မြင်ပါပြီ!`;
-
-            } catch (err) {
-                statusEl.className = "text-xs text-rose-400 font-bold";
-                statusEl.innerText = `Error: ${err.message}`;
-            } finally {
-                deployBtn.disabled = false;
-                deployBtn.classList.remove('opacity-50');
-            }
-        }
-
-        function copyGitHubLink() {
-            const linkInput = document.getElementById('gh-generated-link');
-            linkInput.select();
-            document.execCommand('copy');
-            alert('GitHub Pages Live Link ကို ကူးယူပြီးပါပြီ!\n' + linkInput.value);
-        }
     </script>
 </body>
 </html>
