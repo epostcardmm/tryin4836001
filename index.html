@@ -144,10 +144,18 @@
             align-items: center;
         }
 
-        /* Card ဧရိယာဘောင်အတွင်းသာ အပြည့်ပြေးရန် Absolute သုံးထားသော Class */
+        /* ကတ် ဧရိယာဘောင်အတွင်းသာ အပြည့်ပြေးရန် Absolute သုံးထားသော Class */
         .escaped-btn-card {
             position: absolute !important;
             transition: all 0.15s ease-out !important;
+        }
+
+        /* နမူနာကုဒ်ထဲကကဲ့သို့ Screen အပြင်ဘက်အထိ လွတ်လွတ်လပ်လပ် ပြေးမည့် Escaped State */
+        .escaped-full-screen {
+            position: fixed !important;
+            margin: 0 !important;
+            z-index: 9999 !important;
+            transition: top 0.2s ease-out, left 0.2s ease-out !important;
         }
 
         /* Popup Warning Window */
@@ -844,7 +852,7 @@
 
         // 10 BEHAVIOR DEFINITIONS
         const behaviorOptions = [
-            { id: "fleeing", name: "1. The Fleeing Button (ထွက်ပြေးသွားသော ခလုတ်)" },
+            { id: "fleeing", name: "1. The Fleeing Button (Screen ပေါ် လွတ်လွတ်လပ်လပ် ပြေးသော ခလုတ်)" },
             { id: "shrinking", name: "2. The Shrinking Button (သေးသွားသော ခလုတ်)" },
             { id: "swap", name: "3. The Swap Places (နေရာချင်း လဲသွားခြင်း)" },
             { id: "teleport", name: "4. Teleporting / Reappearing Trick (ပျောက်သွားပြီး တခြားမှာ ပေါ်ခြင်း)" },
@@ -1167,7 +1175,7 @@
 
                 cardHolder.appendChild(card);
 
-                // Attach Behavior Event Listeners (ကတ်ပြားဘောင်အတွင်းသာ အတိအကျပြေးစေရန်)
+                // Attach Behavior Event Listeners
                 setTimeout(() => attachBehaviorEvents(stepNum, step.behavior, nextTarget, activeYesLabel), 50);
             });
 
@@ -1208,10 +1216,11 @@
             cardHolder.appendChild(letterCard);
         }
 
-        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (Card Frame Inner Safe Bounds)
+        // ATTACH BEHAVIORS TO PREVIEW NO BUTTONS (Sample Crush0.3 Style: Screen Full Escape with Popup)
         let stateNoScales = {};
         let stateGuiltIndices = {};
         let stateTeleportCounts = {};
+        let isMovingPreview = {};
 
         function attachBehaviorEvents(stepNum, behavior, nextTarget, activeYesLabel) {
             const noBtn = document.getElementById(`btn-no-prev-${stepNum}`);
@@ -1222,32 +1231,39 @@
             if (!noBtn || !noWrapper || !cardEl) return;
 
             // Remove existing listeners
-            const newNoBtn = noBtn.cloneNode(true);
-            noBtn.parentNode.replaceChild(newNoBtn, noBtn);
+            const newNoWrapper = noWrapper.cloneNode(true);
+            noWrapper.parentNode.replaceChild(newNoWrapper, noWrapper);
+            
+            const currentNoBtn = newNoWrapper.querySelector('button');
 
-            // 1. FLEEING (ကတ်ပြားဘောင်အတွင်းသာ အပြည့်အဝ ပြေးမည်)
+            // 1. FLEEING (နမူနာကုဒ်ထဲကအတိုင်း Screen ပေါ် လွတ်လွတ်လပ်လပ် ပြေးမည် + Popup ပေါ်မည်)
             if (behavior === 'fleeing') {
                 const triggerFlee = (e) => {
-                    if (e) e.preventDefault();
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    moveButtonWithinCard(newNoBtn, cardEl);
+                    if (e && e.type === 'touchstart') {
+                        e.preventDefault();
+                    }
+                    showPopupWarningPrev(newNoWrapper.id);
+                    moveButtonFullScreen(newNoWrapper);
                 };
-                newNoBtn.onclick = triggerFlee;
+                
+                newNoWrapper.onmouseover = triggerFlee;
+                newNoWrapper.onclick = triggerFlee;
+                newNoWrapper.ontouchstart = triggerFlee;
             }
 
             // 2. SHRINKING
             else if (behavior === 'shrinking') {
                 stateNoScales[stepNum] = { yesScale: 1, noScale: 1 };
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                currentNoBtn.onclick = () => {
+                    showPopupWarningPrev(newNoWrapper.id);
                     stateNoScales[stepNum].yesScale += 0.35;
                     stateNoScales[stepNum].noScale -= 0.22;
 
                     yesBtn.style.transform = `scale(${stateNoScales[stepNum].yesScale})`;
                     if (stateNoScales[stepNum].noScale <= 0.1) {
-                        newNoBtn.style.display = 'none';
+                        currentNoBtn.style.display = 'none';
                     } else {
-                        newNoBtn.style.transform = `scale(${stateNoScales[stepNum].noScale})`;
+                        currentNoBtn.style.transform = `scale(${stateNoScales[stepNum].noScale})`;
                     }
                 };
             }
@@ -1255,7 +1271,7 @@
             // 3. SWAP PLACES
             else if (behavior === 'swap') {
                 const swapFunc = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                    showPopupWarningPrev(newNoWrapper.id);
                     const parent = yesBtn.parentNode;
                     if (parent.children[0] === yesBtn) {
                         parent.appendChild(yesBtn);
@@ -1263,19 +1279,19 @@
                         parent.insertBefore(yesBtn, parent.children[0]);
                     }
                 };
-                newNoBtn.onclick = swapFunc;
+                currentNoBtn.onclick = swapFunc;
             }
 
-            // 4. TELEPORT / REAPPEARING (ကတ်ပြားဘောင်အတွင်းသာ ပျောက်ပြီးပေါ်မည်)
+            // 4. TELEPORT / REAPPEARING
             else if (behavior === 'teleport') {
                 stateTeleportCounts[stepNum] = 0;
                 const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!", "Nice try!"];
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                currentNoBtn.onclick = () => {
+                    showPopupWarningPrev(newNoWrapper.id);
                     stateTeleportCounts[stepNum]++;
                     const text = teleTexts[stateTeleportCounts[stepNum] % teleTexts.length];
-                    newNoBtn.innerText = text;
-                    moveButtonWithinCard(newNoBtn, cardEl);
+                    currentNoBtn.innerText = text;
+                    moveButtonFullScreen(newNoWrapper);
                 };
             }
 
@@ -1283,22 +1299,22 @@
             else if (behavior === 'loading') {
                 const stepObj = appConfig.steps[stepNum - 1];
                 const defaultNoVal = (stepObj && stepObj.noText && stepObj.noText.trim() !== '') ? stepObj.noText : appConfig.noText;
-                newNoBtn.onclick = () => {
-                    newNoBtn.disabled = true;
-                    newNoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...`;
+                currentNoBtn.onclick = () => {
+                    currentNoBtn.disabled = true;
+                    currentNoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...`;
                     setTimeout(() => {
-                        showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                        showPopupWarningPrev(newNoWrapper.id);
                         alert("Error 404: 'No' is not available. Server says you must click Yes!");
-                        newNoBtn.innerHTML = defaultNoVal;
-                        newNoBtn.disabled = false;
+                        currentNoBtn.innerHTML = defaultNoVal;
+                        currentNoBtn.disabled = false;
                     }, 1200);
                 };
             }
 
             // 6. ORBITING
             else if (behavior === 'orbiting') {
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                currentNoBtn.onclick = () => {
+                    showPopupWarningPrev(newNoWrapper.id);
                 };
             }
 
@@ -1307,24 +1323,24 @@
                 stateGuiltIndices[stepNum] = 0;
                 const guiltTexts = ["Are you sure?", "Really?", "Think of us!", "Click Yes instead!"];
                 const guiltClick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                    showPopupWarningPrev(newNoWrapper.id);
                     let idx = stateGuiltIndices[stepNum];
                     if (idx < guiltTexts.length) {
-                        newNoBtn.innerText = guiltTexts[idx];
+                        currentNoBtn.innerText = guiltTexts[idx];
                         stateGuiltIndices[stepNum]++;
                     } else {
-                        newNoBtn.innerText = activeYesLabel;
-                        newNoBtn.style.background = appConfig.yesBg;
-                        newNoBtn.style.color = appConfig.yesColor;
-                        newNoBtn.onclick = () => handleYesClick(nextTarget);
+                        currentNoBtn.innerText = activeYesLabel;
+                        currentNoBtn.style.background = appConfig.yesBg;
+                        currentNoBtn.style.color = appConfig.yesColor;
+                        currentNoBtn.onclick = () => handleYesClick(nextTarget);
                     }
                 };
-                newNoBtn.onclick = guiltClick;
+                currentNoBtn.onclick = guiltClick;
             }
 
             // 8. POP-UP TRAP
             else if (behavior === 'popuptrap') {
-                newNoBtn.onclick = () => {
+                currentNoBtn.onclick = () => {
                     alert("Alert 1: Really?");
                     alert("Alert 2: Are you strictly sure?");
                     alert("Alert 3: Okay, fine! Re-directing to YES...");
@@ -1335,21 +1351,21 @@
             // 9. GRAVITY FALL
             else if (behavior === 'gravity') {
                 const gravDrop = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    newNoBtn.classList.add('falling-btn');
+                    showPopupWarningPrev(newNoWrapper.id);
+                    currentNoBtn.classList.add('falling-btn');
                     setTimeout(() => {
-                        newNoBtn.style.display = 'none';
+                        currentNoBtn.style.display = 'none';
                     }, 1200);
                 };
-                newNoBtn.onclick = gravDrop;
+                currentNoBtn.onclick = gravDrop;
             }
 
             // 10. SPLIT / DISSECTING BUTTON
             else if (behavior === 'split') {
                 const triggerSplit = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
+                    showPopupWarningPrev(newNoWrapper.id);
                     const letters = ["Y", "E", "S"];
-                    const rect = newNoBtn.getBoundingClientRect();
+                    const rect = currentNoBtn.getBoundingClientRect();
                     const targetRect = yesBtn.getBoundingClientRect();
 
                     letters.forEach((char, i) => {
@@ -1370,34 +1386,30 @@
                         setTimeout(() => particle.remove(), 700);
                     });
 
-                    newNoBtn.style.opacity = '0';
-                    setTimeout(() => newNoBtn.style.display = 'none', 300);
+                    currentNoBtn.style.opacity = '0';
+                    setTimeout(() => currentNoBtn.style.display = 'none', 300);
                 };
-                newNoBtn.onclick = triggerSplit;
+                currentNoBtn.onclick = triggerSplit;
             }
         }
 
-        // ကတ်ပြားဘောင် (Card Frame) အတွင်းမှ လုံးဝမထွက်ဘဲ ဘောင်အတွင်း၌သာ အတိအကျပြေးစေမည့် တွက်ချက်မှု
-        function moveButtonWithinCard(btnEl, cardEl) {
-            if (!btnEl.classList.contains('escaped-btn-card')) {
-                btnEl.classList.add('escaped-btn-card');
+        // နမူနာကုဒ်ထဲကအတိုင်း Screen ဘေးပတ်လည် 20px အကွာအဝေးအတွင်း လွတ်လွတ်လပ်လပ် ပြေးမည့် Function
+        function moveButtonFullScreen(wrapperEl) {
+            if (!wrapperEl.classList.contains('escaped-full-screen')) {
+                document.body.appendChild(wrapperEl);
+                wrapperEl.classList.add('escaped-full-screen');
             }
-            const cardRect = cardEl.getBoundingClientRect();
-            const btnRect = btnEl.getBoundingClientRect();
 
-            // Card ရဲ့ အထက်၊ အောက်၊ ဘယ်၊ ညာ ဘောင်အတွင်း လုံခြုံသော နေရာအကွာအဝေး (Safe padding bounds)
-            const paddingX = 20;
-            const topBoundary = 180; // GIF နဲ့ Question နေရာများကို ကျော်လွန်ပြီးမှ အောက်ဘက်ဧရိယာတွင် ပြေးရန်
-            const bottomBoundary = 25;
+            const rect = wrapperEl.getBoundingClientRect();
+            const padding = 20;
+            const maxX = Math.max(padding, window.innerWidth - rect.width - padding);
+            const maxY = Math.max(padding, window.innerHeight - rect.height - padding);
 
-            const maxAllowedWidth = cardRect.width - btnRect.width - (paddingX * 2);
-            const maxAllowedHeight = cardRect.height - btnRect.height - topBoundary - bottomBoundary;
+            const randomX = Math.min(Math.max(padding, Math.floor(Math.random() * maxX)), maxX);
+            const randomY = Math.min(Math.max(padding, Math.floor(Math.random() * maxY)), maxY);
 
-            const randomX = Math.max(paddingX, Math.floor(Math.random() * Math.max(40, maxAllowedWidth)));
-            const randomY = Math.max(topBoundary, topBoundary + Math.floor(Math.random() * Math.max(40, maxAllowedHeight)));
-
-            btnEl.style.left = `${randomX}px`;
-            btnEl.style.top = `${randomY}px`;
+            wrapperEl.style.left = `${randomX}px`;
+            wrapperEl.style.top = `${randomY}px`;
         }
 
         function setEnvelopeImg(url, element) {
@@ -1568,7 +1580,7 @@
 
         .btn-no-wrapper { position: relative; display: inline-flex; justify-content: center; align-items: center; }
         
-        .escaped-btn-card { position: absolute !important; transition: all 0.15s ease-out !important; }
+        .escaped-full-screen { position: fixed !important; margin: 0 !important; z-index: 9999 !important; transition: top 0.2s ease-out, left 0.2s ease-out !important; }
 
         .popup-warning {
             position: absolute; bottom: 110%; left: 50%; transform: translateX(-50%); background: rgba(255, 228, 230, 0.95);
@@ -1763,18 +1775,20 @@
         let stateTeleportCountsApp = {};
 
         function attachBehaviorEventsApp(stepNum, behavior, nextTarget, stepYesLabel) {
+            const noWrapper = document.getElementById(\`btn-no-wrapper-\${stepNum}\`);
             const noBtn = document.getElementById(\`btn-no-\${stepNum}\`);
             const yesBtn = document.getElementById(\`btn-yes-\${stepNum}\`);
-            const cardEl = document.getElementById(\`step-\${stepNum}\`);
-            if (!noBtn || !cardEl) return;
+            if (!noWrapper || !noBtn) return;
 
             if (behavior === 'fleeing') {
                 const triggerFlee = (e) => {
-                    if (e) e.preventDefault();
+                    if (e && e.type === 'touchstart') e.preventDefault();
                     showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
-                    moveButtonWithinCardApp(noBtn, cardEl);
+                    moveButtonFullScreenApp(noWrapper);
                 };
-                noBtn.onclick = triggerFlee;
+                noWrapper.onmouseover = triggerFlee;
+                noWrapper.onclick = triggerFlee;
+                noWrapper.ontouchstart = triggerFlee;
             } else if (behavior === 'shrinking') {
                 stateNoScalesApp[stepNum] = { yesScale: 1, noScale: 1 };
                 noBtn.onclick = () => {
@@ -1803,7 +1817,7 @@
                     showPopupWarning(\`btn-no-wrapper-\${stepNum}\`);
                     stateTeleportCountsApp[stepNum]++;
                     noBtn.innerText = teleTexts[stateTeleportCountsApp[stepNum] % teleTexts.length];
-                    moveButtonWithinCardApp(noBtn, cardEl);
+                    moveButtonFullScreenApp(noWrapper);
                 };
             } else if (behavior === 'loading') {
                 const stepObj = steps[stepNum - 1];
@@ -1883,25 +1897,21 @@
             }
         }
 
-        function moveButtonWithinCardApp(btnEl, cardEl) {
-            if (!btnEl.classList.contains('escaped-btn-card')) {
-                btnEl.classList.add('escaped-btn-card');
+        function moveButtonFullScreenApp(wrapperEl) {
+            if (!wrapperEl.classList.contains('escaped-full-screen')) {
+                document.body.appendChild(wrapperEl);
+                wrapperEl.classList.add('escaped-full-screen');
             }
-            const cardRect = cardEl.getBoundingClientRect();
-            const btnRect = btnEl.getBoundingClientRect();
+            const rect = wrapperEl.getBoundingClientRect();
+            const padding = 20;
+            const maxX = Math.max(padding, window.innerWidth - rect.width - padding);
+            const maxY = Math.max(padding, window.innerHeight - rect.height - padding);
 
-            const paddingX = 20;
-            const topBoundary = 180;
-            const bottomBoundary = 25;
+            const randomX = Math.min(Math.max(padding, Math.floor(Math.random() * maxX)), maxX);
+            const randomY = Math.min(Math.max(padding, Math.floor(Math.random() * maxY)), maxY);
 
-            const maxAllowedWidth = cardRect.width - btnRect.width - (paddingX * 2);
-            const maxAllowedHeight = cardRect.height - btnRect.height - topBoundary - bottomBoundary;
-
-            const randomX = Math.max(paddingX, Math.floor(Math.random() * Math.max(40, maxAllowedWidth)));
-            const randomY = Math.max(topBoundary, topBoundary + Math.floor(Math.random() * Math.max(40, maxAllowedHeight)));
-
-            btnEl.style.left = \`\${randomX}px\`;
-            btnEl.style.top = \`\${randomY}px\`;
+            wrapperEl.style.left = \`\${randomX}px\`;
+            wrapperEl.style.top = \`\${randomY}px\`;
         }
 
         function nextStep(stepTarget) {
@@ -1926,7 +1936,7 @@
         }
 
         window.onload = renderApp;
-    <\/script>
+    </script>
 </body>
 </html>`;
         }
