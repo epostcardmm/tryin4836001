@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@600&family=Cinzel:wght@600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -199,69 +200,16 @@
                 <button onclick="resetAllDefaults()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-2 rounded-lg border border-slate-700 transition">
                     🔄 Reset Defaults
                 </button>
-                <button onclick="openGithubModal()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg flex items-center gap-2 transition">
-                    🌐 GitHub API Upload
+                <button onclick="openLinkGeneratorModal()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition hover:scale-105">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> 🌐 Auto Deploy & Get Link
                 </button>
-                <button onclick="generateAndExportHTML()" class="bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow-lg flex items-center gap-2 transition">
+                <button onclick="generateAndExportHTML()" class="flex-1 sm:flex-none bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 hover:from-amber-600 hover:to-purple-700 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition hover:scale-105">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Export HTML
+                    Export Standalone HTML
                 </button>
             </div>
         </div>
     </header>
-
-    <!-- GITHUB API MODAL WITH HIDDEN TEXTBOX SYSTEM -->
-    <div id="github-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 p-6 rounded-2xl max-w-lg w-full shadow-2xl space-y-4 relative">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="text-sm font-bold text-amber-300 uppercase tracking-wider">🚀 GitHub API & Link Generator</h3>
-                <button onclick="closeGithubModal()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
-            </div>
-
-            <!-- GitHub Credentials -->
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">GitHub Personal Access Token (PAT)</label>
-                    <input type="password" id="gh-token-custom" placeholder="Keyword ရိုက်ထည့်ပါက Token အလိုအလျောက်ပေါ်မည်..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Repository Owner / Username</label>
-                        <input type="text" id="gh-owner" placeholder="e.g. username" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">Repository Name</label>
-                        <input type="text" id="gh-repo" placeholder="e.g. my-cards" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">File Path in Repo (e.g., cards/birthday.html)</label>
-                    <input type="text" id="gh-path" value="index.html" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400">
-                </div>
-            </div>
-
-            <!-- CUSTOM TEXT BOXES SYSTEM (Keyword Input & Hidden API Box) -->
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
-                <h4 class="text-xs font-bold text-teal-300 uppercase">✨ Keyword & API Link Box System</h4>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">1. Upper Keyword Box (e.g., epostcard, mm, epostcardmm)</label>
-                    <input type="text" id="gh-keyword-input" oninput="onKeywordInputChange()" placeholder="epostcard ဟုရိုက်ထည့်ပါ..." class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-amber-200 focus:outline-none focus:border-amber-400">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">2. Lower API Box (Hidden Result)</label>
-                    <input type="text" id="custom-api-box" readonly placeholder="Generated Link or Result..." class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-xs text-emerald-300 font-mono focus:outline-none">
-                    <span class="text-[10px] text-slate-500 mt-1 block">🔒 ဖိုင်တင်ပြီးပါက ထွက်လာမည့် GitHub လင့်ခ်ကိုပါ ဤအောက်ဘောက်စ်တွင် ပြသပေးပါမည်။</span>
-                </div>
-            </div>
-
-            <div class="flex items-center justify-end gap-3 pt-2">
-                <button onclick="closeGithubModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-2 rounded-lg">Cancel</button>
-                <button onclick="uploadToGitHubAPI()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-5 py-2 rounded-lg shadow transition">
-                    Upload & Generate Link
-                </button>
-            </div>
-        </div>
-    </div>
 
     <!-- Main Studio Layout (Split Screen) -->
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -583,6 +531,76 @@
         </section>
 
     </main>
+
+    <!-- GITHUB DEPLOYMENT & LINK GENERATOR MODAL -->
+    <div id="link-generator-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex justify-center items-center p-4 z-50 hidden overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl p-6 space-y-4 shadow-2xl text-slate-100 my-auto">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-lg text-emerald-400 flex items-center gap-2">
+                    <i class="fa-solid fa-globe"></i> GitHub Auto Deploy & Live Link Generator
+                </h3>
+                <button onclick="closeLinkGeneratorModal()" class="text-slate-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div class="bg-slate-800/60 p-4 rounded-2xl border border-emerald-500/30 space-y-3">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                        <i class="fa-brands fa-github text-sm"></i> GitHub သို့ တခါတည်း တင်ပြီး Live Link ထုတ်မည်
+                    </h4>
+                    <span class="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded-full font-mono">index.html auto deploy</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                    စာသားရိုက်ထည့်ရာနေရာတွင် <b>epostcard</b> သို့မဟုတ် <b>mm</b> သို့မဟုတ် <b>epostcardmm</b> ဟု ရိုက်ထည့်၍ လင့်ခ်အလိုအလျောက် ထုတ်ယူနိုင်ပါသည်။
+                </p>
+
+                <div class="space-y-2 pt-1">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div class="space-y-1">
+                            <label class="block text-[11px] text-slate-400">စာရိုက်ထည့်ရန် Box (epostcard / mm):</label>
+                            <input type="text" id="gh-keyword-input" oninput="onKeywordInputChange()" placeholder="စာရိုက်ပါ (e.g. epostcardmm)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-300 font-bold focus:outline-none focus:border-emerald-500">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-[11px] text-slate-400">Repository Name:</label>
+                            <input type="text" id="gh-repo" placeholder="Repository Name" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500" value="birthday-wish-card">
+                        </div>
+                    </div>
+
+                    <!-- Hidden API Token Box -->
+                    <div class="pt-1">
+                        <label class="block text-[11px] text-slate-400 mb-1">API Token Status:</label>
+                        <input type="password" id="gh-token-custom" readonly placeholder="အထက်ပါနေရာတွင် စာရိုက်ပါက Token အလိုအလျောက် တက်လာပါမည်" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-mono focus:outline-none">
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 items-center justify-between pt-1">
+                        <button onclick="autoDeployToGitHub()" id="btn-deploy-gh" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Auto Deploy & Get Link
+                        </button>
+                        <span id="deploy-status" class="text-xs text-amber-400 font-medium"></span>
+                    </div>
+
+                    <!-- Generated Link Result Box -->
+                    <div id="gh-link-container" class="hidden pt-2">
+                        <label class="block text-[11px] font-bold text-emerald-400 mb-1">✨ သင့် Live Web Link ရရှိပါပြီ (GitHub Pages):</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="gh-generated-link" readonly class="flex-1 bg-slate-950 border border-emerald-500/50 rounded-xl px-3 py-2 text-xs font-mono text-emerald-300 focus:outline-none select-all">
+                            <button onclick="copyGitHubLink()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+                                <i class="fa-regular fa-copy"></i> Copy Link
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-1">Note: GitHub Pages ပထမဆုံးအကြိမ် တည်ဆောက်ချိန် ၁ မိနစ်မှ ၂ မိနစ်ခန့် ကြာမြင့်နိုင်ပါသည်။</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button onclick="closeLinkGeneratorModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition">
+                    ပိတ်မည်
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- JS SCRIPT FOR STUDIO LOGIC AND DATA -->
     <script>
@@ -1006,94 +1024,8 @@
             playFullFlowPreview();
         }
 
-        /* --- GITHUB MODAL CONTROLS & KEYWORD TO API MAPPING LOGIC --- */
-        function openGithubModal() {
-            document.getElementById('github-modal').classList.remove('hidden');
-        }
-
-        function closeGithubModal() {
-            document.getElementById('github-modal').classList.add('hidden');
-        }
-
-        // KEYWORD TO API MAPPING LOGIC (As requested)
-        function onKeywordInputChange() {
-            const val = document.getElementById('gh-keyword-input').value.trim().toLowerCase();
-            const tokenBox = document.getElementById('gh-token-custom');
-            
-            const part1 = "ghp_l25YhqL0XsLZFEf8w";
-            const part2 = "S4J9vqnigY9uz1ihXpt";
-
-            if (val === "epostcard") {
-                tokenBox.value = part1;
-            } else if (val === "mm") {
-                tokenBox.value = part2;
-            } else if (val === "epostcardmm") {
-                tokenBox.value = part1 + part2;
-            } else {
-                tokenBox.value = "";
-            }
-        }
-
-        /* --- GITHUB API UPLOAD FUNCTION --- */
-        async function uploadToGitHubAPI() {
-            const token = document.getElementById('gh-token-custom').value.trim();
-            const owner = document.getElementById('gh-owner').value.trim();
-            const repo = document.getElementById('gh-repo').value.trim();
-            const path = document.getElementById('gh-path').value.trim() || 'index.html';
-
-            if (!token || !owner || !repo) {
-                alert('ကျေးဇူးပြု၍ Keyword (သို့မဟုတ် Token)၊ Owner နှင့် Repository အမည်များကို ဖြည့်သွင်းပါ။');
-                return;
-            }
-
-            const htmlContent = getStandaloneHTMLString();
-            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-
-            let sha = '';
-            try {
-                const getRes = await fetch(apiUrl, {
-                    headers: { 'Authorization': `token ${token}` }
-                });
-                if (getRes.ok) {
-                    const data = await getRes.json();
-                    sha = data.sha;
-                }
-            } catch (e) {
-                console.log("File check note:", e);
-            }
-
-            const payload = {
-                message: "Upload Birthday Card via Studio API",
-                content: btoa(unescape(encodeURIComponent(htmlContent))),
-                branch: "main"
-            };
-            if (sha) payload.sha = sha;
-
-            try {
-                const res = await fetch(apiUrl, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (res.ok) {
-                    const pageLink = `https://${owner}.github.io/${repo}/${path}`;
-                    document.getElementById('custom-api-box').value = pageLink;
-                    alert('GitHub သို့ အောင်မြင်စွာ တင်ပြီးပါပြီ!\nGenerated Link: ' + pageLink);
-                } else {
-                    const err = await res.json();
-                    alert('Upload Fail: ' + (err.message || 'Unknown error'));
-                }
-            } catch (err) {
-                alert('Network Error: ' + err.message);
-            }
-        }
-
-        /* --- GENERATE STANDALONE HTML STRING FOR EXPORT / API --- */
-        function getStandaloneHTMLString() {
+        /* --- EXPORT GENERATED STANDALONE HTML SOURCE CODE --- */
+        function getGeneratedHTMLCode() {
             const fontClass = document.getElementById('input-font-family').value;
             const startHint = document.getElementById('input-start-hint').value;
             const cardTitle = document.getElementById('input-card-title').value;
@@ -1103,6 +1035,7 @@
             const signLeft = document.getElementById('input-sign-left').value;
             const signRight = document.getElementById('input-sign-right').value;
 
+            // Compute background CSS string for export
             let exportBgCss = '';
             if(state.bgMode === 'single') {
                 exportBgCss = `background: ${state.singleColor};`;
@@ -1125,10 +1058,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@400;500;600;700&family=Dancing+Script:wght@600&family=Cinzel:wght@600&family=Caveat:wght@600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; ${exportBgCss} overflow: hidden; height: 100vh; touch-action: manipulation; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            ${exportBgCss}
+            overflow: hidden;
+            height: 100vh;
+            touch-action: manipulation;
+        }
+
         .font-cursive { font-family: 'Great Vibes', cursive; }
         .font-serif-custom { font-family: 'Playfair Display', serif; }
         .font-padauk { font-family: 'Padauk', sans-serif; }
+
         @keyframes floatDownToCenter {
             0% { transform: translate(-50%, -100vh) rotate(-12deg); opacity: 0; }
             20% { opacity: 1; }
@@ -1137,89 +1078,308 @@
             85% { transform: translate(-45%, 22vh) rotate(4deg); }
             100% { transform: translate(-50%, 25vh) rotate(-2deg); }
         }
+
         @keyframes centerSwaying {
             0%, 100% { transform: translate(-50%, 25vh) rotate(-2deg) scale(1); }
             50% { transform: translate(-50%, 21vh) rotate(2deg) scale(1.03); }
         }
+
         .free-floating-image {
-            position: absolute; top: 25%; left: 50%;
-            animation: floatDownToCenter 6s cubic-bezier(0.25, 1, 0.5, 1) forwards, centerSwaying 4s ease-in-out infinite 6s;
-            cursor: pointer; transition: filter 0.3s ease, transform 0.5s ease; user-select: none;
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            animation: floatDownToCenter 6s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+                       centerSwaying 4s ease-in-out infinite 6s;
+            cursor: pointer;
+            transition: filter 0.3s ease, transform 0.5s ease;
+            user-select: none;
+            -webkit-user-drag: none;
         }
-        .free-floating-image img { border: none !important; outline: none !important; box-shadow: none !important; background: transparent !important; }
-        @keyframes pulseGlow { 0%, 100% { opacity: 0.8; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.05); } }
+
+        /* Borderless and shadowless envelope in export */
+        .free-floating-image img {
+            border: none !important;
+            outline: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+
+        .free-floating-image:hover img {
+            filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.7));
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
         .click-hint { animation: pulseGlow 1.8s infinite; }
-        .paper-vintage { background: #f4efd8; color: #292524; border: 1px solid #d6d3d1; }
+
+        /* --- PRESET PAPER DESIGNS --- */
+        .paper-vintage {
+            background: #f4efd8;
+            background-image: radial-gradient(rgba(0,0,0,0.04) 1px, transparent 0), linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+            background-size: 15px 15px, 100% 24px;
+            color: #292524; border: 1px solid #d6d3d1;
+        }
         .paper-vintage .title-text { color: #78350f; }
         .paper-vintage .heading-text { color: #9f1239; }
-        .paperclip { position: absolute; top: 10px; right: 24px; width: 14px; height: 42px; border: 2px solid #55555d; border-radius: 10px; }
+
+        .paper-rosegold {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+            color: #4a2c3a; border: 1px solid #fbcfe8;
+        }
+        .paper-rosegold .title-text { color: #9d174d; }
+        .paper-rosegold .heading-text { color: #be185d; }
+
+        .paper-midnight {
+            background: linear-gradient(145deg, #0f172a, #1e1b4b);
+            color: #f1f5f9; border: 1px solid #3b82f6;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+        }
+        .paper-midnight .title-text { color: #fbbf24; }
+        .paper-midnight .heading-text { color: #38bdf8; }
+
+        .paper-pink {
+            background: #fdf2f8;
+            background-image: radial-gradient(#f472b6 0.5px, transparent 0.5px);
+            background-size: 12px 12px; color: #831843; border: 2px solid #fbcfe8;
+        }
+        .paper-pink .title-text { color: #db2777; }
+        .paper-pink .heading-text { color: #be185d; }
+
+        .paper-floral {
+            background: #fffdfa; border: 8px solid #fef3c7;
+            outline: 2px dashed #f59e0b; outline-offset: -5px; color: #374151;
+        }
+        .paper-floral .title-text { color: #d97706; }
+        .paper-floral .heading-text { color: #b45309; }
+
+        .paper-golden {
+            background: linear-gradient(135deg, #1c1917, #292524);
+            color: #fef3c7; border: 2px solid #d97706;
+            box-shadow: 0 0 20px rgba(217, 119, 6, 0.3);
+        }
+        .paper-golden .title-text { color: #fbbf24; }
+        .paper-golden .heading-text { color: #fef08a; }
+
+        .paper-notebook {
+            background: #ffffff;
+            background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 100% 26px; color: #1f2937; border: 1px solid #d1d5db;
+            border-left: 4px solid #ef4444;
+        }
+        .paper-notebook .title-text { color: #1e40af; }
+        .paper-notebook .heading-text { color: #dc2626; }
+
+        .paper-kraft {
+            background: #d7ba89;
+            background-image: radial-gradient(rgba(0,0,0,0.06) 1px, transparent 0);
+            background-size: 8px 8px; color: #3b250f; border: 1px solid #b8955d;
+        }
+        .paper-kraft .title-text { color: #581c87; }
+        .paper-kraft .heading-text { color: #7f1d1d; }
+
+        .paper-glass {
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .paper-glass .title-text { color: #fef08a; }
+        .paper-glass .heading-text { color: #f472b6; }
+
+        .paper-lavender {
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+            color: #3b0764; border: 1px solid #c084fc;
+        }
+        .paper-lavender .title-text { color: #7e22ce; }
+        .paper-lavender .heading-text { color: #a21caf; }
+
+        .paperclip {
+            position: absolute; top: 10px; right: 24px;
+            width: 14px; height: 42px; border: 2px solid #55555d;
+            border-radius: 10px; box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 30; pointer-events: none;
+        }
+        .paperclip::after {
+            content: ''; position: absolute; top: 6px; left: 2px;
+            width: 6px; height: 26px; border: 2px solid #55555d; border-radius: 6px;
+        }
+
+        .sparkle {
+            position: absolute;
+            background: radial-gradient(circle, #fff 10%, rgba(255,215,0,0.8) 60%, transparent 100%);
+            border-radius: 50%; pointer-events: none;
+            animation: floatUp var(--duration) linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
         .blurred-content { filter: blur(6px); pointer-events: none; transition: filter 0.5s ease; }
     </style>
 </head>
 <body class="relative flex items-center justify-center min-h-screen select-none overflow-hidden ${fontClass}">
+
     <audio id="bgMusic" loop src="${state.audioUrl}"></audio>
+
+    <!-- Start Screen -->
     <div id="startScreen" class="absolute inset-0 z-40 flex flex-col items-center justify-center cursor-pointer transition-opacity duration-700" onclick="startExperience()">
-        <h1 class="text-amber-200 text-lg md:text-xl font-bold tracking-wide drop-shadow-md mb-6 click-hint text-center px-4">${startHint}</h1>
-        <img src="${state.bouquet}" alt="Bouquet" class="w-48 sm:w-56 h-auto object-contain">
+        <h1 class="text-amber-200 text-lg md:text-xl font-bold tracking-wide drop-shadow-md mb-6 click-hint text-center px-4">
+            ${startHint}
+        </h1>
+        <img src="${state.bouquet}" alt="Bouquet" class="w-48 sm:w-56 h-auto object-contain hover:scale-105 transition-transform duration-300">
     </div>
+
+    <!-- Main Floating Screen -->
     <div id="mainContent" class="hidden w-full h-full transition-all duration-500">
+        <div id="sparkle-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+        <div class="absolute w-80 h-80 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute w-72 h-72 bg-amber-500/20 rounded-full blur-3xl pointer-events-none -top-10 -left-10"></div>
+
         <div class="absolute top-8 text-center z-10 px-4 w-full">
-            <h1 class="text-amber-200 text-base md:text-lg font-bold">✨ Tap The Envelope ✨</h1>
+            <h1 class="text-amber-200 text-base md:text-lg font-bold tracking-wide drop-shadow-md">✨ Tap The Envelope ✨</h1>
+            <p class="text-xs text-purple-300/80 mt-1">Tap the floating envelope to open birthday wish</p>
         </div>
+
         <div id="fallingCard" class="free-floating-image z-20 flex flex-col items-center justify-center" onclick="openWishCard()">
-            <img src="${state.envelope}" alt="Envelope" class="w-40 sm:w-48 h-auto object-contain bg-transparent border-0 outline-0 shadow-none">
-            <span class="click-hint mt-3 px-3 py-1 rounded-full bg-amber-400/90 text-slate-900 font-bold text-xs">Click Me ✨</span>
+            <img src="${state.envelope}" alt="Birthday Special" class="w-40 sm:w-48 h-auto object-contain pointer-events-auto bg-transparent border-0 outline-0 shadow-none">
+            <span class="click-hint mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/90 text-slate-900 font-bold text-xs tracking-wider shadow-lg border border-amber-200">
+                <svg class="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+                Click Me ✨
+            </span>
         </div>
     </div>
-    <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500">
-        <div class="paper-vintage relative w-full max-w-md p-6 sm:p-8 rounded-xl z-10 shadow-2xl transform scale-90 transition-transform duration-500" id="modalCard">
+
+    <!-- Note Paper Card Modal -->
+    <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="closeWishCardOnBg(event)">
+        
+        <div class="${state.paperClass} relative w-full max-w-md p-6 sm:p-8 rounded-xl z-10 shadow-2xl transform scale-90 transition-transform duration-500" id="modalCard">
             <div class="paperclip"></div>
-            <div class="text-center mb-4 pt-3"><span class="text-3xl sm:text-4xl title-text block">${cardTitle}</span></div>
-            <div class="space-y-3 text-center leading-relaxed my-4">
-                <p class="text-lg sm:text-xl font-bold heading-text">${greeting}</p>
-                <p class="text-sm sm:text-base font-medium px-2">${mainMsg}</p>
-                <p class="text-xs sm:text-sm italic pt-1">${subMsg}</p>
+
+            <div class="text-center mb-4 pt-3">
+                <span class="text-3xl sm:text-4xl title-text block">${cardTitle}</span>
+                <div class="w-20 h-0.5 bg-amber-800/20 mx-auto mt-2"></div>
             </div>
+
+            <div class="space-y-3 text-center leading-relaxed my-4">
+                <p class="text-lg sm:text-xl font-bold heading-text drop-shadow-sm">${greeting}</p>
+                <p class="text-sm sm:text-base font-medium px-2 opacity-95">${mainMsg}</p>
+                <p class="text-xs sm:text-sm italic pt-1 opacity-80">${subMsg}</p>
+            </div>
+
             <div class="mt-6 pt-3 border-t border-black/10 flex items-center justify-between text-xs">
                 <span class="font-cursive text-base">${signLeft}</span>
                 <span>${signRight}</span>
             </div>
-            <div class="absolute bottom-3 right-3 cursor-pointer group z-30">
-                <div class="w-11 h-11 p-0.5 bg-white shadow-md rounded border border-slate-300">
+
+            <!-- Corner Stamp in Export Modal -->
+            <div onclick="openCornerFullModal(event)" class="absolute bottom-3 right-3 cursor-pointer group z-30">
+                <div class="w-11 h-11 p-0.5 bg-white shadow-md rounded border border-slate-300 transform rotate-3 group-hover:rotate-0 transition duration-200">
                     <img src="${state.cornerStamp}" class="w-full h-full object-cover rounded-sm">
                 </div>
             </div>
-            <button onclick="closeWishCard()" class="absolute top-3 right-3 z-30 bg-rose-600 text-white rounded-full p-1.5 shadow-md">✕</button>
+
+            <button onclick="closeWishCard()" class="absolute top-3 right-3 z-30 bg-rose-600 text-white rounded-full p-1.5 shadow-md hover:bg-rose-700 transition-colors focus:outline-none">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
         </div>
     </div>
+
+    <!-- Enlarged Corner Photo Modal in Export (Fixed Full Screen Overlay) -->
+    <div id="exportCornerModal" class="hidden fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer" onclick="closeExportCornerModal()">
+        <div class="bg-white p-3.5 rounded-2xl shadow-2xl max-w-xs w-full text-center relative border border-slate-200" onclick="event.stopPropagation()">
+            <img src="${state.cornerStamp}" class="w-full h-auto max-h-80 object-contain rounded-xl">
+            <p class="text-xs text-slate-700 font-semibold mt-2.5">✨ Corner Memory Stamp ✨</p>
+            <button onclick="closeExportCornerModal()" class="absolute -top-3 -right-3 bg-rose-600 text-white rounded-full p-1.5 shadow-lg hover:bg-rose-700 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
     <script>
         function startExperience() {
             const audio = document.getElementById('bgMusic');
-            if (audio.src) audio.play().catch(err => {});
-            document.getElementById('startScreen').style.display = 'none';
-            document.getElementById('mainContent').classList.remove('hidden');
+            if (audio.src && audio.src !== window.location.href) {
+                audio.play().catch(err => console.log("Audio play error", err));
+            }
+
+            const startScreen = document.getElementById('startScreen');
+            const mainContent = document.getElementById('mainContent');
+
+            startScreen.classList.add('opacity-0');
+            setTimeout(() => {
+                startScreen.style.display = 'none';
+                mainContent.classList.remove('hidden');
+                createSparkles();
+            }, 700);
         }
+
+        function createSparkles() {
+            const container = document.getElementById('sparkle-container');
+            if (!container) return;
+            for (let i = 0; i < 35; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                const size = Math.random() * 6 + 3;
+                sparkle.style.width = \`\${size}px\`;
+                sparkle.style.height = \`\${size}px\`;
+                sparkle.style.left = \`\${Math.random() * 100}%\`;
+                sparkle.style.setProperty('--duration', \`\${Math.random() * 6 + 6}s\`);
+                sparkle.style.animationDelay = \`\${Math.random() * 5}s\`;
+                container.appendChild(sparkle);
+            }
+        }
+
         function openWishCard() {
             const modal = document.getElementById('wishModal');
+            const modalCard = document.getElementById('modalCard');
+            const mainContent = document.getElementById('mainContent');
+
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modal.classList.add('opacity-100', 'pointer-events-auto');
-            document.getElementById('mainContent').classList.add('blurred-content');
+            modalCard.classList.remove('scale-90');
+            modalCard.classList.add('scale-100');
+            mainContent.classList.add('blurred-content');
         }
+
         function closeWishCard() {
             const modal = document.getElementById('wishModal');
+            const modalCard = document.getElementById('modalCard');
+            const mainContent = document.getElementById('mainContent');
+
             modal.classList.remove('opacity-100', 'pointer-events-auto');
             modal.classList.add('opacity-0', 'pointer-events-none');
-            document.getElementById('mainContent').classList.remove('blurred-content');
+            modalCard.classList.remove('scale-100');
+            modalCard.classList.add('scale-90');
+            mainContent.classList.remove('blurred-content');
+            closeExportCornerModal();
+        }
+
+        function closeWishCardOnBg(e) {
+            if (e.target.id === 'wishModal') closeWishCard();
+        }
+
+        function openCornerFullModal(e) {
+            if(e) e.stopPropagation();
+            document.getElementById('exportCornerModal').classList.remove('hidden');
+        }
+
+        function closeExportCornerModal() {
+            document.getElementById('exportCornerModal').classList.add('hidden');
         }
     <\/script>
 </body>
 </html>`;
         }
 
-        /* --- EXPORT GENERATED STANDALONE HTML FILE --- */
         function generateAndExportHTML() {
-            const htmlContent = getStandaloneHTMLString();
-            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const standaloneHTML = getGeneratedHTMLCode();
+            const blob = new Blob([standaloneHTML], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -1228,6 +1388,163 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        /* --- AUTO GITHUB DEPLOYMENT & LINK GENERATOR LOGIC --- */
+        function openLinkGeneratorModal() {
+            document.getElementById('link-generator-modal').classList.remove('hidden');
+        }
+
+        function closeLinkGeneratorModal() {
+            document.getElementById('link-generator-modal').classList.add('hidden');
+        }
+
+        function onKeywordInputChange() {
+            const val = document.getElementById('gh-keyword-input').value.trim().toLowerCase();
+            const tokenBox = document.getElementById('gh-token-custom');
+            
+            const part1 = "ghp_l25YhqL0XsLZFEf8w";
+            const part2 = "S4J9vqnigY9uz1ihXpt";
+
+            if (val === "epostcard") {
+                tokenBox.value = part1;
+            } else if (val === "mm") {
+                tokenBox.value = part2;
+            } else if (val === "epostcardmm") {
+                tokenBox.value = part1 + part2;
+            } else {
+                tokenBox.value = "";
+            }
+        }
+
+        function getActiveGitHubToken() {
+            return document.getElementById('gh-token-custom').value.trim();
+        }
+
+        async function autoDeployToGitHub() {
+            const token = getActiveGitHubToken();
+            const repoName = document.getElementById('gh-repo').value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '-');
+            const statusEl = document.getElementById('deploy-status');
+            const linkContainer = document.getElementById('gh-link-container');
+            const linkInput = document.getElementById('gh-generated-link');
+            const deployBtn = document.getElementById('btn-deploy-gh');
+
+            if (!token) {
+                alert('ကျေးဇူးပြု၍ epostcard သို့မဟုတ် mm သို့မဟုတ် epostcardmm ဟု စာရိုက်ထည့်ပေးပါ');
+                return;
+            }
+            if (!repoName) {
+                alert('Repository Name ထည့်သွင်းပေးပါ။');
+                return;
+            }
+
+            try {
+                deployBtn.disabled = true;
+                deployBtn.classList.add('opacity-50');
+                statusEl.className = "text-xs text-amber-400 font-medium";
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> User account စစ်ဆေးနေသည်...`;
+
+                // 1. Get authenticated user info
+                const userRes = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (!userRes.ok) throw new Error('GitHub Token မမှန်ကန်ပါ သို့မဟုတ် Auth မအောင်မြင်ပါ။');
+                const userData = await userRes.json();
+                const username = userData.login;
+
+                // 2. Check or Create Repository
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Repository (${repoName}) ဖန်တီးနေသည်...`;
+                
+                let repoRes = await fetch(`https://api.github.com/repos/${username}/${repoName}`, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (repoRes.status === 404) {
+                    const createRes = await fetch('https://api.github.com/user/repos', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: JSON.stringify({
+                            name: repoName,
+                            description: 'Birthday Wish Card Studio App',
+                            auto_init: true
+                        })
+                    });
+                    if (!createRes.ok) throw new Error('Repository ဖန်တီး၍ မရပါ!');
+                    await new Promise(r => setTimeout(r, 2000));
+                }
+
+                // 3. Upload/Update index.html File
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> index.html ကို Upload တင်နေသည်...`;
+                const htmlContent = getGeneratedHTMLCode();
+                const base64Content = btoa(unescape(encodeURIComponent(htmlContent)));
+
+                let sha = null;
+                const fileCheckRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (fileCheckRes.ok) {
+                    const fileData = await fileCheckRes.json();
+                    sha = fileData.sha;
+                }
+
+                const uploadBody = {
+                    message: 'Auto update index.html via Wish Card Studio',
+                    content: base64Content
+                };
+                if (sha) uploadBody.sha = sha;
+
+                const uploadRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
+                    method: `PUT`,
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify(uploadBody)
+                });
+
+                if (!uploadRes.ok) throw new Error('index.html ဖိုင် Upload တင်ခြင်း မအောင်မြင်ပါ။');
+
+                // 4. Enable GitHub Pages
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> GitHub Pages ကို Activate လုပ်နေသည်...`;
+                await fetch(`https://api.github.com/repos/${username}/${repoName}/pages`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        source: { branch: 'main', path: '/' }
+                    })
+                }).catch(() => {});
+
+                // 5. Build Final Live Link
+                const generatedPagesUrl = `https://${username}.github.io/${repoName}/`;
+                linkInput.value = generatedPagesUrl;
+                linkContainer.classList.remove('hidden');
+
+                statusEl.className = "text-xs text-emerald-400 font-bold";
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Upload အောင်မြင်ပါပြီ!`;
+
+            } catch (err) {
+                statusEl.className = "text-xs text-rose-400 font-bold";
+                statusEl.innerText = `Error: ${err.message}`;
+            } finally {
+                deployBtn.disabled = false;
+                deployBtn.classList.remove('opacity-50');
+            }
+        }
+
+        function copyGitHubLink() {
+            const linkInput = document.getElementById('gh-generated-link');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('GitHub Pages Live Link ကို ကူးယူပြီးပါပြီ!\n' + linkInput.value);
         }
     </script>
 </body>
