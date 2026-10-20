@@ -509,8 +509,8 @@
 
             </div>
 
-            <!-- ENLARGED CORNER PHOTO MODAL -->
-            <div id="corner-full-modal" class="hidden absolute inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer" onclick="closeCornerFullModal()">
+            <!-- ENLARGED CORNER PHOTO MODAL (High z-index to stay on top) -->
+            <div id="corner-full-modal" class="hidden absolute inset-0 z-60 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer" onclick="closeCornerFullModal()">
                 <div class="bg-white p-3 rounded-xl shadow-2xl max-w-xs w-full text-center relative" onclick="event.stopPropagation()">
                     <img id="prev-corner-full-img" src="" class="w-full h-auto max-h-72 object-contain rounded-lg">
                     <p class="text-xs text-slate-700 font-medium mt-2">✨ Corner Memory Stamp ✨</p>
@@ -1180,7 +1180,7 @@
     </div>
 
     <!-- Note Paper Card Modal -->
-    <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="closeWishCardOnBg(event)">
+    <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-[2px] opacity-0 pointer-events-none transition-opacity duration-500" onclick="closeWishCardOnBg(event)">
         
         <div class="${state.paperClass} relative w-full max-w-md p-6 sm:p-8 rounded-xl z-10 shadow-2xl transform scale-90 transition-transform duration-500" id="modalCard">
             <div class="paperclip"></div>
@@ -1202,7 +1202,7 @@
             </div>
 
             <!-- Corner Stamp in Export Modal -->
-            <div onclick="openCornerFullModal(event)" class="absolute bottom-3 right-3 cursor-pointer group z-20">
+            <div onclick="openCornerFullModal(event)" class="absolute bottom-3 right-3 cursor-pointer group z-30">
                 <div class="w-11 h-11 p-0.5 bg-white shadow-md rounded border border-slate-300 transform rotate-3 group-hover:rotate-0 transition duration-200">
                     <img src="${state.cornerStamp}" class="w-full h-full object-cover rounded-sm">
                 </div>
@@ -1214,8 +1214,8 @@
         </div>
     </div>
 
-    <!-- Enlarged Corner Photo Modal in Export -->
-    <div id="exportCornerModal" class="hidden fixed inset-0 z-60 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer" onclick="closeExportCornerModal()">
+    <!-- Enlarged Corner Photo Modal in Export (z-70 to stay on top of everything) -->
+    <div id="exportCornerModal" class="hidden fixed inset-0 z-70 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 cursor-pointer" onclick="closeExportCornerModal()">
         <div class="bg-white p-3 rounded-xl shadow-2xl max-w-xs w-full text-center relative" onclick="event.stopPropagation()">
             <img src="${state.cornerStamp}" class="w-full h-auto max-h-72 object-contain rounded-lg">
             <p class="text-xs text-slate-700 font-medium mt-2">✨ Corner Memory Stamp ✨</p>
