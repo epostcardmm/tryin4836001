@@ -1,273 +1,425 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Uploader & GitHub Auto Deploy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Interactive ePostcard & Quest Studio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #0f172a; color: #f8fafc; }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
-        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 4px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #ffeef8, #d6eaff); overflow-x: hidden; position: relative; padding: 20px 0; }
+        
+        .bg-heart { position: absolute; color: rgba(255, 105, 180, 0.2); font-size: 20px; animation: floatUp 6s linear infinite; bottom: -20px; z-index: 0; pointer-events: none; }
+        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; } }
+        
+        .card-container { position: relative; width: 92%; max-width: 480px; background: rgba(255, 255, 255, 0.95); border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 25px; text-align: center; z-index: 10; margin: auto; }
+        
+        /* Editor Styles */
+        .editor-container { max-width: 650px; text-align: left; max-height: 90vh; overflow-y: auto; }
+        .editor-container h2 { color: #00bab7; margin-bottom: 15px; text-align: center; font-size: 22px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; color: #444; margin-bottom: 5px; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; outline: none; }
+        .step-box { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 12px; padding: 15px; margin-bottom: 12px; position: relative; }
+        .step-box h4 { color: #ff4757; margin-bottom: 10px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .delete-step-btn { background: #ff4757; color: white; border: none; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+        
+        .btn-main { background: #00bab7; color: white; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; padding: 12px 25px; font-size: 15px; transition: 0.2s; width: 100%; }
+        .btn-main:hover { opacity: 0.9; }
+        .btn-secondary { background: #ff4757; color: white; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; padding: 10px 20px; font-size: 14px; margin-top: 10px; width: 100%; }
+
+        /* Preview Card Styles */
+        .gif-container { width: 140px; height: 140px; margin: 15px auto; }
+        .gif-container img { width: 100%; height: 100%; border-radius: 15px; object-fit: cover; }
+        .btn-group { position: relative; min-height: 70px; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; }
+        button.choice-btn { padding: 12px 25px; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; transition: 0.2s ease; font-size: 16px; }
+        
+        .primary-btn, .secondary-btn { background: #00bab7; color: white; }
+        .fullscreen-active { position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border-radius: 0; font-size: 26px; display: flex; justify-content: center; align-items: center; }
+        
+        #captureArea { background: linear-gradient(135deg, #fff, #fff0f5); border: 2px dashed #85ff75; border-radius: 18px; padding: 15px; text-align: center; }
+        #captureArea h3 { color: #ff4757; margin-bottom: 12px; font-size: 18px; }
+        .result-item { background: #ffffff; border: 1px solid #cfffcc; border-radius: 12px; padding: 10px 12px; margin: 8px 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left; box-shadow: 0 3px 8px rgba(255, 117, 140, 0.08); gap: 4px; }
+        .result-row { display: flex; justify-content: space-between; width: 100%; align-items: center; }
+        .result-q { font-size: 13px; color: #444; flex: 1; padding-right: 8px; font-weight: 500; }
+        .result-a { background: #00bab7; color: white; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; white-space: nowrap; }
+        .result-no-count { font-size: 11px; color: #ff4757; font-weight: bold; }
+        
+        #sendingStatus { display: none; font-size: 14px; color: #6c5ce7; margin-top: 10px; font-weight: bold; }
+        
+        .heart-start-btn { cursor: pointer; animation: pulseBeat 1.2s infinite; margin: 15px auto; display: inline-block; user-select: none; }
+        .heart-start-btn img { width: 130px; height: auto; display: block; border: none; outline: none; background: transparent; }
+        @keyframes pulseBeat { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .burst-emoji { position: fixed; font-size: 26px; pointer-events: none; z-index: 99999; animation: burstAnim 0.8s ease-out forwards; }
+        @keyframes burstAnim { 0% { transform: translate(0, 0) scale(0.4); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(1.3); opacity: 0; } }
+
+        .running-gif-container { position: fixed; bottom: 5px; left: 0; width: 100px; height: 100px; z-index: 100; pointer-events: none; animation: runBackAndForth 12s linear infinite; }
+        .running-gif-container img { width: 100%; height: 100%; object-fit: contain; background: transparent; animation: faceDirection 12s linear infinite; }
+        .speech-bubble { position: absolute; top: -32px; left: 50%; transform: translateX(-50%); background: white; color: #13b11e; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; white-space: nowrap; box-shadow: 0 3px 8px rgba(0,0,0,0.18); border: 1px solid #ffccd5; }
+        .speech-bubble::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-width: 5px 5px 0; border-style: solid; border-color: white transparent; display: block; width: 0; }
+
+        @keyframes runBackAndForth { 0% { left: 0%; } 49.9% { left: calc(100% - 100px); } 50% { left: calc(100% - 100px); } 100% { left: 0%; } }
+        @keyframes faceDirection { 0% { transform: scaleX(1); } 49.9% { transform: scaleX(1); } 50% { transform: scaleX(-1); } 100% { transform: scaleX(-1); } }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 bg-slate-950">
+<body>
 
-    <div class="max-w-xl w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-md">
-        
-        <!-- Header -->
-        <div class="text-center space-y-2 border-b border-slate-800 pb-4">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 text-xl mb-1 border border-emerald-500/30">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-            </div>
-            <h1 class="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
-                HTML File Uploader & Live Link Generator
-            </h1>
-            <p class="text-xs text-slate-400">Device ထဲက HTML ဖိုင်ကို Upload တင်ပြီး GitHub Pages Live Link အလိုအလျောက် ထုတ်ယူပါ</p>
-        </div>
+    <div id="heartsContainer"></div>
 
-        <!-- Step 1: Upload HTML File -->
-        <div class="space-y-3">
-            <label class="block text-xs font-bold text-emerald-300 uppercase tracking-wider">
-                📁 1. Select HTML File from Device
-            </label>
-            <div class="border-2 border-dashed border-slate-700 hover:border-emerald-500/50 rounded-2xl p-6 text-center bg-slate-950/50 transition cursor-pointer relative group">
-                <input type="file" accept=".html,.htm" onchange="handleHtmlFileUpload(this)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
-                <div class="space-y-2 pointer-events-none">
-                    <i class="fa-solid fa-file-code text-3xl text-emerald-400 group-hover:scale-110 transition"></i>
-                    <p class="text-xs text-slate-300 font-medium">Click to browse or drag & drop your .html file here</p>
-                    <p class="text-[10px] text-slate-500">Supports standalone HTML files</p>
-                </div>
-            </div>
-
-            <div id="file-status-box" class="hidden bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-3 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
-                    <span id="file-status-text" class="text-xs text-emerald-200 font-medium truncate">No file selected</span>
-                </div>
-                <span class="text-[10px] bg-emerald-900/60 text-emerald-300 px-2 py-0.5 rounded font-mono">Ready</span>
-            </div>
-        </div>
-
-        <!-- Step 2: GitHub Config -->
-        <div class="space-y-3 border-t border-slate-800 pt-4">
-            <label class="block text-xs font-bold text-teal-300 uppercase tracking-wider">
-                ⚙️ 2. GitHub Deployment Settings
-            </label>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div class="space-y-1">
-                    <label class="block text-[11px] text-slate-400">Keyword Box (epostcard / mm):</label>
-                    <input type="text" id="gh-keyword-input" oninput="onKeywordInputChange()" placeholder="စာရိုက်ပါ (e.g. epostcardmm)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-300 font-bold focus:outline-none focus:border-emerald-500">
-                </div>
-                <div class="space-y-1">
-                    <label class="block text-[11px] text-slate-400">Repository Name:</label>
-                    <input type="text" id="gh-repo" value="my-html-page" placeholder="Repository Name" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-[11px] text-slate-400 mb-1">API Token Status:</label>
-                <input type="password" id="gh-token-custom" readonly placeholder="အထက်ပါနေရာတွင် စာရိုက်ပါက Token အလိုအလျောက် တက်လာပါမည်" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-mono focus:outline-none">
-            </div>
-        </div>
-
-        <!-- Step 3: Action & Result -->
-        <div class="space-y-3 pt-2">
-            <div class="flex flex-wrap gap-2 items-center justify-between">
-                <button onclick="autoDeployToGitHub()" id="btn-deploy-gh" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl text-xs font-bold shadow-lg transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> Upload HTML & Get Live Link
-                </button>
-                <span id="deploy-status" class="text-xs text-amber-400 font-medium w-full text-center"></span>
-            </div>
-
-            <!-- Result Box -->
-            <div id="gh-link-container" class="hidden space-y-2 pt-2 border-t border-slate-800">
-                <label class="block text-[11px] font-bold text-emerald-400">✨ သင့် Live Web Link ရရှိပါပြီ (GitHub Pages):</label>
-                <div class="flex gap-2">
-                    <input type="text" id="gh-generated-link" readonly class="flex-1 bg-slate-950 border border-emerald-500/50 rounded-xl px-3 py-2 text-xs font-mono text-emerald-300 focus:outline-none select-all">
-                    <button onclick="copyGitHubLink()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
-                        <i class="fa-regular fa-copy"></i> Copy
-                    </button>
-                </div>
-                <p class="text-[10px] text-slate-400 text-center">Note: GitHub Pages ပထမဆုံးအကြိမ် တည်ဆောက်ချိန် ၁ မိနစ်မှ ၂ မိနစ်ခန့် ကြာမြင့်နိုင်ပါသည်။</p>
-            </div>
-        </div>
-
+    <!-- Running Cat Helper -->
+    <div class="running-gif-container" id="runningCatWrapper">
+        <div class="speech-bubble" id="speechBubbleText">မထားခဲ့ပါနဲ့ 🥺</div>
+        <img src="https://media.tenor.com/EjjrPtO6BzQAAAAi/peach-cat.gif" alt="Running GIF">
     </div>
 
-    <!-- Scripts -->
+    <!-- 1. EDITOR VIEW (အသေးစိတ်ပြင်ဆင်ရန် နေရာ) -->
+    <div class="card-container editor-container" id="editorView">
+        <h2>🛠️ ePostcard & Quest Studio</h2>
+        
+        <div class="form-group">
+            <label>Formspree Endpoint URL (အဖြေများ လက်ခံလိုပါက ထည့်ပါ):</label>
+            <input type="text" id="inputFormspree" placeholder="https://formspree.io/f/your_id">
+        </div>
+
+        <div class="form-group">
+            <label>သတိပေးစာသားများ (Comma ဖြင့် ခြားပါ):</label>
+            <textarea id="inputWarnings" rows="3">နောက်တစ်ခါ ထပ်နှိပ်ရင် ငိုမှာနော်! 😭, မရဘူး၊ ပြန်စဉ်းစားလိုက်ဦး! 😤, ငြင်းလို့မရဘူးလေ🏃‍♂️, ရက်စက်လိုက်တာကွာ... 😢, လက်ခံလိုက်ပါတော့❤️</textarea>
+        </div>
+
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #ddd;">
+        
+        <h3 style="font-size: 16px; color: #444; margin-bottom: 10px;">📋 မေးခွန်း အဆင့်များ (Steps)</h3>
+        <div id="stepsEditorList"></div>
+
+        <button class="btn-secondary" type="button" onclick="addNewStep()">➕ မေးခွန်းအသစ် ထပ်ထည့်ရန်</button>
+        <br><br>
+        <button class="btn-main" onclick="startPreview()">▶️ Preview ကြည့်မည် & စတင်မည်</button>
+    </div>
+
+    <!-- 2. INTRO SCREEN -->
+    <div class="card-container" id="introScreen" style="display: none;">
+        <h2 style="color: #ff4757; margin-bottom: 10px;" id="introTitleText">Hello ရည်းစားဟောင်းလေး</h2>
+        <p style="color: #555; font-size: 14px; margin-bottom: 5px;">Click The Heart</p>
+        <div class="heart-start-btn" id="startHeartBtn">
+            <img src="https://media.tenor.com/RjFzdxaLVNMAAAAi/heart.gif" alt="Heart GIF">
+        </div>
+        <button class="btn-secondary" style="margin-top: 15px; background: #6c5ce7;" onclick="backToEditor()">⚙️ ပြန်ပြင်မည် (Editor သို့)</button>
+    </div>
+
+    <!-- 3. MAIN CARD QUESTION FLOW -->
+    <div class="card-container" id="mainCard" style="display: none;">
+        <h2 id="questionText">ပြန်ချစ်ကြည့်ကြမလား?</h2>
+        <div class="gif-container"><img id="statusGif" src="https://media1.tenor.com/m/2K0bjyLKldkAAAAC/dudu-dudu-bubu.gif"></div>
+        <div class="btn-group" id="btnGroup">
+            <button id="yesBtn" class="choice-btn primary-btn" onclick="handleInteraction(true)">ချစ်တယ်</button>
+            <button id="noBtn" class="choice-btn secondary-btn" onclick="handleInteraction(false)">မချစ်ဘူး</button>
+        </div>
+        <div id="sendingStatus">အဖြေများကို ပို့ပေးနေပါသည်... 💌</div>
+    </div>
+
+    <!-- 4. SUCCESS SCREEN -->
+    <div class="card-container" id="successScreen" style="display: none;">
+        <div id="captureArea">
+            <h3>💖 Our Love Agreement</h3>
+            <div id="summaryList"></div>
+        </div>
+        <button class="primary-btn" style="width:100%; margin-top:15px;" onclick="saveToPNG()">Save As PNG 📸</button>
+        <button class="btn-secondary" style="background: #6c5ce7; margin-top: 10px;" onclick="backToEditor()">⚙️ အစကနေ ပြန်ပြင်မည်</button>
+    </div>
+
     <script>
-        let uploadedHtmlContent = "";
-        let uploadedFileName = "";
+        // မူလ default steps များ
+        let defaultSteps = [
+            { question: "ပြန်ချစ်ကြည့်ကြမလား?", yes: "ချစ်တယ်", no: "မချစ်ဘူး", gif: "https://media1.tenor.com/m/2K0bjyLKldkAAAAC/dudu-dudu-bubu.gif", type: "shrink" },
+            { question: "သတိရနေခဲ့တာ သိရဲ့လား", yes: "ဒီကရောပဲ", no: "မယုံပါဘူး", gif: "https://media.tenor.com/PkvpJyo2rSQAAAAi/bubu-dudu-sseeyall.gif", type: "run" },
+            { question: "ပြန်တွဲကြမယ်လေနော် နော်..", yes: "တွဲကြမယ်", no: "တော်ပါပြီ", gif: "https://media.tenor.com/BKP6erkQWjMAAAAi/bubu-dudu-sseeyall.gif", type: "fade" },
+            { question: "ပြန်လာမယ်မလား", yes: "ပြန်လာမယ်", no: "မလာပါဘူး", gif: "https://media.tenor.com/BL6TlnbQD0sAAAAi/dudu-surprise.gif", type: "fullscreen" },
+            { question: "ဒါဆို ရည်းစားပြန်ဖြစ်ပြီနော်..ဟဲဟဲ", yes: "Yes,Of Course", no: "No..No..No", gif: "https://media1.tenor.com/m/c8KXOOGytDYAAAAC/dudu-dudu-bubu.gif", type: "magnet" }
+        ];
 
-        function handleHtmlFileUpload(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                uploadedFileName = file.name;
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedHtmlContent = e.target.result;
-                    document.getElementById('file-status-text').innerText = `Loaded: ${uploadedFileName} (${(file.size/1024).toFixed(1)} KB)`;
-                    document.getElementById('file-status-box').classList.remove('hidden');
-                };
-                reader.readAsText(file);
-            }
+        let activeSteps = JSON.parse(JSON.stringify(defaultSteps));
+        let warningMessages = [];
+        let FORMSPREE_URL = "";
+
+        let currentStep = 0, yesScale = 1, noScale = 1, userAnswers = [];
+        let noClickCounts = [];
+
+        // Editor တွင် steps များကို ဖော်ပြရန်
+        function renderEditorSteps() {
+            const container = document.getElementById('stepsEditorList');
+            container.innerHTML = "";
+            activeSteps.forEach((s, index) => {
+                let div = document.createElement('div');
+                div.className = 'step-box';
+                div.innerHTML = `
+                    <h4>အဆင့် ${index + 1} <button class="delete-step-btn" onclick="removeStep(${index})">ဖျက်မည်</button></h4>
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <label>မေးခွန်း:</label>
+                        <input type="text" value="${s.question}" id="eq_${index}">
+                    </div>
+                    <div style="display: flex; gap: 8px; margin-bottom:8px;">
+                        <div style="flex:1;"><label>Yes ခလုတ်စာသား:</label><input type="text" value="${s.yes}" id="eyes_${index}"></div>
+                        <div style="flex:1;"><label>No ခလုတ်စာသား:</label><input type="text" value="${s.no}" id="eno_${index}"></div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <label>GIF ပုံ URL:</label>
+                        <input type="text" value="${s.gif}" id="egif_${index}">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>No ခလုတ်ပုံစံ (Animation Type):</label>
+                        <select id="etype_${index}">
+                            <option value="shrink" ${s.type==='shrink'?'selected':''}>shrink (No ငြင်းလေ Yes ကြီးလာလေ)</option>
+                            <option value="run" ${s.type==='run'?'selected':''}>run (No ခလုတ် ပြေးထွက်သွားမည်)</option>
+                            <option value="fade" ${s.type==='fade'='/'?'selected':''}>fade (No ခလုတ် ပျောက်သွားမည်)</option>
+                            <option value="fullscreen" ${s.type==='fullscreen'?'selected':''}>fullscreen (Yes ခလုတ် မျက်နှာပြင်ပြည့်ဖြစ်မည်)</option>
+                            <option value="magnet" ${s.type==='magnet'?'selected':''}>magnet (No နှိပ်ချင်းဖြင့် Yes အလိုအလျောက်ဖြစ်မည်)</option>
+                        </select>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
         }
 
-        function onKeywordInputChange() {
-            const val = document.getElementById('gh-keyword-input').value.trim().toLowerCase();
-            const tokenBox = document.getElementById('gh-token-custom');
+        function addNewStep() {
+            activeSteps.push({ question: "ထပ်တိုးမေးခွန်း?", yes: "သဘောတူတယ်", no: "မလုပ်ဘူး", gif: "https://media1.tenor.com/m/2K0bjyLKldkAAAAC/dudu-dudu-bubu.gif", type: "shrink" });
+            renderEditorSteps();
+        }
+
+        function removeStep(index) {
+            if(activeSteps.length <= 1) {
+                alert("မေးခွန်း အနည်းဆုံး တစ်ခုတော့ ရှိရပါမည်။");
+                return;
+            }
+            activeSteps.splice(index, 1);
+            renderEditorSteps();
+        }
+
+        function startPreview() {
+            // Formspree URL & Warnings သိမ်းဆည်းခြင်း
+            FORMSPREE_URL = document.getElementById('inputFormspree').value.trim();
+            let rawWarnings = document.getElementById('inputWarnings').value;
+            warningMessages = rawWarnings.split(',').map(w => w.trim()).filter(w => w.length > 0);
+            if(warningMessages.length === 0) warningMessages = ["မရဘူး၊ ပြန်စဉ်းစားလိုက်ဦး! 😤"];
+
+            // Steps များကို Form မှ ပြန်ဖတ်သိမ်းမည်
+            for(let i=0; i<activeSteps.length; i++) {
+                activeSteps[i].question = document.getElementById(`eq_${i}`).value;
+                activeSteps[i].yes = document.getElementById(`eyes_${i}`).value;
+                activeSteps[i].no = document.getElementById(`eno_${i}`).value;
+                activeSteps[i].gif = document.getElementById(`egif_${i}`).value;
+                activeSteps[i].type = document.getElementById(`etype_${i}`).value;
+            }
+
+            noClickCounts = new Array(activeSteps.length).fill(0);
+            currentStep = 0;
+            userAnswers = [];
+            yesScale = 1;
+            noScale = 1;
+
+            // UI ပြောင်းလဲခြင်း
+            document.getElementById('editorView').style.display = 'none';
+            document.getElementById('introScreen').style.display = 'block';
+        }
+
+        function backToEditor() {
+            document.getElementById('editorView').style.display = 'block';
+            document.getElementById('introScreen').style.display = 'none';
+            document.getElementById('mainCard').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'none';
+            document.getElementById('btnGroup').style.display = 'flex';
+            document.getElementById('sendingStatus').style.display = 'none';
+        }
+
+        // Warning Bubble ပြောင်းရန်
+        function changeWarningBubble() {
+            const bubble = document.getElementById('speechBubbleText');
+            const randomMsg = warningMessages[Math.floor(Math.random() * warningMessages.length)];
+            bubble.innerText = randomMsg;
+        }
+
+        document.getElementById('startHeartBtn').onclick = function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            const emojis = ['❤️', '💖', '💕', '💘', '💓', '💗', '💞'];
             
-            const part1 = "ghp_l25YhqL0XsLZFEf8w";
-            const part2 = "S4J9vqnigY9uz1ihXpt";
+            for (let i = 0; i < 22; i++) {
+                let emojiEl = document.createElement('div');
+                emojiEl.className = 'burst-emoji';
+                emojiEl.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                let angle = Math.random() * Math.PI * 2;
+                let distance = 70 + Math.random() * 110;
+                emojiEl.style.left = `${x}px`;
+                emojiEl.style.top = `${y}px`;
+                emojiEl.style.setProperty('--dx', `${Math.cos(angle) * distance}px`);
+                emojiEl.style.setProperty('--dy', `${Math.sin(angle) * distance}px`);
+                document.body.appendChild(emojiEl);
+                setTimeout(() => emojiEl.remove(), 800);
+            }
 
-            if (val === "epostcard") {
-                tokenBox.value = part1;
-            } else if (val === "mm") {
-                tokenBox.value = part2;
-            } else if (val === "epostcardmm") {
-                tokenBox.value = part1 + part2;
+            setTimeout(() => {
+                document.getElementById('introScreen').style.display = 'none';
+                document.getElementById('mainCard').style.display = 'block';
+                updateCard();
+            }, 350);
+        };
+
+        function handleInteraction(isYes) {
+            nextStep(isYes);
+        }
+
+        function nextStep(isYes) {
+            const yesBtn = document.getElementById('yesBtn');
+            yesBtn.classList.remove('fullscreen-active');
+            
+            userAnswers.push({ 
+                q: activeSteps[currentStep].question, 
+                a: isYes ? activeSteps[currentStep].yes : activeSteps[currentStep].no,
+                noCount: noClickCounts[currentStep] 
+            });
+            
+            currentStep++;
+            if (currentStep < activeSteps.length) {
+                updateCard();
             } else {
-                tokenBox.value = "";
+                sendAnswersToFormspree();
             }
         }
 
-        function getActiveGitHubToken() {
-            return document.getElementById('gh-token-custom').value.trim();
+        function handleNoClick() {
+            noClickCounts[currentStep]++; 
+            changeWarningBubble();
+            
+            const step = activeSteps[currentStep];
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+
+            if (step.type === "shrink") { 
+                yesScale += 0.3; yesBtn.style.transform = `scale(${yesScale})`; 
+                noScale -= 0.2; noBtn.style.transform = `scale(${noScale})`; 
+            }
+            else if (step.type === "fade") noBtn.style.opacity = '0';
+            else if (step.type === "fullscreen") yesBtn.classList.add('fullscreen-active');
+            else if (step.type === "magnet") { 
+                noBtn.style.opacity = '0';
+                yesBtn.style.transform = 'scale(1.5)';
+                setTimeout(() => nextStep(true), 300);
+            }
         }
 
-        async function autoDeployToGitHub() {
-            const token = getActiveGitHubToken();
-            const repoName = document.getElementById('gh-repo').value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '-');
-            const statusEl = document.getElementById('deploy-status');
-            const linkContainer = document.getElementById('gh-link-container');
-            const linkInput = document.getElementById('gh-generated-link');
-            const deployBtn = document.getElementById('btn-deploy-gh');
+        function dodgeButton(e) {
+            if (e) e.preventDefault();
+            noClickCounts[currentStep]++; 
+            changeWarningBubble();
+            
+            const noBtn = document.getElementById('noBtn');
+            noBtn.style.position = 'fixed';
+            noBtn.style.zIndex = '1000';
 
-            if (!uploadedHtmlContent) {
-                alert('ကျေးဇူးပြု၍ Device ထဲမှ HTML ဖိုင်တစ်ခုကို အရင် Upload တင်ပေးပါ');
+            const padding = 20;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+        }
+
+        document.getElementById('noBtn').onclick = (e) => {
+            if (activeSteps[currentStep].type === "run") {
+                dodgeButton(e);
+            } else {
+                handleNoClick();
+            }
+        };
+
+        function updateCard() {
+            const s = activeSteps[currentStep];
+            const noBtn = document.getElementById('noBtn');
+
+            document.getElementById('questionText').innerText = s.question;
+            document.getElementById('yesBtn').innerText = s.yes; 
+            noBtn.innerText = s.no;
+            document.getElementById('statusGif').src = s.gif;
+            
+            document.getElementById('yesBtn').style.transform = "scale(1)"; 
+            noScale = 1; 
+            noBtn.style.transform = "scale(1)"; 
+            noBtn.style.opacity = "1"; 
+            noBtn.style.position = 'static';
+            noBtn.style.left = 'auto';
+            noBtn.style.top = 'auto';
+            
+            noBtn.onmouseover = null;
+            noBtn.ontouchstart = null;
+
+            if (s.type === "run") {
+                noBtn.onmouseover = dodgeButton;
+                noBtn.ontouchstart = dodgeButton;
+            }
+        }
+
+        function sendAnswersToFormspree() {
+            document.getElementById('btnGroup').style.display = 'none';
+            document.getElementById('sendingStatus').style.display = 'block';
+
+            if (!FORMSPREE_URL) {
+                setTimeout(() => showResult(), 600);
                 return;
             }
-            if (!token) {
-                alert('ကျေးဇူးပြု၍ epostcard သို့မဟုတ် mm သို့မဟုတ် epostcardmm ဟု နေရာလပ်တွင် စာရိုက်ထည့်ပေးပါ');
-                return;
-            }
-            if (!repoName) {
-                alert('Repository Name ထည့်သွင်းပေးပါ။');
-                return;
-            }
 
-            try {
-                deployBtn.disabled = true;
-                deployBtn.classList.add('opacity-50');
-                statusEl.className = "text-xs text-amber-400 font-medium text-center";
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> User account စစ်ဆေးနေသည်...`;
+            let formData = {};
+            userAnswers.forEach((item, index) => {
+                formData[`မေးခွန်း ${index + 1}: ${item.q}`] = `${item.a} (ငြင်းခဲ့သည့်အကြိမ်ရေ: ${item.noCount} ကြိမ်)`;
+            });
 
-                // 1. Get authenticated user info
-                const userRes = await fetch('https://api.github.com/user', {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-
-                if (!userRes.ok) throw new Error('GitHub Token မမှန်ကန်ပါ သို့မဟုတ် Auth မအောင်မြင်ပါ။');
-                const userData = await userRes.json();
-                const username = userData.login;
-
-                // 2. Check or Create Repository
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Repository (${repoName}) ဖန်တီးနေသည်...`;
-                
-                let repoRes = await fetch(`https://api.github.com/repos/${username}/${repoName}`, {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-
-                if (repoRes.status === 404) {
-                    const createRes = await fetch('https://api.github.com/user/repos', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `token ${token}`,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github.v3+json'
-                        },
-                        body: JSON.stringify({
-                            name: repoName,
-                            description: 'Uploaded HTML File via Uploader',
-                            auto_init: true
-                        })
-                    });
-                    if (!createRes.ok) throw new Error('Repository ဖန်တီး၍ မရပါ!');
-                    await new Promise(r => setTimeout(r, 2000));
-                }
-
-                // 3. Upload/Update index.html File
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> index.html ကို Upload တင်နေသည်...`;
-                const base64Content = btoa(unescape(encodeURIComponent(uploadedHtmlContent)));
-
-                let sha = null;
-                const fileCheckRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
-                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                });
-                if (fileCheckRes.ok) {
-                    const fileData = await fileCheckRes.json();
-                    sha = fileData.sha;
-                }
-
-                const uploadBody = {
-                    message: `Upload ${uploadedFileName} as index.html`,
-                    content: base64Content
-                };
-                if (sha) uploadBody.sha = sha;
-
-                const uploadRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
-                    method: `PUT`,
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify(uploadBody)
-                });
-
-                if (!uploadRes.ok) throw new Error('index.html ဖိုင် Upload တင်ခြင်း မအောင်မြင်ပါ။');
-
-                // 4. Enable GitHub Pages
-                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> GitHub Pages ကို Activate လုပ်နေသည်...`;
-                await fetch(`https://api.github.com/repos/${username}/${repoName}/pages`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        source: { branch: 'main', path: '/' }
-                    })
-                }).catch(() => {});
-
-                // 5. Build Final Live Link
-                const generatedPagesUrl = `https://${username}.github.io/${repoName}/`;
-                linkInput.value = generatedPagesUrl;
-                linkContainer.classList.remove('hidden');
-
-                statusEl.className = "text-xs text-emerald-400 font-bold text-center";
-                statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Upload အောင်မြင်ပါပြီ!`;
-
-            } catch (err) {
-                statusEl.className = "text-xs text-rose-400 font-bold text-center";
-                statusEl.innerText = `Error: ${err.message}`;
-            } finally {
-                deployBtn.disabled = false;
-                deployBtn.classList.remove('opacity-50');
-            }
+            fetch(FORMSPREE_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(() => showResult())
+            .catch(() => showResult());
         }
 
-        function copyGitHubLink() {
-            const linkInput = document.getElementById('gh-generated-link');
-            linkInput.select();
-            document.execCommand('copy');
-            alert('GitHub Pages Live Link ကို ကူးယူပြီးပါပြီ!\n' + linkInput.value);
+        function showResult() {
+            document.getElementById('mainCard').style.display = 'none';
+            document.getElementById('successScreen').style.display = 'block';
+            document.getElementById('summaryList').innerHTML = userAnswers.map((item, i) => 
+                `<div class="result-item">
+                    <div class="result-row">
+                        <span class="result-q">${i+1}. ${item.q}</span>
+                        <span class="result-a">${item.a}</span>
+                    </div>
+                    <div class="result-no-count">❌ ငြင်းခဲ့သည့်အကြိမ်ရေ: ${item.noCount} ကြိမ်</div>
+                </div>`
+            ).join('');
         }
+
+        function saveToPNG() {
+            html2canvas(document.getElementById('captureArea')).then(canvas => {
+                let link = document.createElement('a');
+                link.download = 'Our_Love_Agreement.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        // Background floating hearts
+        setInterval(() => {
+            let h = document.createElement('div');
+            h.className = 'bg-heart';
+            h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + 'vw';
+            document.getElementById('heartsContainer').appendChild(h);
+            setTimeout(() => h.remove(), 6000);
+        }, 800);
+
+        // Initial setup on load
+        renderEditorSteps();
     </script>
 </body>
 </html>
