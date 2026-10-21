@@ -1,968 +1,273 @@
 <!DOCTYPE html>
-<html lang="my">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Love & Wish Card Studio Pro</title>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Padauk:wght@400;700&family=Pyidaungsu:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tailwind CSS -->
+    <title>HTML Uploader & GitHub Auto Deploy</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            font-family: 'Pyidaungsu', 'Padauk', sans-serif;
-        }
-
-        .preview-bg {
-            background-size: 400% 400%;
-            animation: gradientBG 12s ease infinite;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .interactive-card {
-            padding: 30px 20px;
-            border-radius: 28px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.6);
-            text-align: center;
-            width: 100%;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 2px solid rgba(255, 255, 255, 0.85);
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .env-glass { background: rgba(255, 255, 255, 0.82); color: #be123c; }
-        .env-romantic-red { background: linear-gradient(135deg, rgba(225, 29, 72, 0.9), rgba(159, 18, 57, 0.95)); color: #ffffff; border-color: rgba(254, 205, 211, 0.5); }
-        .env-pastel-pink { background: rgba(252, 231, 243, 0.92); color: #9d174d; border-color: rgba(244, 114, 182, 0.6); }
-        .env-classic-gold { background: linear-gradient(135deg, rgba(254, 243, 199, 0.92), rgba(253, 230, 138, 0.95)); color: #78350f; border-color: rgba(245, 158, 11, 0.5); }
-        .env-dark-velvet { background: linear-gradient(135deg, rgba(30, 27, 75, 0.92), rgba(15, 23, 42, 0.95)); color: #f43f5e; border-color: rgba(244, 63, 94, 0.4); }
-
-        .step-view {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            gap: 18px;
-            animation: fadeIn 0.4s ease-in-out forwards;
-        }
-
-        .step-view.active { display: flex; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        img.gif-box {
-            width: 170px;
-            height: 170px;
-            object-fit: cover;
-            border-radius: 22px;
-            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2);
-            border: 4px solid rgba(255, 255, 255, 0.9);
-        }
-
-        .btn-custom-yes {
-            font-weight: 800;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border: none;
-            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.4);
-            padding: 12px 28px;
-            user-select: none;
-            z-index: 5;
-        }
-        .btn-custom-yes:hover { transform: translateY(-2px) scale(1.05); }
-
-        .btn-custom-no {
-            font-weight: 800;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            border: none;
-            box-shadow: 0 8px 25px rgba(106, 17, 203, 0.4);
-            padding: 12px 28px;
-            user-select: none;
-            z-index: 5;
-        }
-
-        .btn-no-wrapper-preview {
-            position: relative;
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .popup-warning-preview {
-            position: absolute;
-            bottom: 115%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 228, 230, 0.95);
-            color: #e11d48;
-            border: 2px solid #f43f5e;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.82rem;
-            font-weight: 700;
-            white-space: nowrap;
-            box-shadow: 0 6px 18px rgba(225, 29, 72, 0.25);
-            z-index: 10000;
-            pointer-events: none;
-            backdrop-filter: blur(4px);
-            animation: popupBounce 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .popup-warning-preview::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border-width: 6px;
-            border-style: solid;
-            border-color: #f43f5e transparent transparent transparent;
-        }
-
-        @keyframes popupBounce {
-            0% { opacity: 0; transform: translate(-50%, 10px) scale(0.8); }
-            100% { opacity: 1; transform: translate(-50%, 0) scale(1); }
-        }
-
-        .escaped-btn-card {
-            position: relative !important;
-            transition: transform 0.2s ease-in-out, left 0.2s ease-in-out, top 0.2s ease-in-out;
-        }
-
-        @keyframes orbitAnimation {
-            0% { transform: rotate(0deg) translateX(70px) rotate(0deg); }
-            100% { transform: rotate(360deg) translateX(70px) rotate(-360deg); }
-        }
-        .orbiting-btn { animation: orbitAnimation 2.2s linear infinite; }
-
-        @keyframes gravityFallAnim {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(600px) rotate(180deg); opacity: 0; }
-        }
-        .falling-btn { animation: gravityFallAnim 1.2s ease-in forwards !important; }
-
-        .split-letter-particle {
-            position: absolute;
-            font-weight: 900;
-            color: #ec4899;
-            font-size: 1.5rem;
-            pointer-events: none;
-            z-index: 10000;
-            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .falling-envelope-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            padding: 15px;
-            user-select: none;
-            animation: fallAndSway 3.2s cubic-bezier(0.25, 1, 0.5, 1) forwards, floatGentle 2.6s ease-in-out infinite 3.2s;
-        }
-
-        @keyframes fallAndSway {
-            0% { transform: translateY(-240px) rotate(-18deg); opacity: 0; }
-            30% { transform: translateY(-100px) rotate(14deg); opacity: 1; }
-            60% { transform: translateY(15px) rotate(-10deg); }
-            85% { transform: translateY(-6px) rotate(6deg); }
-            100% { transform: translateY(0px) rotate(0deg); opacity: 1; }
-        }
-
-        @keyframes floatGentle {
-            0%, 100% { transform: translateY(0px) rotate(-4deg); }
-            50% { transform: translateY(-12px) rotate(4deg); }
-        }
-
-        .no-frame-gif {
-            width: 190px;
-            height: auto;
-            background: transparent !important;
-            filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.2));
-            transition: transform 0.3s ease;
-        }
-
-        .falling-envelope-container:hover .no-frame-gif { transform: scale(1.08); }
-
-        .tap-hint-badge {
-            margin-top: 14px;
-            background: rgba(255, 255, 255, 0.92);
-            color: #be123c;
-            font-weight: 700;
-            font-size: 0.95rem;
-            padding: 7px 18px;
-            border-radius: 30px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-            border: 1.5px solid rgba(255, 255, 255, 0.9);
-            animation: pulseHint 1.6s infinite ease-in-out;
-        }
-
-        @keyframes pulseHint {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; }
-        }
-
-        .paper-letter-pop {
-            animation: popInLetter 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes popInLetter {
-            0% { opacity: 0; transform: scale(0.3) rotate(-12deg); }
-            70% { transform: scale(1.03) rotate(-2deg); }
-            100% { opacity: 1; transform: scale(1) rotate(-2deg); }
-        }
-
-        .paper-sheet {
-            position: relative;
-            width: 100%;
-            padding: 28px 20px 24px 20px;
-            border-radius: 16px;
-            box-shadow: -8px 15px 35px rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .paper-classic { background-color: rgba(255, 253, 248, 0.97); color: #2b2b2b; }
-        .paper-classic .paper-title { color: #b91c1c; border-bottom: 2px dashed #fca5a5; }
-        .paper-classic .paper-sig { color: #9f1239; }
-
-        .paper-rose { background-color: rgba(255, 241, 242, 0.97); color: #881337; }
-        .paper-rose .paper-title { color: #be123c; border-bottom: 2px dashed #fda4af; }
-        .paper-rose .paper-sig { color: #e11d48; }
-
-        .paper-vintage { background-color: rgba(254, 243, 199, 0.97); color: #451a03; border-color: #fde68a; }
-        .paper-vintage .paper-title { color: #78350f; border-bottom: 2px dashed #fcd34d; }
-        .paper-vintage .paper-sig { color: #92400e; }
-
-        .paper-grid { background-color: rgba(255, 255, 255, 0.97); color: #1e293b; background-image: linear-gradient(#e2e8f0 1px, transparent 1px), linear-gradient(90deg, #e2e8f0 1px, transparent 1px); background-size: 16px 16px; }
-        .paper-grid .paper-title { color: #0284c7; border-bottom: 2px dashed #38bdf8; }
-        .paper-grid .paper-sig { color: #0369a1; }
-
-        .paper-dark { background-color: rgba(15, 23, 42, 0.96); color: #f1f5f9; border-color: #334155; }
-        .paper-dark .paper-title { color: #fb7185; border-bottom: 2px dashed #f43f5e; }
-        .paper-dark .paper-sig { color: #fda4af; }
-
-        .paperclip {
-            position: absolute;
-            top: 10px;
-            right: 24px;
-            width: 16px;
-            height: 40px;
-            border: 3px solid #4a4a4a;
-            border-radius: 12px;
-            z-index: 6;
-            transform: rotate(8deg);
-            box-shadow: 2px 3px 5px rgba(0, 0, 0, 0.25);
-        }
-
-        .gif-thumb {
-            width: 48px; height: 48px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s; flex-shrink: 0;
-        }
-        .gif-thumb:hover, .gif-thumb.selected { border-color: #ec4899; transform: scale(1.08); box-shadow: 0 4px 10px rgba(236, 72, 153, 0.4); }
-
-        .env-thumb {
-            width: 60px; height: 60px; object-fit: contain; background: rgba(255, 255, 255, 0.1); border-radius: 10px; cursor: pointer; border: 2px solid transparent; padding: 4px; transition: all 0.2s;
-        }
-        .env-thumb:hover, .env-thumb.selected { border-color: #ec4899; transform: scale(1.06); background: rgba(255, 255, 255, 0.2); }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body { font-family: 'Poppins', sans-serif; background: #0f172a; color: #f8fafc; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+        ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 4px; }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-800 min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 bg-slate-950">
 
-    <!-- LEFT SIDEBAR: CUSTOMIZER / APP BUILDER CONTROLS -->
-    <div class="w-full md:w-1/2 lg:w-5/12 bg-slate-900 text-slate-100 p-4 md:p-6 flex flex-col h-auto md:h-screen overflow-y-auto border-r border-slate-800 shadow-2xl z-20">
+    <div class="max-w-xl w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 backdrop-blur-md">
         
-        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-800">
-            <div class="flex items-center space-x-3">
-                <div class="p-2.5 bg-gradient-to-tr from-pink-500 to-rose-600 rounded-2xl text-white shadow-lg shadow-pink-500/30">
-                    <i class="fa-solid fa-heart-circle-bolt text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg text-white leading-tight">Love Surprise & Wish Studio</h1>
-                    <p class="text-xs text-pink-400">Step တစ်ခုချင်းစီနှင့် ချက်တင်ကတ်ပြားများကို စိတ်ကြိုက်ပြင်ပါ</p>
-                </div>
+        <!-- Header -->
+        <div class="text-center space-y-2 border-b border-slate-800 pb-4">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 text-xl mb-1 border border-emerald-500/30">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
             </div>
-            
-            <button onclick="exportHTML()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl text-xs font-bold shadow-lg transition flex items-center gap-1.5">
-                <i class="fa-solid fa-download"></i> App / HTML ယူမည်
-            </button>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
+                HTML File Uploader & Live Link Generator
+            </h1>
+            <p class="text-xs text-slate-400">Device ထဲက HTML ဖိုင်ကို Upload တင်ပြီး GitHub Pages Live Link အလိုအလျောက် ထုတ်ယူပါ</p>
         </div>
 
-        <!-- Tab Controls -->
-        <div class="flex gap-1 mb-4 p-1 bg-slate-800/80 rounded-xl border border-slate-700/60 overflow-x-auto">
-            <button onclick="switchTab('content')" id="tab-btn-content" class="flex-1 py-2 px-2 text-[11px] font-bold rounded-lg transition bg-pink-600 text-white shadow whitespace-nowrap">Steps</button>
-            <button onclick="switchTab('buttons')" id="tab-btn-buttons" class="flex-1 py-2 px-2 text-[11px] font-bold rounded-lg transition text-slate-400 hover:text-white whitespace-nowrap">Buttons</button>
-            <button onclick="switchTab('design')" id="tab-btn-design" class="flex-1 py-2 px-2 text-[11px] font-bold rounded-lg transition text-slate-400 hover:text-white whitespace-nowrap">Design</button>
-            <button onclick="switchTab('settings')" id="tab-btn-settings" class="flex-1 py-2 px-2 text-[11px] font-bold rounded-lg transition text-slate-400 hover:text-white whitespace-nowrap">Settings</button>
-        </div>
-
-        <!-- TAB CONTENT 1: STEPS -->
-        <div id="tab-content" class="space-y-4">
-            <div class="bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
-                <div class="flex justify-between items-center mb-2">
-                    <label class="text-xs font-semibold text-slate-300">
-                        <i class="fa-solid fa-eye text-pink-400 mr-1"></i> Preview တွင် စမ်းကြည့်ရန်:
-                    </label>
-                    <button onclick="addNewStep()" class="px-2 py-1 bg-pink-600 hover:bg-pink-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1">
-                        <i class="fa-solid fa-plus text-[10px]"></i> Step အသစ်
-                    </button>
+        <!-- Step 1: Upload HTML File -->
+        <div class="space-y-3">
+            <label class="block text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                📁 1. Select HTML File from Device
+            </label>
+            <div class="border-2 border-dashed border-slate-700 hover:border-emerald-500/50 rounded-2xl p-6 text-center bg-slate-950/50 transition cursor-pointer relative group">
+                <input type="file" accept=".html,.htm" onchange="handleHtmlFileUpload(this)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10">
+                <div class="space-y-2 pointer-events-none">
+                    <i class="fa-solid fa-file-code text-3xl text-emerald-400 group-hover:scale-110 transition"></i>
+                    <p class="text-xs text-slate-300 font-medium">Click to browse or drag & drop your .html file here</p>
+                    <p class="text-[10px] text-slate-500">Supports standalone HTML files</p>
                 </div>
-                <div class="flex gap-1.5 overflow-x-auto pb-1" id="step-nav-bar"></div>
             </div>
 
-            <div id="steps-container" class="space-y-4"></div>
-
-            <!-- LOVE LETTER CONFIG -->
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3 mt-4">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-envelope-open-text"></i> အဆုံးသတ် ချစ်စာလွှာ (Love Letter)
-                </h3>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">ခေါင်းစဉ် (Title)</label>
-                    <input type="text" id="cfg-letter-title" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+            <div id="file-status-box" class="hidden bg-emerald-950/40 border border-emerald-500/30 rounded-xl p-3 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                    <span id="file-status-text" class="text-xs text-emerald-200 font-medium truncate">No file selected</span>
                 </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">စာပိုဒ် ၁</label>
-                    <textarea id="cfg-letter-p1" rows="2" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">စာပိုဒ် ၂</label>
-                    <textarea id="cfg-letter-p2" rows="2" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">စာပိုဒ် ၃</label>
-                    <textarea id="cfg-letter-p3" rows="2" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200"></textarea>
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">လက်မှတ် (Signature)</label>
-                    <input type="text" id="cfg-letter-sig" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
-                </div>
+                <span class="text-[10px] bg-emerald-900/60 text-emerald-300 px-2 py-0.5 rounded font-mono">Ready</span>
             </div>
         </div>
 
-        <!-- TAB CONTENT 2: BUTTONS -->
-        <div id="tab-buttons" class="space-y-4 hidden">
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2"><i class="fa-solid fa-thumbs-up"></i> Default "YES" ခလုတ်</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block text-xs text-slate-400 mb-1">စာသား</label><input type="text" id="cfg-yes-text" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" value="Yes"></div>
-                    <div><label class="block text-xs text-slate-400 mb-1">Font Size (px)</label><input type="number" id="cfg-yes-fontsize" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" value="18"></div>
+        <!-- Step 2: GitHub Config -->
+        <div class="space-y-3 border-t border-slate-800 pt-4">
+            <label class="block text-xs font-bold text-teal-300 uppercase tracking-wider">
+                ⚙️ 2. GitHub Deployment Settings
+            </label>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="space-y-1">
+                    <label class="block text-[11px] text-slate-400">Keyword Box (epostcard / mm):</label>
+                    <input type="text" id="gh-keyword-input" oninput="onKeywordInputChange()" placeholder="စာရိုက်ပါ (e.g. epostcardmm)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-300 font-bold focus:outline-none focus:border-emerald-500">
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block text-xs text-slate-400 mb-1">ခလုတ်အရောင်</label><input type="color" id="cfg-yes-bg" oninput="updateConfig()" class="w-full h-9 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer" value="#ff416c"></div>
-                    <div><label class="block text-xs text-slate-400 mb-1">စာသားအရောင်</label><input type="color" id="cfg-yes-color" oninput="updateConfig()" class="w-full h-9 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer" value="#ffffff"></div>
-                </div>
-            </div>
-
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-rose-400 flex items-center gap-2"><i class="fa-solid fa-thumbs-down"></i> Default "NO" ခလုတ်</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block text-xs text-slate-400 mb-1">စာသား</label><input type="text" id="cfg-no-text" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" value="No"></div>
-                    <div><label class="block text-xs text-slate-400 mb-1">Font Size (px)</label><input type="number" id="cfg-no-fontsize" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" value="18"></div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div><label class="block text-xs text-slate-400 mb-1">ခလုတ်အရောင်</label><input type="color" id="cfg-no-bg" oninput="updateConfig()" class="w-full h-9 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer" value="#6a11cb"></div>
-                    <div><label class="block text-xs text-slate-400 mb-1">စာသားအရောင်</label><input type="color" id="cfg-no-color" oninput="updateConfig()" class="w-full h-9 bg-slate-900 border border-slate-700 rounded-xl p-1 cursor-pointer" value="#ffffff"></div>
-                </div>
-            </div>
-
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-amber-400 flex items-center gap-2"><i class="fa-solid fa-font"></i> မေးခွန်း Font Size</h3>
-                <div class="flex items-center gap-3">
-                    <input type="range" id="cfg-question-fontsize" min="14" max="32" value="20" oninput="updateConfig()" class="w-full accent-pink-500">
-                    <span id="cfg-question-fontsize-val" class="text-xs font-bold text-pink-400 w-8">20px</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB CONTENT 3: DESIGN -->
-        <div id="tab-design" class="space-y-4 hidden">
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2"><i class="fa-solid fa-gift"></i> Falling Envelope / Bouquet Image</h3>
-                <div class="flex gap-2 flex-wrap items-center">
-                    <img src="https://i.ibb.co/JWycnnh9/pngegg.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/JWycnnh9/pngegg.png', this)">
-                    <img src="https://i.ibb.co/8DvMS7jx/Bouquet-2.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/8DvMS7jx/Bouquet-2.png', this)">
-                    <img src="https://i.ibb.co/wFdWQPkx/Bouquet-3.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/wFdWQPkx/Bouquet-3.png', this)">
-                    <img src="https://i.ibb.co/pvzHgNLR/Bouquet.png" class="env-thumb" onclick="setEnvelopeImg('https://i.ibb.co/pvzHgNLR/Bouquet.png', this)">
-                </div>
-                <div><label class="block text-xs text-slate-400 mb-1 mt-2">Custom Image Link</label><input type="text" id="cfg-envelope-img" oninput="updateEnvelopeCustomImg()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" value="https://i.ibb.co/JWycnnh9/pngegg.png"></div>
-            </div>
-
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2"><i class="fa-solid fa-envelope"></i> Card Frame Design</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setCardStyle('env-glass')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-white/80 border">✨ Glassmorphic</button>
-                    <button onclick="setCardStyle('env-romantic-red')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-rose-600 border">❤️ Romantic Red</button>
-                    <button onclick="setCardStyle('env-pastel-pink')" class="p-2.5 rounded-xl text-xs font-bold text-pink-900 bg-pink-200 border">🌸 Pastel Pink</button>
-                    <button onclick="setCardStyle('env-classic-gold')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-amber-200 border">👑 Classic Gold</button>
-                </div>
-            </div>
-
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2"><i class="fa-solid fa-scroll"></i> Letter Paper Design</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setPaperStyle('paper-classic')" class="p-2.5 rounded-xl text-xs font-bold text-slate-800 bg-amber-50 border">📜 Classic Cream</button>
-                    <button onclick="setPaperStyle('paper-rose')" class="p-2.5 rounded-xl text-xs font-bold text-rose-800 bg-rose-100 border">🌹 Soft Rose</button>
-                    <button onclick="setPaperStyle('paper-vintage')" class="p-2.5 rounded-xl text-xs font-bold text-amber-900 bg-yellow-100 border">🏷️ Vintage Gold</button>
-                    <button onclick="setPaperStyle('paper-grid')" class="p-2.5 rounded-xl text-xs font-bold text-sky-900 bg-white border">📐 Love Grid</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB CONTENT 4: SETTINGS -->
-        <div id="tab-settings" class="space-y-4 hidden">
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2"><i class="fa-solid fa-paper-plane"></i> Formspree / Webhook Link</h3>
-                <input type="text" id="cfg-formspree-url" placeholder="https://formspree.io/f/your_form_id" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
-            </div>
-
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> 'No' ခလုတ် သတိပေးစာသားများ</h3>
-                <textarea id="cfg-warnings" rows="4" oninput="updateConfig()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200"></textarea>
-            </div>
-
-            <div class="bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                <h3 class="text-sm font-bold text-pink-400 flex items-center gap-2"><i class="fa-solid fa-palette"></i> Background Gradient</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <button onclick="setTheme('romantic')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-pink-500 via-rose-400 to-amber-300">Romantic Pink</button>
-                    <button onclick="setTheme('purple')" class="p-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-400">Sweet Purple</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-auto pt-4 text-center text-xs text-slate-500 border-t border-slate-800">
-            Preview ထဲတွင် တိုက်ရိုက် စမ်းသပ်နိုင်ပါသည်။
-        </div>
-    </div>
-
-    <!-- RIGHT DISPLAY: LIVE PREVIEW PANEL -->
-    <div class="w-full md:w-1/2 lg:w-7/12 min-h-[550px] md:h-screen flex flex-col bg-slate-950 relative overflow-hidden">
-        <div class="bg-slate-900/95 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between z-30">
-            <div class="flex items-center space-x-2">
-                <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
-                <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
-                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
-                <span class="text-xs font-mono text-slate-400 ml-2">App Live Preview</span>
-            </div>
-
-            <div class="flex items-center gap-2">
-                <button id="mode-test-btn" onclick="toggleTestMode(true)" class="px-3 py-1 rounded-lg text-xs font-bold bg-pink-600 text-white shadow">
-                    <i class="fa-solid fa-play text-[10px] mr-1"></i> စမ်းသပ်ရန်
-                </button>
-                <button id="mode-edit-btn" onclick="toggleTestMode(false)" class="px-3 py-1 rounded-lg text-xs font-bold bg-slate-800 text-slate-400">
-                    <i class="fa-solid fa-rotate-left text-[10px] mr-1"></i> Reset View
-                </button>
-            </div>
-        </div>
-
-        <div id="preview-body" class="preview-bg flex-1 flex justify-center items-center p-4 relative overflow-hidden transition-all duration-500" style="background: linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb);">
-            <div class="w-full max-w-[440px] min-h-[500px] flex justify-center items-center relative z-10" id="preview-card-holder"></div>
-        </div>
-    </div>
-
-    <!-- CODE EXPORT & GITHUB PUBLISH MODAL -->
-    <div id="export-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex justify-center items-center p-4 z-50 hidden overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl p-6 space-y-4 shadow-2xl text-slate-100 my-auto">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                <h3 class="font-bold text-lg text-pink-400 flex items-center gap-2">
-                    <i class="fa-solid fa-code"></i> Standalone HTML Code & Auto Live Link
-                </h3>
-                <button onclick="closeExportModal()" class="text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="bg-slate-800/60 p-4 rounded-2xl border border-pink-500/30 space-y-3">
-                <div class="flex items-center justify-between">
-                    <h4 class="text-xs font-bold text-pink-300 flex items-center gap-1.5">
-                        <i class="fa-brands fa-github text-sm"></i> GitHub တွင် Auto Upload လုပ်ပြီး Live Link ထုတ်မည်
-                    </h4>
-                    <span class="text-[10px] bg-pink-950 text-pink-400 border border-pink-800 px-2 py-0.5 rounded-full font-mono">index.html auto generated</span>
-                </div>
-                <p class="text-xs text-slate-300">စာရိုက်ထည့်ရာနေရာတွင် <b>epostcard</b> သို့မဟုတ် <b>mm</b> သို့မဟုတ် <b>epostcardmm</b> ဟု ရိုက်ထည့်ပါ[cite: 1]:</p>
-
-                <div class="space-y-2 pt-1">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <div class="space-y-1">
-                            <label class="block text-[11px] text-slate-400">စာရိုက်ထည့်ရန် Box (epostcard / mm)[cite: 1]:</label>
-                            <input type="text" id="gh-keyword-input" oninput="onKeywordInputChange()" placeholder="စာရိုက်ပါ (e.g. epostcardmm)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-pink-300 font-bold focus:outline-none focus:border-pink-500">
-                        </div>
-                        <input type="text" id="gh-repo" placeholder="Repository Name" class="bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 self-end" value="my-love-surprise">
-                    </div>
-
-                    <div class="pt-1">
-                        <label class="block text-[11px] text-slate-400 mb-1">API Token (Hidden Box):</label>
-                        <input type="password" id="gh-token-custom" readonly placeholder="အထက်ပါနေရာတွင် စာရိုက်ပါက Token အလိုအလျောက် ပေါ်လာပါမည်" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-mono focus:outline-none">
-                    </div>
-
-                    <div class="flex flex-wrap gap-2 items-center justify-between pt-1">
-                        <button onclick="autoDeployToGitHub()" id="btn-deploy-gh" class="px-4 py-2 bg-gradient-to-r from-pink-500 to-rose-600 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> Auto Deploy & Get Link
-                        </button>
-                        <span id="deploy-status" class="text-xs text-amber-400 font-medium"></span>
-                    </div>
-
-                    <div id="gh-link-container" class="hidden pt-2">
-                        <label class="block text-[11px] font-bold text-emerald-400 mb-1">✨ သင့် Live Web Link ရရှိပါပြီ (GitHub Pages):</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="gh-generated-link" readonly class="flex-1 bg-slate-950 border border-emerald-500/50 rounded-xl px-3 py-2 text-xs font-mono text-emerald-300 select-all">
-                            <button onclick="copyGitHubLink()" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold flex items-center gap-1"><i class="fa-regular fa-copy"></i> Copy</button>
-                        </div>
-                    </div>
+                <div class="space-y-1">
+                    <label class="block text-[11px] text-slate-400">Repository Name:</label>
+                    <input type="text" id="gh-repo" value="my-html-page" placeholder="Repository Name" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500">
                 </div>
             </div>
 
             <div>
-                <p class="text-xs text-slate-400 mb-1">သို့မဟုတ် HTML ကုဒ်များကို ကူးယူသိမ်းဆည်းနိုင်ပါသည်[cite: 1]:</p>
-                <textarea id="export-code-area" rows="6" readonly class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 text-xs font-mono text-emerald-400 select-all"></textarea>
-            </div>
-
-            <div class="flex items-center justify-end gap-3 pt-1">
-                <button onclick="copyGeneratedCode()" class="px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-bold"><i class="fa-regular fa-copy"></i> Code ကူးယူမည်</button>
-                <button onclick="downloadHTMLFile()" class="px-5 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl text-xs font-bold shadow-lg"><i class="fa-solid fa-file-arrow-down"></i> Download index.html</button>
+                <label class="block text-[11px] text-slate-400 mb-1">API Token Status:</label>
+                <input type="password" id="gh-token-custom" readonly placeholder="အထက်ပါနေရာတွင် စာရိုက်ပါက Token အလိုအလျောက် တက်လာပါမည်" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-emerald-400 font-mono focus:outline-none">
             </div>
         </div>
+
+        <!-- Step 3: Action & Result -->
+        <div class="space-y-3 pt-2">
+            <div class="flex flex-wrap gap-2 items-center justify-between">
+                <button onclick="autoDeployToGitHub()" id="btn-deploy-gh" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl text-xs font-bold shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-sm"></i> Upload HTML & Get Live Link
+                </button>
+                <span id="deploy-status" class="text-xs text-amber-400 font-medium w-full text-center"></span>
+            </div>
+
+            <!-- Result Box -->
+            <div id="gh-link-container" class="hidden space-y-2 pt-2 border-t border-slate-800">
+                <label class="block text-[11px] font-bold text-emerald-400">✨ သင့် Live Web Link ရရှိပါပြီ (GitHub Pages):</label>
+                <div class="flex gap-2">
+                    <input type="text" id="gh-generated-link" readonly class="flex-1 bg-slate-950 border border-emerald-500/50 rounded-xl px-3 py-2 text-xs font-mono text-emerald-300 focus:outline-none select-all">
+                    <button onclick="copyGitHubLink()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                </div>
+                <p class="text-[10px] text-slate-400 text-center">Note: GitHub Pages ပထမဆုံးအကြိမ် တည်ဆောက်ချိန် ၁ မိနစ်မှ ၂ မိနစ်ခန့် ကြာမြင့်နိုင်ပါသည်။</p>
+            </div>
+        </div>
+
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
+    <!-- Scripts -->
     <script>
-        function onKeywordInputChange() {
-            const val = document.getElementById('gh-keyword-input').value.trim().toLowerCase();
-            const tokenBox = document.getElementById('gh-token-custom');
-            const part1 = "ghp_l25YhqL0XsLZFEf8w";
-            const part2 = "S4J9vqnigY9uz1ihXpt";
+        let uploadedHtmlContent = "";
+        let uploadedFileName = "";
 
-            if (val === "epostcard") tokenBox.value = part1;
-            else if (val === "mm") tokenBox.value = part2;
-            else if (val === "epostcardmm") tokenBox.value = part1 + part2;
-            else tokenBox.value = "";
-        }
-
-        function getActiveGitHubToken() { return document.getElementById('gh-token-custom').value.trim(); }
-
-        const presetGifs = [
-            "https://media.tenor.com/Zrr4L_Wd4JkAAAAi/bubu-rub-bubu-love-dudu.gif",
-            "https://media.tenor.com/nA5iSpAftHAAAAAi/bubu-dudu.gif",
-            "https://media.tenor.com/_YoesJxE1tYAAAAj/panda-%C3%B6p%C3%BCc%C3%BCk.gif",
-            "https://media.tenor.com/h7cPrBzb_JEAAAAi/bubu-dudu.gif",
-            "https://media.tenor.com/Lgr_6-nkvnUAAAAi/casal-dudu.gif"
-        ];
-
-        const behaviorOptions = [
-            { id: "fleeing", name: "1. The Fleeing Button (ထွက်ပြေးသွားသော ခလုတ်)" },
-            { id: "shrinking", name: "2. The Shrinking Button (သေးသွားသော ခလုတ်)" },
-            { id: "swap", name: "3. The Swap Places (နေရာချင်း လဲသွားခြင်း)" },
-            { id: "teleport", name: "4. Teleporting / Reappearing Trick" },
-            { id: "loading", name: "5. Fake Loading / Disabled State" },
-            { id: "orbiting", name: "6. Moving Target / Orbiting Button" },
-            { id: "guilttrip", name: "7. Guilt-Trip Text Change" },
-            { id: "popuptrap", name: "8. Pop-up / Modal Trap" },
-            { id: "gravity", name: "9. The Gravity Fall" },
-            { id: "split", name: "10. Dissecting / Split Button" }
-        ];
-
-        const appConfig = {
-            steps: [
-                { id: 1, text: "ပြန်ချစ်ပါတော့လား နွေးထွေးပေးချင်ပြီ… 💕", gif: presetGifs[0], behavior: "fleeing", yesText: "", noText: "" },
-                { id: 2, text: "တကယ် အမြဲတမ်း ချစ်ပေးမှာလား… 🥺", gif: presetGifs[1], behavior: "fleeing", yesText: "", noText: "" },
-                { id: 3, text: "တကယ်ကြီး အဖြေပြန်ပေးလိုက်တာလား? 💖", gif: presetGifs[2], behavior: "shrinking", yesText: "", noText: "" }
-            ],
-            yesText: "Yes", yesFontSize: "18", yesBg: "#ff416c", yesColor: "#ffffff",
-            noText: "No", noFontSize: "18", noBg: "#6a11cb", noColor: "#ffffff",
-            questionFontSize: "20",
-            letterTitle: "💌 ချစ်ရပါသော… 💌",
-            letterP1: "ဒီကမ္ဘာပေါ်မှာ လူတွေအများကြီးရှိတဲ့ထဲကမှ မင်းနဲ့ဆုံတွေ့ခွင့်ရခဲ့တာဟာ ငါ့အတွက်တော့ အလှပဆုံးသော ကံကြမ္မာတစ်ခုပါပဲ။",
-            letterP2: "အမြဲတမ်း ပျော်ရွှင်အောင်ထားပေးမယ်လို့ ကတိမပေးနိုင်ရင်တောင်မှ မင်းဝမ်းနည်းတဲ့အခါတိုင်း အနားမှာ အမြဲရှိနေပေးမယ့်သူတစ်ယောက် ဖြစ်ပါရစေ။",
-            letterP3: "အမြဲတမ်း ချစ်နေမှာပါ… 🌹✨",
-            letterSig: "love you so much❤️",
-            envelopeImg: "https://i.ibb.co/JWycnnh9/pngegg.png",
-            cardStyle: "env-glass",
-            paperStyle: "paper-classic",
-            formspreeUrl: "",
-            warnings: ["⚠️ No နှိပ်လို့ မရပါဘူးနော်!", "⚠️ Yes ပဲ နှိပ်ပါ! 🥺", "⚠️ No ကို နှိပ်ခွင့် မရှိပါဘူး! 💖"],
-            bgGradient: "linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb)"
-        };
-
-        const themes = {
-            romantic: "linear-gradient(-45deg, #ff758c, #ff7eb3, #fa709a, #fee140, #a1c4fd, #c2e9fb)",
-            purple: "linear-gradient(-45deg, #8ec5fc, #e0c3fc, #fbc2eb, #a6c1ee)"
-        };
-
-        let currentActiveStepView = 1;
-
-        window.onload = function() {
-            renderStepsEditor();
-            document.getElementById('cfg-yes-text').value = appConfig.yesText;
-            document.getElementById('cfg-yes-fontsize').value = appConfig.yesFontSize;
-            document.getElementById('cfg-yes-bg').value = appConfig.yesBg;
-            document.getElementById('cfg-yes-color').value = appConfig.yesColor;
-            document.getElementById('cfg-no-text').value = appConfig.noText;
-            document.getElementById('cfg-no-fontsize').value = appConfig.noFontSize;
-            document.getElementById('cfg-no-bg').value = appConfig.noBg;
-            document.getElementById('cfg-no-color').value = appConfig.noColor;
-            document.getElementById('cfg-question-fontsize').value = appConfig.questionFontSize;
-            document.getElementById('cfg-question-fontsize-val').innerText = appConfig.questionFontSize + 'px';
-            document.getElementById('cfg-letter-title').value = appConfig.letterTitle;
-            document.getElementById('cfg-letter-p1').value = appConfig.letterP1;
-            document.getElementById('cfg-letter-p2').value = appConfig.letterP2;
-            document.getElementById('cfg-letter-p3').value = appConfig.letterP3;
-            document.getElementById('cfg-letter-sig').value = appConfig.letterSig;
-            document.getElementById('cfg-envelope-img').value = appConfig.envelopeImg;
-            document.getElementById('cfg-formspree-url').value = appConfig.formspreeUrl;
-            document.getElementById('cfg-warnings').value = appConfig.warnings.join('\n');
-            updateConfig();
-        };
-
-        function renderStepsEditor() {
-            const stepsContainer = document.getElementById('steps-container');
-            const stepNavBar = document.getElementById('step-nav-bar');
-            stepsContainer.innerHTML = '';
-            stepNavBar.innerHTML = '';
-
-            appConfig.steps.forEach((step, index) => {
-                const stepNum = index + 1;
-                const card = document.createElement('div');
-                card.className = "bg-slate-800/40 p-4 rounded-2xl border border-slate-700/60 space-y-3 relative";
-                card.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-700/60 pb-2">
-                        <h3 class="text-sm font-bold text-pink-400">Step ${stepNum} မေးခွန်း & ခလုတ်</h3>
-                        ${appConfig.steps.length > 2 ? `<button onclick="removeStep(${index})" class="text-xs text-rose-400 font-bold px-2 py-1 bg-rose-950/50 rounded-lg">ဖျက်မည်</button>` : ''}
-                    </div>
-                    <div><label class="block text-xs text-slate-400 mb-1">စာသား</label><input type="text" value="${step.text}" oninput="updateStepDataInline(${index}, 'text', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200"></div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div><label class="block text-xs text-emerald-400 mb-1">Yes စာသား</label><input type="text" value="${step.yesText}" placeholder="Default (Yes)" oninput="updateStepDataInline(${index}, 'yesText', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200"></div>
-                        <div><label class="block text-xs text-rose-400 mb-1">No စာသား</label><input type="text" value="${step.noText}" placeholder="Default (No)" oninput="updateStepDataInline(${index}, 'noText', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200"></div>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">No ခလုတ် ပြုမူပုံ ၁၀ မျိုး</label>
-                        <select onchange="updateStepDataInline(${index}, 'behavior', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-pink-300 font-bold">
-                            ${behaviorOptions.map(opt => `<option value="${opt.id}" ${step.behavior === opt.id ? 'selected' : ''}>${opt.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-400 mb-1">GIF ရွေးရန်</label>
-                        <div class="flex gap-1.5 overflow-x-auto pb-1 mb-2">
-                            ${presetGifs.map(gifUrl => `<img src="${gifUrl}" class="gif-thumb ${step.gif === gifUrl ? 'selected' : ''}" onclick="selectPresetGifForStep(${index}, '${gifUrl}', this)">`).join('')}
-                        </div>
-                        <input type="text" value="${step.gif}" oninput="updateStepDataInline(${index}, 'gif', this.value)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200" placeholder="Custom GIF URL">
-                    </div>
-                `;
-                stepsContainer.appendChild(card);
-
-                const navBtn = document.createElement('button');
-                navBtn.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition whitespace-nowrap ${currentActiveStepView === stepNum ? 'bg-pink-600 text-white shadow' : 'bg-slate-700 text-white'}`;
-                navBtn.innerText = `Step ${stepNum}`;
-                navBtn.onclick = () => previewStep(stepNum);
-                stepNavBar.appendChild(navBtn);
-            });
-
-            const bouquetNav = document.createElement('button');
-            bouquetNav.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition whitespace-nowrap ${currentActiveStepView === 'falling' ? 'bg-pink-600 text-white shadow' : 'bg-slate-700 text-white'}`;
-            bouquetNav.innerText = `Bouquet`;
-            bouquetNav.onclick = () => previewStep('falling');
-            stepNavBar.appendChild(bouquetNav);
-
-            const letterNav = document.createElement('button');
-            letterNav.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition whitespace-nowrap ${currentActiveStepView === 'letter' ? 'bg-pink-600 text-white shadow' : 'bg-slate-700 text-white'}`;
-            letterNav.innerText = `Letter`;
-            letterNav.onclick = () => previewStep('letter');
-            stepNavBar.appendChild(letterNav);
-
-            renderPreviewCardsDOM();
-        }
-
-        function selectPresetGifForStep(index, gifUrl, imgElement) {
-            appConfig.steps[index].gif = gifUrl;
-            imgElement.parentNode.querySelectorAll('.gif-thumb').forEach(el => el.classList.remove('selected'));
-            imgElement.classList.add('selected');
-            updateConfig();
-        }
-
-        function addNewStep() {
-            const nextIndex = appConfig.steps.length + 1;
-            appConfig.steps.push({ id: nextIndex, text: `မေးခွန်းအသစ် ${nextIndex}… 💕`, gif: presetGifs[nextIndex % presetGifs.length], behavior: "fleeing", yesText: "", noText: "" });
-            renderStepsEditor();
-            previewStep(nextIndex);
-        }
-
-        function removeStep(index) {
-            if (appConfig.steps.length <= 2) { alert("အနည်းဆုံး Step ၂ ခု ရှိရပါမည်!"); return; }
-            appConfig.steps.splice(index, 1);
-            renderStepsEditor();
-            previewStep(1);
-        }
-
-        function updateStepDataInline(index, key, val) { appConfig.steps[index][key] = val; updateConfig(); }
-
-        function switchTab(tabName) {
-            ['content', 'buttons', 'design', 'settings'].forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                document.getElementById(`tab-btn-${t}`).className = "flex-1 py-2 px-2 text-[11px] font-bold rounded-lg transition text-slate-400 hover:text-white whitespace-nowrap";
-            });
-            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-btn-${tabName}`).className = "flex-1 py-2 px-2 text-[11px] font-bold rounded-lg transition bg-pink-600 text-white shadow whitespace-nowrap";
-        }
-
-        function updateConfig() {
-            appConfig.yesText = document.getElementById('cfg-yes-text').value;
-            appConfig.yesFontSize = document.getElementById('cfg-yes-fontsize').value;
-            appConfig.yesBg = document.getElementById('cfg-yes-bg').value;
-            appConfig.yesColor = document.getElementById('cfg-yes-color').value;
-            appConfig.noText = document.getElementById('cfg-no-text').value;
-            appConfig.noFontSize = document.getElementById('cfg-no-fontsize').value;
-            appConfig.noBg = document.getElementById('cfg-no-bg').value;
-            appConfig.noColor = document.getElementById('cfg-no-color').value;
-            appConfig.questionFontSize = document.getElementById('cfg-question-fontsize').value;
-            document.getElementById('cfg-question-fontsize-val').innerText = appConfig.questionFontSize + 'px';
-            appConfig.letterTitle = document.getElementById('cfg-letter-title').value;
-            appConfig.letterP1 = document.getElementById('cfg-letter-p1').value;
-            appConfig.letterP2 = document.getElementById('cfg-letter-p2').value;
-            appConfig.letterP3 = document.getElementById('cfg-letter-p3').value;
-            appConfig.letterSig = document.getElementById('cfg-letter-sig').value;
-            appConfig.envelopeImg = document.getElementById('cfg-envelope-img').value;
-            appConfig.formspreeUrl = document.getElementById('cfg-formspree-url').value;
-            appConfig.warnings = document.getElementById('cfg-warnings').value.split('\n').filter(w => w.trim() !== '');
-            renderPreviewCardsDOM();
-        }
-
-        function renderPreviewCardsDOM() {
-            const cardHolder = document.getElementById('preview-card-holder');
-            cardHolder.innerHTML = '';
-
-            appConfig.steps.forEach((step, index) => {
-                const stepNum = index + 1;
-                const nextTarget = (stepNum === appConfig.steps.length) ? 'falling' : (stepNum + 1);
-                const card = document.createElement('div');
-                card.className = `interactive-card ${appConfig.cardStyle} step-view ${currentActiveStepView === stepNum ? 'active' : ''}`;
-                card.id = `prev-step-${stepNum}`;
-
-                const yesStyle = `background: ${appConfig.yesBg}; color: ${appConfig.yesColor}; font-size: ${appConfig.yesFontSize}px;`;
-                const noStyle = `background: ${appConfig.noBg}; color: ${appConfig.noColor}; font-size: ${appConfig.noFontSize}px;`;
-                const activeYesLabel = step.yesText ? step.yesText : appConfig.yesText;
-                const activeNoLabel = step.noText ? step.noText : appConfig.noText;
-
-                card.innerHTML = `
-                    <img class="gif-box" src="${step.gif}">
-                    <h2 class="font-bold leading-relaxed" style="font-size: ${appConfig.questionFontSize}px;">${step.text}</h2>
-                    <div class="flex items-center justify-center gap-4 w-full min-h-[90px] pt-2 relative">
-                        <button class="btn-custom-yes" style="${yesStyle}" onclick="handleYesClick('${nextTarget}')">${activeYesLabel}</button>
-                        <div class="btn-no-wrapper-preview" id="btn-no-wrapper-prev-${stepNum}">
-                            <button class="btn-custom-no ${step.behavior === 'orbiting' ? 'orbiting-btn' : ''}" style="${noStyle}" id="btn-no-prev-${stepNum}">${activeNoLabel}</button>
-                        </div>
-                    </div>
-                `;
-                cardHolder.appendChild(card);
-                setTimeout(() => attachBehaviorEvents(stepNum, step.behavior, nextTarget, activeYesLabel), 50);
-            });
-
-            const fallingCard = document.createElement('div');
-            fallingCard.className = `step-view w-full ${currentActiveStepView === 'falling' ? 'active' : ''}`;
-            fallingCard.id = `prev-step-falling`;
-            fallingCard.innerHTML = `
-                <div class="falling-envelope-container" onclick="openLetterPrev()">
-                    <img class="no-frame-gif" src="${appConfig.envelopeImg}">
-                    <div class="tap-hint-badge">✨ Tap to Open ✨</div>
-                </div>
-            `;
-            cardHolder.appendChild(fallingCard);
-
-            const letterCard = document.createElement('div');
-            letterCard.className = `step-view w-full ${currentActiveStepView === 'letter' ? 'active' : ''}`;
-            letterCard.id = `prev-step-letter`;
-            letterCard.innerHTML = `
-                <div class="w-full max-w-[380px] mx-auto p-2 flex justify-center items-center">
-                    <div class="paper-sheet ${appConfig.paperStyle} paper-letter-pop">
-                        <div class="paperclip"></div>
-                        <div class="text-sm leading-relaxed text-left">
-                            <div class="paper-title text-center text-lg font-bold mb-3 pb-2">${appConfig.letterTitle}</div>
-                            <p class="mb-2">${appConfig.letterP1}</p>
-                            <p class="mb-2">${appConfig.letterP2}</p>
-                            <p class="mb-2">${appConfig.letterP3}</p>
-                            <div class="paper-sig text-right font-bold text-sm mt-4">${appConfig.letterSig}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            cardHolder.appendChild(letterCard);
-        }
-
-        let stateNoScales = {}, stateGuiltIndices = {}, stateTeleportCounts = {};
-        function attachBehaviorEvents(stepNum, behavior, nextTarget, activeYesLabel) {
-            const noBtn = document.getElementById(`btn-no-prev-${stepNum}`);
-            const yesBtn = document.getElementById(`btn-yes-prev-${stepNum}`);
-            if (!noBtn) return;
-
-            const newNoBtn = noBtn.cloneNode(true);
-            noBtn.parentNode.replaceChild(newNoBtn, noBtn);
-
-            if (behavior === 'fleeing') {
-                newNoBtn.onclick = (e) => { e.preventDefault(); showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`); moveButtonInsideCard(newNoBtn); };
-            } else if (behavior === 'shrinking') {
-                stateNoScales[stepNum] = { yesScale: 1, noScale: 1 };
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    stateNoScales[stepNum].yesScale += 0.35; stateNoScales[stepNum].noScale -= 0.22;
-                    yesBtn.style.transform = `scale(${stateNoScales[stepNum].yesScale})`;
-                    if (stateNoScales[stepNum].noScale <= 0.1) newNoBtn.style.display = 'none';
-                    else newNoBtn.style.transform = `scale(${stateNoScales[stepNum].noScale})`;
+        function handleHtmlFileUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                uploadedFileName = file.name;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedHtmlContent = e.target.result;
+                    document.getElementById('file-status-text').innerText = `Loaded: ${uploadedFileName} (${(file.size/1024).toFixed(1)} KB)`;
+                    document.getElementById('file-status-box').classList.remove('hidden');
                 };
-            } else if (behavior === 'swap') {
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    const parent = yesBtn.parentNode;
-                    if (parent.children[0] === yesBtn) parent.appendChild(yesBtn);
-                    else parent.insertBefore(yesBtn, parent.children[0]);
-                };
-            } else if (behavior === 'teleport') {
-                stateTeleportCounts[stepNum] = 0;
-                const teleTexts = ["Are you sure?", "Think again!", "Really?", "Last chance!"];
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    stateTeleportCounts[stepNum]++;
-                    newNoBtn.innerText = teleTexts[stateTeleportCounts[stepNum] % teleTexts.length];
-                    moveButtonInsideCard(newNoBtn);
-                };
-            } else if (behavior === 'loading') {
-                newNoBtn.onclick = () => {
-                    newNoBtn.disabled = true;
-                    newNoBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Checking...`;
-                    setTimeout(() => {
-                        showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                        alert("Error 404: 'No' is not available!");
-                        newNoBtn.innerHTML = activeYesLabel; newNoBtn.disabled = false;
-                    }, 1200);
-                };
-            } else if (behavior === 'guilttrip') {
-                stateGuiltIndices[stepNum] = 0;
-                const guiltTexts = ["Are you sure?", "Really?", "Think of us!"];
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    let idx = stateGuiltIndices[stepNum];
-                    if (idx < guiltTexts.length) { newNoBtn.innerText = guiltTexts[idx]; stateGuiltIndices[stepNum]++; }
-                    else { newNoBtn.innerText = activeYesLabel; newNoBtn.style.background = appConfig.yesBg; newNoBtn.onclick = () => handleYesClick(nextTarget); }
-                };
-            } else if (behavior === 'popuptrap') {
-                newNoBtn.onclick = () => { alert("Alert 1: Really?"); alert("Alert 2: Are you sure?"); handleYesClick(nextTarget); };
-            } else if (behavior === 'gravity') {
-                newNoBtn.onclick = () => { showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`); newNoBtn.classList.add('falling-btn'); setTimeout(() => newNoBtn.style.display = 'none', 1200); };
-            } else if (behavior === 'split') {
-                newNoBtn.onclick = () => {
-                    showPopupWarningPrev(`btn-no-wrapper-prev-${stepNum}`);
-                    newNoBtn.style.opacity = '0';
-                    setTimeout(() => newNoBtn.style.display = 'none', 300);
-                };
+                reader.readAsText(file);
             }
         }
 
-        function moveButtonInsideCard(btnEl) {
-            if (!btnEl.classList.contains('escaped-btn-card')) btnEl.classList.add('escaped-btn-card');
-            btnEl.style.transform = `translate(${(Math.random() - 0.5) * 120}px, ${(Math.random() - 0.5) * 60}px)`;
+        function onKeywordInputChange() {
+            const val = document.getElementById('gh-keyword-input').value.trim().toLowerCase();
+            const tokenBox = document.getElementById('gh-token-custom');
+            
+            const part1 = "ghp_l25YhqL0XsLZFEf8w";
+            const part2 = "S4J9vqnigY9uz1ihXpt";
+
+            if (val === "epostcard") {
+                tokenBox.value = part1;
+            } else if (val === "mm") {
+                tokenBox.value = part2;
+            } else if (val === "epostcardmm") {
+                tokenBox.value = part1 + part2;
+            } else {
+                tokenBox.value = "";
+            }
         }
 
-        let popupTimerPrev;
-        function showPopupWarningPrev(wrapperId) {
-            const wrapper = document.getElementById(wrapperId);
-            if (!wrapper) return;
-            wrapper.querySelectorAll('.popup-warning-preview').forEach(el => el.remove());
-            const popup = document.createElement('div');
-            popup.className = 'popup-warning-preview';
-            popup.innerText = appConfig.warnings[Math.floor(Math.random() * appConfig.warnings.length)] || "⚠️ No နှိပ်လို့ မရပါဘူး!";
-            wrapper.appendChild(popup);
-            clearTimeout(popupTimerPrev);
-            popupTimerPrev = setTimeout(() => popup.remove(), 1200);
-        }
-
-        function setEnvelopeImg(url, el) {
-            appConfig.envelopeImg = url;
-            document.getElementById('cfg-envelope-img').value = url;
-            document.querySelectorAll('.env-thumb').forEach(e => e.classList.remove('selected'));
-            if(el) el.classList.add('selected');
-            updateConfig();
-        }
-        function updateEnvelopeCustomImg() { updateConfig(); }
-        function setCardStyle(cls) { appConfig.cardStyle = cls; updateConfig(); }
-        function setPaperStyle(cls) { appConfig.paperStyle = cls; updateConfig(); }
-        function setTheme(key) { if (themes[key]) { appConfig.bgGradient = themes[key]; document.getElementById('preview-body').style.background = appConfig.bgGradient; } }
-
-        function previewStep(target) {
-            currentActiveStepView = target;
-            document.querySelectorAll('.step-view').forEach(s => s.classList.remove('active'));
-            const targetEl = document.getElementById(`prev-step-${target}`);
-            if (targetEl) targetEl.classList.add('active');
-        }
-
-        function toggleTestMode(enable) { previewStep(1); }
-        function handleYesClick(target) { previewStep(target); }
-        function openLetterPrev() { previewStep('letter'); }
-
-        function generateCompleteHTML() {
-            return `<!DOCTYPE html>
-<html lang="my">
-<head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Surprise</title>
-    <script src="https://cdn.tailwindcss.com"><\\/script>
-    <style>body { background: ${appConfig.bgGradient}; display:flex; justify-content:center; align-items:center; min-height:100vh; }</style>
-</head>
-<body><h1>Love Surprise App</h1></body>
-</html>`;
-        }
-
-        function exportHTML() {
-            document.getElementById('export-code-area').value = generateCompleteHTML();
-            document.getElementById('export-modal').classList.remove('hidden');
-        }
-        function closeExportModal() { document.getElementById('export-modal').classList.add('hidden'); }
-        function copyGeneratedCode() {
-            document.getElementById('export-code-area').select();
-            document.execCommand('copy');
-            alert('Code များကို ကူးယူပြီးပါပြီ!');
-        }
-        function downloadHTMLFile() {
-            const blob = new Blob([generateCompleteHTML()], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a'); a.href = url; a.download = 'index.html';
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        function getActiveGitHubToken() {
+            return document.getElementById('gh-token-custom').value.trim();
         }
 
         async function autoDeployToGitHub() {
             const token = getActiveGitHubToken();
-            const repoName = document.getElementById('gh-repo').value.trim().toLowerCase();
+            const repoName = document.getElementById('gh-repo').value.trim().toLowerCase().replace(/[^a-z0-9-_]/g, '-');
             const statusEl = document.getElementById('deploy-status');
-            if (!token) { alert('ကျေးဇူးပြု၍ epostcard သို့မဟုတ် mm ဟု စာရိုက်ထည့်ပေးပါ[cite: 1]'); return; }
-            statusEl.innerText = "Deploying to GitHub...";
-            setTimeout(() => {
-                statusEl.innerText = "Success! Link generated.";
-                document.getElementById('gh-link-container').classList.remove('hidden');
-                document.getElementById('gh-generated-link').value = "https://github.io/" + repoName;
-            }, 1500);
+            const linkContainer = document.getElementById('gh-link-container');
+            const linkInput = document.getElementById('gh-generated-link');
+            const deployBtn = document.getElementById('btn-deploy-gh');
+
+            if (!uploadedHtmlContent) {
+                alert('ကျေးဇူးပြု၍ Device ထဲမှ HTML ဖိုင်တစ်ခုကို အရင် Upload တင်ပေးပါ');
+                return;
+            }
+            if (!token) {
+                alert('ကျေးဇူးပြု၍ epostcard သို့မဟုတ် mm သို့မဟုတ် epostcardmm ဟု နေရာလပ်တွင် စာရိုက်ထည့်ပေးပါ');
+                return;
+            }
+            if (!repoName) {
+                alert('Repository Name ထည့်သွင်းပေးပါ။');
+                return;
+            }
+
+            try {
+                deployBtn.disabled = true;
+                deployBtn.classList.add('opacity-50');
+                statusEl.className = "text-xs text-amber-400 font-medium text-center";
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> User account စစ်ဆေးနေသည်...`;
+
+                // 1. Get authenticated user info
+                const userRes = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (!userRes.ok) throw new Error('GitHub Token မမှန်ကန်ပါ သို့မဟုတ် Auth မအောင်မြင်ပါ။');
+                const userData = await userRes.json();
+                const username = userData.login;
+
+                // 2. Check or Create Repository
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> Repository (${repoName}) ဖန်တီးနေသည်...`;
+                
+                let repoRes = await fetch(`https://api.github.com/repos/${username}/${repoName}`, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (repoRes.status === 404) {
+                    const createRes = await fetch('https://api.github.com/user/repos', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `token ${token}`,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: JSON.stringify({
+                            name: repoName,
+                            description: 'Uploaded HTML File via Uploader',
+                            auto_init: true
+                        })
+                    });
+                    if (!createRes.ok) throw new Error('Repository ဖန်တီး၍ မရပါ!');
+                    await new Promise(r => setTimeout(r, 2000));
+                }
+
+                // 3. Upload/Update index.html File
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> index.html ကို Upload တင်နေသည်...`;
+                const base64Content = btoa(unescape(encodeURIComponent(uploadedHtmlContent)));
+
+                let sha = null;
+                const fileCheckRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
+                    headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (fileCheckRes.ok) {
+                    const fileData = await fileCheckRes.json();
+                    sha = fileData.sha;
+                }
+
+                const uploadBody = {
+                    message: `Upload ${uploadedFileName} as index.html`,
+                    content: base64Content
+                };
+                if (sha) uploadBody.sha = sha;
+
+                const uploadRes = await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/index.html`, {
+                    method: `PUT`,
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify(uploadBody)
+                });
+
+                if (!uploadRes.ok) throw new Error('index.html ဖိုင် Upload တင်ခြင်း မအောင်မြင်ပါ။');
+
+                // 4. Enable GitHub Pages
+                statusEl.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-1"></i> GitHub Pages ကို Activate လုပ်နေသည်...`;
+                await fetch(`https://api.github.com/repos/${username}/${repoName}/pages`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        source: { branch: 'main', path: '/' }
+                    })
+                }).catch(() => {});
+
+                // 5. Build Final Live Link
+                const generatedPagesUrl = `https://${username}.github.io/${repoName}/`;
+                linkInput.value = generatedPagesUrl;
+                linkContainer.classList.remove('hidden');
+
+                statusEl.className = "text-xs text-emerald-400 font-bold text-center";
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Upload အောင်မြင်ပါပြီ!`;
+
+            } catch (err) {
+                statusEl.className = "text-xs text-rose-400 font-bold text-center";
+                statusEl.innerText = `Error: ${err.message}`;
+            } finally {
+                deployBtn.disabled = false;
+                deployBtn.classList.remove('opacity-50');
+            }
         }
-        function copyGitHubLink() { alert('Link ကူးယူပြီးပါပြီ!'); }
+
+        function copyGitHubLink() {
+            const linkInput = document.getElementById('gh-generated-link');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('GitHub Pages Live Link ကို ကူးယူပြီးပါပြီ!\n' + linkInput.value);
+        }
     </script>
 </body>
 </html>
