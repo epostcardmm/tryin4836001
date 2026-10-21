@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday Card Studio & Generator</title>
+    <title>Card Studio & Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -200,7 +200,7 @@
                 <span class="text-3xl">🎁</span>
                 <div>
                     <h1 class="text-xl font-bold bg-gradient-to-r from-amber-300 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-                        Birthday Wish Card Studio
+                        Wish Card Studio
                     </h1>
                     <p class="text-xs text-slate-400">Custom Backgrounds, Borderless Envelope, Corner Stamp & HTML Generator</p>
                 </div>
@@ -383,7 +383,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">Main Birthday Wish Body (Supports Burmese or English)</label>
+                    <label class="block text-xs text-slate-400 mb-1">Main  Wish Body (Supports Burmese or English)</label>
                     <textarea id="input-main-msg" oninput="updateStudioState()" rows="3" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-slate-100 focus:outline-none focus:border-amber-400">Wishing you a day filled with love, joy, and endless laughter. Thank you for being my constant source of happiness! 💖</textarea>
                 </div>
 
@@ -573,7 +573,7 @@
                         </div>
                         <div class="space-y-1">
                             <label class="block text-[11px] text-slate-400">Repository Name:</label>
-                            <input type="text" id="gh-repo" placeholder="Repository Name" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500" value="birthday-wish-card">
+                            <input type="text" id="gh-repo" placeholder="Repository Name" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-emerald-500" value="wish-card">
                         </div>
                     </div>
 
@@ -636,7 +636,7 @@
             { id: 'e4', name: 'Romantic Rose Envelope', url: 'https://i.ibb.co/7DVGjsV/download-50-removebg-preview.png' },
             { id: 'e5', name: 'Cute Heart Letter', url: 'https://i.ibb.co/qLdjT3C5/Envelope-with-ribbon-and-cherry-blossoms-hand-drawn-illustration-Premium-PSD-removebg-preview.png' },
             { id: 'e6', name: 'Luxury Gold Envelope', url: 'https://i.ibb.co/0jJQgkQB/download-51-removebg-preview.png' },
-            { id: 'e7', name: 'Birthday Gift Card Cover', url: 'https://i.ibb.co/ym5j19SL/download-52-removebg-preview.png' },
+            { id: 'e7', name: 'Gift Card Cover', url: 'https://i.ibb.co/ym5j19SL/download-52-removebg-preview.png' },
             { id: 'e8', name: 'Floral Envelope Card', url: 'https://i.ibb.co/3546QZPS/download-53-removebg-preview.png' },
             { id: 'e9', name: 'Aesthetic Pastel Envelope', url: 'https://i.ibb.co/GQ3KV9qs/Vintage-Envelope-Clipart-for-Elegant-Letter-Design-Download-Today-removebg-preview.png' },
             { id: 'e10', name: 'Starry Night Card', url: 'https://i.ibb.co/svGL69SV/Watercolor-stack-of-antique-books-with-red-rose-removebg-preview.png' }
@@ -658,9 +658,9 @@
 
         /* --- BACKGROUND AUDIO PRESETS DATA --- */
         const AUDIO_PRESETS = [
-            { name: 'Soft Birthday Piano (Default)', url: 'https://www.image2url.com/r2/default/audio/1789288232634-9a89e91e-e43f-4d68-b101-bf9b607f0f76.m4a' },
+            { name: 'Soft Piano (Default)', url: 'https://www.image2url.com/r2/default/audio/1789288232634-9a89e91e-e43f-4d68-b101-bf9b607f0f76.m4a' },
             { name: 'Acoustic Romantic Guitar', url: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-acoustic-guitar-112349.mp3' },
-            { name: 'Upbeat Happy Birthday Melody', url: 'https://www.image2url.com/r2/default/audio/1792508415436-4775f91e-6dcd-41df-80ed-5d6a5cf2a270.mp3' },
+            { name: 'Upbeat Happy Melody', url: 'https://www.image2url.com/r2/default/audio/1792508415436-4775f91e-6dcd-41df-80ed-5d6a5cf2a270.mp3' },
             { name: 'Lofi Sweet Dreams Melodic', url: 'https://www.image2url.com/r2/default/audio/1791729490799-5aaff6bd-4322-478d-a72b-6da5a7754d49.mp3' },
             { name: '🚫 No Music / Muted ', url: '' }
         ];
@@ -678,7 +678,7 @@
             envelopeName: ENVELOPES[0].name,
             paperClass: PAPER_DESIGNS[0].cssClass,
             paperName: PAPER_DESIGNS[0].name,
-            cornerStamp: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=300&q=80',
+            cornerStamp: 'https://i.ibb.co/cp6WytW/download-55.jpg',
             audioUrl: AUDIO_PRESETS[0].url,
             audioName: AUDIO_PRESETS[0].name
         };
@@ -1262,11 +1262,11 @@
 
         <div class="absolute top-8 text-center z-10 px-4 w-full">
             <h1 class="text-amber-200 text-base md:text-lg font-bold tracking-wide drop-shadow-md">✨ Tap The Envelope ✨</h1>
-            <p class="text-xs text-purple-300/80 mt-1">Tap the floating envelope to open birthday wish</p>
+            <p class="text-xs text-purple-300/80 mt-1">Tap the floating envelope to open wish</p>
         </div>
 
         <div id="fallingCard" class="free-floating-image z-20 flex flex-col items-center justify-center" onclick="openWishCard()">
-            <img src="${state.envelope}" alt="Birthday Special" class="w-40 sm:w-48 h-auto object-contain pointer-events-auto bg-transparent border-0 outline-0 shadow-none bouquet-sway">
+            <img src="${state.envelope}" alt="Special" class="w-40 sm:w-48 h-auto object-contain pointer-events-auto bg-transparent border-0 outline-0 shadow-none bouquet-sway">
             <span class="click-hint mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/90 text-slate-900 font-bold text-xs tracking-wider shadow-lg border border-amber-200">
                 <svg class="w-3.5 h-3.5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
                 Click Me ✨
@@ -1402,7 +1402,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'Birthday_Wish_Card.html';
+            a.download = 'Wish_Card.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1489,7 +1489,7 @@
                         },
                         body: JSON.stringify({
                             name: repoName,
-                            description: 'Birthday Wish Card Studio App',
+                            description: 'Wish Card Studio App',
                             auto_init: true
                         })
                     });
