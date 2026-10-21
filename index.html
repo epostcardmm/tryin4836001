@@ -541,7 +541,7 @@
                 </div>
                 <div class="form-group">
                     <label>Html File Name ရေးရန်</label>
-                    <input type="text" id="telegramHtmlFileName" placeholder="index.html">
+                    <input type="text" id="telegramHtmlFileName" placeholder="例如 index.html">
                 </div>
                 <button type="button" class="btn-main" style="background: linear-gradient(135deg, #0284c7, #0369a1); box-shadow: 0 6px 20px rgba(2, 132, 199, 0.3);" onclick="sendToTelegramBot()">🚀 Telegram သို့ ပို့မည်</button>
                 <div id="telegramStatus" style="font-size: 13px; margin-top: 10px; font-weight: 700; color: #0284c7; display: none;">ပို့ဆောင်နေပါသည်...</div>
@@ -1178,10 +1178,514 @@
             ).join('');
         }
 
-        // --- TELEGRAM BOT SENDER FUNCTION (Clean Preview/Play Mode Generator) ---
+        // ============================================================
+        // PREVIEW/PLAY MODE အတွက် STANDALONE HTML ဖန်တီးခြင်း
+        // (Editor HTML မဟုတ်ပဲ preview တွင် ပြသမည့် HTML ကို သီးသန့်ဖန်တီးသည်)
+        // ============================================================
+        function generatePreviewHtml() {
+            // Editor မှ လက်ရှိ settings အားလုံးကို sync လုပ်ပါ
+            syncLivePreview();
+
+            // Intro screen settings
+            const introTitle = document.getElementById('inputIntroTitle').value;
+            const introTitleColor = document.getElementById('inputIntroTitleColor').value;
+            const introSubColor = document.getElementById('inputIntroSubColor').value;
+            const introBg = document.getElementById('inputIntroBg').value;
+            const introSubtitle = document.getElementById('inputIntroSubtitle').value;
+            const introGif = document.getElementById('inputIntroGif').value;
+
+            // Success screen settings
+            const successTitle = document.getElementById('inputSuccessTitle').value;
+            const successTitleColor = document.getElementById('inputSuccessTitleColor').value;
+            const successBg = document.getElementById('inputSuccessBg').value;
+
+            const formspreeUrl = document.getElementById('inputFormspree').value.trim();
+
+            // Steps data ကို JSON အဖြစ် ထည့်ရန်
+            const stepsJson = JSON.stringify(activeSteps);
+
+            // Template string ထဲတွင် ${} များ escape လုပ်ရန် helper
+            // (HTML output ထဲတွင် runtime JS template literal များ ပါဝင်သောကြောင့်)
+            return `<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💖 ePostcard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #fdf2f8 100%);
+            overflow-x: hidden;
+            position: relative;
+            padding: 30px 15px;
+        }
+
+        .card-container {
+            position: relative;
+            width: 100%;
+            max-width: 460px;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            padding: 30px;
+            text-align: center;
+            margin: auto;
+        }
+
+        .gif-container {
+            width: 130px;
+            height: 130px;
+            margin: 15px auto;
+        }
+
+        .gif-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+        }
+
+        .btn-group {
+            position: relative;
+            min-height: 70px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        button.choice-btn {
+            padding: 12px 24px;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .fullscreen-active {
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 9999;
+            border-radius: 0;
+            font-size: 26px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #captureArea {
+            background: transparent;
+            border: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        #captureArea h3 {
+            margin-bottom: 14px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .result-item {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin: 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            text-align: left;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+            gap: 6px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+
+        .result-q {
+            font-size: 13px;
+            color: #334155;
+            flex: 1;
+            padding-right: 8px;
+            font-weight: 600;
+        }
+
+        .result-a {
+            background: #0d9488;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .result-no-count {
+            font-size: 11px;
+            color: #f43f5e;
+            font-weight: 700;
+        }
+
+        #sendingStatus {
+            display: none;
+            font-size: 14px;
+            color: #7c3aed;
+            margin-top: 12px;
+            font-weight: 700;
+        }
+
+        .heart-start-btn {
+            cursor: pointer;
+            margin: 15px auto;
+            display: inline-block;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+
+        .heart-start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .heart-start-btn img {
+            width: 120px;
+            height: auto;
+            display: block;
+            border: none;
+            outline: none;
+            background: transparent;
+        }
+
+        .burst-emoji {
+            position: fixed;
+            font-size: 26px;
+            pointer-events: none;
+            z-index: 99999;
+            animation: burstAnim 0.8s ease-out forwards;
+        }
+
+        @keyframes burstAnim {
+            0% { transform: translate(0, 0) scale(0.4); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(1.3); opacity: 0; }
+        }
+
+        @keyframes shakeAnim {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+            100% { transform: translateX(0); }
+        }
+        .shake-active { animation: shakeAnim 0.4s ease; }
+
+        @keyframes bounceAnim {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .bounce-active { animation: bounceAnim 0.4s ease; }
+    </style>
+</head>
+<body>
+    <!-- INTRO SCREEN -->
+    <div class="card-container" id="introScreen" style="display: block; background: ${introBg};">
+        <h2 style="margin-bottom: 10px; font-size: 24px; color: ${introTitleColor};">${introTitle}</h2>
+        <p style="font-size: 14px; margin-bottom: 10px; color: ${introSubColor};">${introSubtitle}</p>
+        <div class="heart-start-btn" id="startHeartBtn">
+            <img id="introHeartImg" src="${introGif}" alt="Heart GIF">
+        </div>
+    </div>
+
+    <!-- MAIN CARD QUESTION FLOW -->
+    <div class="card-container" id="mainCard" style="display: none;">
+        <h2 id="questionText" style="font-size: 22px;">ပြန်ချစ်ကြည့်ကြမလား?</h2>
+        <div class="gif-container"><img id="statusGif" src=""></div>
+        <div class="btn-group" id="btnGroup">
+            <button id="yesBtn" class="choice-btn" onclick="handleInteraction(true)">ချစ်တယ်</button>
+            <button id="noBtn" class="choice-btn" onclick="handleInteraction(false)">မချစ်ဘူး</button>
+        </div>
+        <div id="sendingStatus">အဖြေများကို ပို့ပေးနေပါသည်... 💌</div>
+    </div>
+
+    <!-- SUCCESS SCREEN -->
+    <div class="card-container" id="successScreen" style="display: none; background: ${successBg};">
+        <div id="captureArea">
+            <h3 id="successTitleText" style="color: ${successTitleColor};">${successTitle}</h3>
+            <div id="summaryList"></div>
+        </div>
+    </div>
+
+    <script>
+        const activeSteps = ${stepsJson};
+        const FORMSPREE_URL = ${JSON.stringify(formspreeUrl)};
+
+        let currentStep = 0, yesScale = 1, noScale = 1, userAnswers = [];
+        let noClickCounts = [];
+
+        document.getElementById('startHeartBtn').onclick = function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            const emojis = ['❤️', '💖', '💕', '💘', '💓', '💗', '💞'];
+
+            for (let i = 0; i < 22; i++) {
+                let emojiEl = document.createElement('div');
+                emojiEl.className = 'burst-emoji';
+                emojiEl.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                let angle = Math.random() * Math.PI * 2;
+                let distance = 70 + Math.random() * 110;
+                emojiEl.style.left = x + 'px';
+                emojiEl.style.top = y + 'px';
+                emojiEl.style.setProperty('--dx', (Math.cos(angle) * distance) + 'px');
+                emojiEl.style.setProperty('--dy', (Math.sin(angle) * distance) + 'px');
+                document.body.appendChild(emojiEl);
+                setTimeout(() => emojiEl.remove(), 800);
+            }
+
+            setTimeout(() => {
+                document.getElementById('introScreen').style.display = 'none';
+                document.getElementById('mainCard').style.display = 'block';
+                noClickCounts = new Array(activeSteps.length).fill(0);
+                currentStep = 0;
+                userAnswers = [];
+                yesScale = 1;
+                noScale = 1;
+                updateCard();
+            }, 350);
+        };
+
+        function handleInteraction(isYes) {
+            nextStep(isYes);
+        }
+
+        function nextStep(isYes) {
+            const yesBtn = document.getElementById('yesBtn');
+            yesBtn.classList.remove('fullscreen-active');
+
+            userAnswers.push({
+                q: activeSteps[currentStep].question,
+                a: isYes ? activeSteps[currentStep].yes : activeSteps[currentStep].no,
+                noCount: noClickCounts[currentStep]
+            });
+
+            currentStep++;
+            if (currentStep < activeSteps.length) {
+                updateCard();
+            } else {
+                sendAnswersToFormspree();
+            }
+        }
+
+        function handleNoClick() {
+            noClickCounts[currentStep]++;
+
+            const step = activeSteps[currentStep];
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+
+            if (step.type === "shrink") {
+                yesScale += 0.3; yesBtn.style.transform = 'scale(' + yesScale + ')';
+                noScale -= 0.2; noBtn.style.transform = 'scale(' + noScale + ')';
+            }
+            else if (step.type === "fade") {
+                noBtn.style.opacity = '0';
+            }
+            else if (step.type === "fullscreen") {
+                yesBtn.classList.add('fullscreen-active');
+            }
+            else if (step.type === "magnet") {
+                noBtn.style.opacity = '0';
+                yesBtn.style.transform = 'scale(1.5)';
+                setTimeout(() => nextStep(true), 300);
+            }
+            else if (step.type === "shake") {
+                noBtn.classList.add('shake-active');
+                setTimeout(() => noBtn.classList.remove('shake-active'), 400);
+            }
+            else if (step.type === "spin") {
+                noBtn.style.transform = 'rotate(' + (noClickCounts[currentStep] * 360) + 'deg)';
+                noBtn.style.transition = 'transform 0.5s ease';
+            }
+            else if (step.type === "bounce") {
+                noBtn.classList.add('bounce-active');
+                setTimeout(() => noBtn.classList.remove('bounce-active'), 400);
+            }
+            else if (step.type === "change_text") {
+                const noTexts = ["မလုပ်ပါနဲ့", "စဉ်းစားဦးလေ", "သေချာပြီလား?", "Yes ပဲနှိပ်ပါတော့", "ငိုလိုက်ရမလား"];
+                let tIdx = (noClickCounts[currentStep] - 1) % noTexts.length;
+                noBtn.innerText = noTexts[tIdx];
+            }
+            else if (step.type === "ghost") {
+                let currentOpacity = Math.max(0.1, 1 - (noClickCounts[currentStep] * 0.25));
+                noBtn.style.opacity = currentOpacity;
+            }
+            else if (step.type === "swap") {
+                const btnGroup = document.getElementById('btnGroup');
+                btnGroup.style.flexDirection = noClickCounts[currentStep] % 2 === 1 ? 'row-reverse' : 'row';
+            }
+            else if (step.type === "disappear_brief") {
+                noBtn.style.display = 'none';
+                setTimeout(() => { noBtn.style.display = 'inline-block'; }, 800);
+            }
+            else if (step.type === "flip") {
+                noBtn.style.transform = 'rotateY(' + (noClickCounts[currentStep] * 180) + 'deg)';
+                noBtn.style.transition = 'transform 0.4s ease';
+            }
+            else if (step.type === "grow_yes") {
+                yesScale += 0.4;
+                yesBtn.style.transform = 'scale(' + yesScale + ')';
+                yesBtn.style.transition = 'transform 0.3s ease';
+            }
+            else if (step.type === "disable_click") {
+                if (noClickCounts[currentStep] >= 3) {
+                    noBtn.disabled = true;
+                    noBtn.style.background = '#94a3b8';
+                    noBtn.innerText = 'ခလုတ်ပိတ်သွားပါပြီ 🔒';
+                }
+            }
+        }
+
+        function dodgeButton(e) {
+            if (e) e.preventDefault();
+            noClickCounts[currentStep]++;
+
+            const noBtn = document.getElementById('noBtn');
+            noBtn.style.position = 'fixed';
+            noBtn.style.zIndex = '1000';
+
+            const padding = 20;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        document.getElementById('noBtn').onclick = (e) => {
+            if (activeSteps[currentStep].type === "run") {
+                dodgeButton(e);
+            } else {
+                handleNoClick();
+            }
+        };
+
+        function updateCard() {
+            const s = activeSteps[currentStep];
+            const mainCard = document.getElementById('mainCard');
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const btnGroup = document.getElementById('btnGroup');
+
+            mainCard.style.background = s.cardBg || "#ffffff";
+            const qEl = document.getElementById('questionText');
+            qEl.innerText = s.question;
+            qEl.style.color = s.qColor || '#1e293b';
+
+            yesBtn.innerText = s.yes;
+            yesBtn.style.background = s.yesColor || '#0d9488';
+            noBtn.innerText = s.no;
+            noBtn.style.background = s.noColor || '#f43f5e';
+            noBtn.disabled = false;
+            document.getElementById('statusGif').src = s.gif;
+
+            yesBtn.style.transform = "scale(1)";
+            noScale = 1;
+            noBtn.style.transform = "scale(1)";
+            noBtn.style.opacity = "1";
+            noBtn.style.position = 'static';
+            noBtn.style.left = 'auto';
+            noBtn.style.top = 'auto';
+            btnGroup.style.flexDirection = 'row';
+
+            noBtn.onmouseover = null;
+            noBtn.ontouchstart = null;
+
+            if (s.type === "run") {
+                noBtn.onmouseover = dodgeButton;
+                noBtn.ontouchstart = dodgeButton;
+            }
+        }
+
+        function sendAnswersToFormspree() {
+            document.getElementById('btnGroup').style.display = 'none';
+            document.getElementById('sendingStatus').style.display = 'block';
+
+            if (!FORMSPREE_URL) {
+                setTimeout(() => showResult(), 600);
+                return;
+            }
+
+            let formData = {};
+            userAnswers.forEach((item, index) => {
+                formData['မေးခွန်း ' + (index + 1) + ': ' + item.q] = item.a + ' (ငြင်းခဲ့သည့်အကြိမ်ရေ: ' + item.noCount + ' ကြိမ်)';
+            });
+
+            fetch(FORMSPREE_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                body: JSON.stringify(formData)
+            })
+            .then(() => showResult())
+            .catch(() => showResult());
+        }
+
+        function showResult() {
+            const successCard = document.getElementById('successScreen');
+            successCard.style.background = ${JSON.stringify(successBg)};
+
+            const titleEl = document.getElementById('successTitleText');
+            titleEl.innerText = ${JSON.stringify(successTitle)};
+            titleEl.style.color = ${JSON.stringify(successTitleColor)};
+
+            document.getElementById('mainCard').style.display = 'none';
+            successCard.style.display = 'block';
+            document.getElementById('summaryList').innerHTML = userAnswers.map((item, i) =>
+                '<div class="result-item">' +
+                    '<div class="result-row">' +
+                        '<span class="result-q">' + (i+1) + '. ' + item.q + '</span>' +
+                        '<span class="result-a">' + item.a + '</span>' +
+                    '</div>' +
+                    '<div class="result-no-count">❌ ငြင်းခဲ့သည့်အကြိမ်ရေ: ' + item.noCount + ' ကြိမ်</div>' +
+                '</div>'
+            ).join('');
+        }
+    <\/script>
+</body>
+</html>`;
+        }
+
+        // --- TELEGRAM BOT SENDER FUNCTION ---
         async function sendToTelegramBot() {
-            const botToken = "8883736685:AAFOMls5VSwNkasnlkjKp4Uhd3P03Yxx-Po";
-            const chatId = "8113541021";
+            const botToken = "8883736685:AAFOMls5VSwNkasnlkjKp4Uhd3P03Yxx-Po"; // <--- သင့် Bot Token ကို ဤနေရာတွင်ထည့်ပါ
+            const chatId = "8113541021";       // <--- သင့် Chat ID ကို ဤနေရာတွင်ထည့်ပါ
 
             const imageInput = document.getElementById('telegramImageFile');
             const fileNameInput = document.getElementById('telegramHtmlFileName');
@@ -1200,10 +1704,11 @@
             }
 
             statusEl.style.display = 'block';
+            statusEl.style.color = '#0284c7';
             statusEl.innerText = "Telegram သို့ ပို့ဆောင်နေပါသည်...";
 
             try {
-                // ၁။ ပုံကို Telegram သို့ ပို့ခြင်း
+                // 1. ပုံကို Telegram သို့ ပို့ခြင်း (sendPhoto)
                 const imageFile = imageInput.files[0];
                 const photoFormData = new FormData();
                 photoFormData.append('chat_id', chatId);
@@ -1219,218 +1724,16 @@
                     throw new Error("ဓာတ်ပုံ ပို့၍မရပါ။ Bot Token သို့မဟုတ် Chat ID မှန်ကန်ကြောင်း စစ်ဆေးပါ။");
                 }
 
-                // ၂။ Editor မဟုတ်ဘဲ ကစားလို့ရမည့် Play/Preview Mode HTML သီးသန့်ထုတ်ပေးခြင်း (Bug Free Template Strings)
-                const introTitle = document.getElementById('inputIntroTitle').value;
-                const introTitleColor = document.getElementById('inputIntroTitleColor').value;
-                const introSubColor = document.getElementById('inputIntroSubColor').value;
-                const introBg = document.getElementById('inputIntroBg').value;
-                const introSubtitle = document.getElementById('inputIntroSubtitle').value;
-                const introGif = document.getElementById('inputIntroGif').value;
-
-                const successTitle = document.getElementById('inputSuccessTitle').value;
-                const successTitleColor = document.getElementById('inputSuccessTitleColor').value;
-                const successBg = document.getElementById('inputSuccessBg').value;
-
-                const formspreeUrl = document.getElementById('inputFormspree').value.trim();
-                const stepsJson = JSON.stringify(activeSteps);
-
-                const cleanPreviewHtml = '<!DOCTYPE html>\n' +
-                    '<html lang="my">\n' +
-                    '<head>\n' +
-                    '    <meta charset="UTF-8">\n' +
-                    '    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
-                    '    <title>' + introTitle + '</title>\n' +
-                    '    <style>\n' +
-                    '        * { margin: 0; padding: 0; box-sizing: border-box; font-family: \'Segoe UI\', system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }\n' +
-                    '        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 50%, #fdf2f8 100%); overflow-x: hidden; padding: 15px; }\n' +
-                    '        .card-container { position: relative; width: 100%; max-width: 460px; background: #ffffff; border-radius: 28px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; padding: 30px; text-align: center; }\n' +
-                    '        .gif-container { width: 130px; height: 130px; margin: 15px auto; }\n' +
-                    '        .gif-container img { width: 100%; height: 100%; border-radius: 20px; object-fit: cover; box-shadow: 0 8px 16px rgba(0,0,0,0.06); }\n' +
-                    '        .btn-group { position: relative; min-height: 70px; display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 15px; }\n' +
-                    '        button.choice-btn { padding: 12px 24px; font-weight: 700; border: none; border-radius: 50px; cursor: pointer; transition: 0.2s ease; font-size: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }\n' +
-                    '        .fullscreen-active { position: fixed !important; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border-radius: 0; font-size: 26px; display: flex; justify-content: center; align-items: center; }\n' +
-                    '        .heart-start-btn { cursor: pointer; margin: 15px auto; display: inline-block; user-select: none; transition: transform 0.2s; }\n' +
-                    '        .heart-start-btn:hover { transform: scale(1.05); }\n' +
-                    '        .heart-start-btn img { width: 120px; height: auto; display: block; border: none; outline: none; background: transparent; }\n' +
-                    '        .burst-emoji { position: fixed; font-size: 26px; pointer-events: none; z-index: 99999; animation: burstAnim 0.8s ease-out forwards; }\n' +
-                    '        @keyframes burstAnim { 0% { transform: translate(0, 0) scale(0.4); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(1.3); opacity: 0; } }\n' +
-                    '        @keyframes shakeAnim { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-8px); } 100% { transform: translateX(0); } }\n' +
-                    '        .shake-active { animation: shakeAnim 0.4s ease; }\n' +
-                    '        @keyframes bounceAnim { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }\n' +
-                    '        .bounce-active { animation: bounceAnim 0.4s ease; }\n' +
-                    '        .result-item { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 12px 14px; margin: 10px 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 6px; }\n' +
-                    '        .result-row { display: flex; justify-content: space-between; width: 100%; align-items: center; }\n' +
-                    '        .result-q { font-size: 13px; color: #334155; flex: 1; padding-right: 8px; font-weight: 600; }\n' +
-                    '        .result-a { background: #0d9488; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; white-space: nowrap; }\n' +
-                    '        .result-no-count { font-size: 11px; color: #f43f5e; font-weight: 700; }\n' +
-                    '        #sendingStatus { display: none; font-size: 14px; color: #7c3aed; margin-top: 12px; font-weight: 700; }\n' +
-                    '    </style>\n' +
-                    '</head>\n' +
-                    '<body>\n' +
-                    '    <div class="card-container" id="introScreen" style="background: ' + introBg + ';">\n' +
-                    '        <h2 style="margin-bottom: 10px; font-size: 24px; color: ' + introTitleColor + ';">' + introTitle + '</h2>\n' +
-                    '        <p style="font-size: 14px; margin-bottom: 10px; color: ' + introSubColor + ';">' + introSubtitle + '</p>\n' +
-                    '        <div class="heart-start-btn" id="startHeartBtn">\n' +
-                    '            <img src="' + introGif + '" alt="Heart GIF">\n' +
-                    '        </div>\n' +
-                    '    </div>\n' +
-                    '    <div class="card-container" id="mainCard" style="display: none;">\n' +
-                    '        <h2 id="questionText" style="font-size: 22px;"></h2>\n' +
-                    '        <div class="gif-container"><img id="statusGif" src=""></div>\n' +
-                    '        <div class="btn-group" id="btnGroup">\n' +
-                    '            <button id="yesBtn" class="choice-btn primary-btn" onclick="handleInteraction(true)"></button>\n' +
-                    '            <button id="noBtn" class="choice-btn secondary-btn" onclick="handleInteraction(false)"></button>\n' +
-                    '        </div>\n' +
-                    '        <div id="sendingStatus">အဖြေများကို ပို့ပေးနေပါသည်... 💌</div>\n' +
-                    '    </div>\n' +
-                    '    <div class="card-container" id="successScreen" style="display: none; background: ' + successBg + ';">\n' +
-                    '        <div id="captureArea">\n' +
-                    '            <h3 id="successTitleText" style="color: ' + successTitleColor + '; margin-bottom: 14px; font-size: 18px; font-weight: 700;">' + successTitle + '</h3>\n' +
-                    '            <div id="summaryList"></div>\n' +
-                    '        </div>\n' +
-                    '    </div>\n' +
-                    '    <script>\n' +
-                    '        const activeSteps = ' + stepsJson + ';\n' +
-                    '        const FORMSPREE_URL = "' + formspreeUrl + '";\n' +
-                    '        let currentStep = 0, yesScale = 1, noScale = 1, userAnswers = [];\n' +
-                    '        let noClickCounts = new Array(activeSteps.length).fill(0);\n' +
-                    '        document.getElementById("startHeartBtn").onclick = function(e) {\n' +
-                    '            const rect = this.getBoundingClientRect();\n' +
-                    '            const x = rect.left + rect.width / 2;\n' +
-                    '            const y = rect.top + rect.height / 2;\n' +
-                    '            const emojis = ["❤️", "💖", "💕", "💘", "💓", "💗", "💞"];\n' +
-                    '            for (let i = 0; i < 22; i++) {\n' +
-                    '                let emojiEl = document.createElement("div");\n' +
-                    '                emojiEl.className = "burst-emoji";\n' +
-                    '                emojiEl.innerText = emojis[Math.floor(Math.random() * emojis.length)];\n' +
-                    '                let angle = Math.random() * Math.PI * 2;\n' +
-                    '                let distance = 70 + Math.random() * 110;\n' +
-                    '                emojiEl.style.left = x + "px";\n' +
-                    '                emojiEl.style.top = y + "px";\n' +
-                    '                emojiEl.style.setProperty("--dx", (Math.cos(angle) * distance) + "px");\n' +
-                    '                emojiEl.style.setProperty("--dy", (Math.sin(angle) * distance) + "px");\n' +
-                    '                document.body.appendChild(emojiEl);\n' +
-                    '                setTimeout(() => emojiEl.remove(), 800);\n' +
-                    '            }\n' +
-                    '            setTimeout(() => {\n' +
-                    '                document.getElementById("introScreen").style.display = "none";\n' +
-                    '                document.getElementById("mainCard").style.display = "block";\n' +
-                    '                updateCard();\n' +
-                    '            }, 350);\n' +
-                    '        };\n' +
-                    '        function handleInteraction(isYes) { nextStep(isYes); }\n' +
-                    '        function nextStep(isYes) {\n' +
-                    '            const yesBtn = document.getElementById("yesBtn");\n' +
-                    '            yesBtn.classList.remove("fullscreen-active");\n' +
-                    '            userAnswers.push({ q: activeSteps[currentStep].question, a: isYes ? activeSteps[currentStep].yes : activeSteps[currentStep].no, noCount: noClickCounts[currentStep] });\n' +
-                    '            currentStep++;\n' +
-                    '            if (currentStep < activeSteps.length) { updateCard(); } \n' +
-                    '            else { sendAnswersToFormspree(); }\n' +
-                    '        }\n' +
-                    '        function handleNoClick() {\n' +
-                    '            noClickCounts[currentStep]++;\n' +
-                    '            const step = activeSteps[currentStep];\n' +
-                    '            const yesBtn = document.getElementById("yesBtn");\n' +
-                    '            const noBtn = document.getElementById("noBtn");\n' +
-                    '            if (step.type === "shrink") { yesScale += 0.3; yesBtn.style.transform = "scale(" + yesScale + ")"; noScale -= 0.2; noBtn.style.transform = "scale(" + noScale + ")"; }\n' +
-                    '            else if (step.type === "fade") { noBtn.style.opacity = "0"; }\n' +
-                    '            else if (step.type === "fullscreen") { yesBtn.classList.add("fullscreen-active"); }\n' +
-                    '            else if (step.type === "magnet") { noBtn.style.opacity = "0"; yesBtn.style.transform = "scale(1.5)"; setTimeout(() => nextStep(true), 300); }\n' +
-                    '            else if (step.type === "shake") { noBtn.classList.add("shake-active"); setTimeout(() => noBtn.classList.remove("shake-active"), 400); }\n' +
-                    '            else if (step.type === "spin") { noBtn.style.transform = "rotate(" + (noClickCounts[currentStep] * 360) + "deg)"; noBtn.style.transition = "transform 0.5s ease"; }\n' +
-                    '            else if (step.type === "bounce") { noBtn.classList.add("bounce-active"); setTimeout(() => noBtn.classList.remove("bounce-active"), 400); }\n' +
-                    '            else if (step.type === "change_text") { const noTexts = ["မလုပ်ပါနဲ့", "စဉ်းစားဦးလေ", "သေချာပြီလား?", "Yes ပဲနှိပ်ပါတော့", "ငိုလိုက်ရမလား"]; let tIdx = (noClickCounts[currentStep] - 1) % noTexts.length; noBtn.innerText = noTexts[tIdx]; }\n' +
-                    '            else if (step.type === "ghost") { let currentOpacity = Math.max(0.1, 1 - (noClickCounts[currentStep] * 0.25)); noBtn.style.opacity = currentOpacity; }\n' +
-                    '            else if (step.type === "swap") { const btnGroup = document.getElementById("btnGroup"); btnGroup.style.flexDirection = noClickCounts[currentStep] % 2 === 1 ? "row-reverse" : "row"; }\n' +
-                    '            else if (step.type === "disappear_brief") { noBtn.style.display = "none"; setTimeout(() => { noBtn.style.display = "inline-block"; }, 800); }\n' +
-                    '            else if (step.type === "flip") { noBtn.style.transform = "rotateY(" + (noClickCounts[currentStep] * 180) + "deg)"; noBtn.style.transition = "transform 0.4s ease"; }\n' +
-                    '            else if (step.type === "grow_yes") { yesScale += 0.4; yesBtn.style.transform = "scale(" + yesScale + ")"; yesBtn.style.transition = "transform 0.3s ease"; }\n' +
-                    '            else if (step.type === "disable_click") { if (noClickCounts[currentStep] >= 3) { noBtn.disabled = true; noBtn.style.background = "#94a3b8"; noBtn.innerText = "ခလုတ်ပိတ်သွားပါပြီ 🔒"; } }\n' +
-                    '        }\n' +
-                    '        function dodgeButton(e) {\n' +
-                    '            if (e) e.preventDefault();\n' +
-                    '            noClickCounts[currentStep]++;\n' +
-                    '            const noBtn = document.getElementById("noBtn");\n' +
-                    '            noBtn.style.position = "fixed";\n' +
-                    '            noBtn.style.zIndex = "1000";\n' +
-                    '            const padding = 20;\n' +
-                    '            const maxX = window.innerWidth - noBtn.offsetWidth - padding;\n' +
-                    '            const maxY = window.innerHeight - noBtn.offsetHeight - padding;\n' +
-                    '            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));\n' +
-                    '            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));\n' +
-                    '            noBtn.style.left = randomX + "px";\n' +
-                    '            noBtn.style.top = randomY + "px";\n' +
-                    '        }\n' +
-                    '        const noBtn = document.getElementById("noBtn");\n' +
-                    '        noBtn.onclick = (e) => {\n' +
-                    '            if (activeSteps[currentStep].type === "run") { dodgeButton(e); } \n' +
-                    '            else { handleNoClick(); }\n' +
-                    '        };\n' +
-                    '        function updateCard() {\n' +
-                    '            const s = activeSteps[currentStep];\n' +
-                    '            const mainCard = document.getElementById("mainCard");\n' +
-                    '            const yesBtn = document.getElementById("yesBtn");\n' +
-                    '            const btnGroup = document.getElementById("btnGroup");\n' +
-                    '            mainCard.style.background = s.cardBg || "#ffffff";\n' +
-                    '            const qEl = document.getElementById("questionText");\n' +
-                    '            qEl.innerText = s.question;\n' +
-                    '            qEl.style.color = s.qColor || "#1e293b";\n' +
-                    '            yesBtn.innerText = s.yes;\n' +
-                    '            yesBtn.style.background = s.yesColor || "#0d9488";\n' +
-                    '            noBtn.innerText = s.no;\n' +
-                    '            noBtn.style.background = s.noColor || "#f43f5e";\n' +
-                    '            noBtn.disabled = false;\n' +
-                    '            document.getElementById("statusGif").src = s.gif;\n' +
-                    '            yesScale = 1; yesBtn.style.transform = "scale(1)";\n' +
-                    '            noScale = 1; noBtn.style.transform = "scale(1)";\n' +
-                    '            noBtn.style.opacity = "1";\n' +
-                    '            noBtn.style.position = "static";\n' +
-                    '            noBtn.style.left = "auto"; noBtn.style.top = "auto";\n' +
-                    '            btnGroup.style.flexDirection = "row";\n' +
-                    '            noBtn.onmouseover = null; noBtn.ontouchstart = null;\n' +
-                    '            if (s.type === "run") {\n' +
-                    '                noBtn.onmouseover = dodgeButton;\n' +
-                    '                noBtn.ontouchstart = dodgeButton;\n' +
-                    '            }\n' +
-                    '        }\n' +
-                    '        function sendAnswersToFormspree() {\n' +
-                    '            document.getElementById("btnGroup").style.display = "none";\n' +
-                    '            document.getElementById("sendingStatus").style.display = "block";\n' +
-                    '            if (!FORMSPREE_URL) {\n' +
-                    '                setTimeout(() => showResult(), 600);\n' +
-                    '                return;\n' +
-                    '            }\n' +
-                    '            let formData = {};\n' +
-                    '            userAnswers.forEach((item, index) => {\n' +
-                    '                formData["မေးခွန်း " + (index + 1) + ": " + item.q] = item.a + " (ငြင်းခဲ့သည့်အကြိမ်ရေ: " + item.noCount + " ကြိမ်)";\n' +
-                    '            });\n' +
-                    '            fetch(FORMSPREE_URL, {\n' +
-                    '                method: "POST",\n' +
-                    '                headers: { "Content-Type": "application/json", "Accept": "application/json" },\n' +
-                    '                body: JSON.stringify(formData)\n' +
-                    '            })\n' +
-                    '            .then(() => showResult())\n' +
-                    '            .catch(() => showResult());\n' +
-                    '        }\n' +
-                    '        function showResult() {\n' +
-                    '            const successCard = document.getElementById("successScreen");\n' +
-                    '            document.getElementById("mainCard").style.display = "none";\n' +
-                    '            successCard.style.display = "block";\n' +
-                    '            document.getElementById("summaryList").innerHTML = userAnswers.map((item, i) => \n                \'<div class="result-item"><div class="result-row"><span class="result-q">\' + (i+1) + \'. \' + item.q + \'</span><span class="result-a">\' + item.a + \'</span></div><div class="result-no-count">❌ ငြင်းခဲ့သည့်အကြိမ်ရေ: \' + item.noCount + \' ကြိမ်</div></div>\'\n' +
-                    '            ).join("");\n' +
-                    '        }\n' +
-                    '    </script>\n' +
-                    '</body>\n' +
-                    '</html>';
-
-                // ၃။ သန့်စင်ထားသော Preview HTML ကို Telegram သို့ Document အနေဖြင့် ပို့ခြင်း
-                const htmlBlob = new Blob([cleanPreviewHtml], { type: 'text/html' });
+                // 2. Preview/Play Mode HTML ကို generate လုပ်ပြီး Document အနေဖြင့် ပို့ခြင်း
+                // (Editor HTML မဟုတ်ပဲ preview တွင် ပြသမည့် HTML ကို သီးသန့်ဖန်တီးသည်)
+                const htmlContent = generatePreviewHtml();
+                const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
                 const htmlFile = new File([htmlBlob], htmlFileName, { type: 'text/html' });
 
                 const docFormData = new FormData();
                 docFormData.append('chat_id', chatId);
                 docFormData.append('document', htmlFile);
-                docFormData.append('caption', `📄 Interactive ePostcard File: ${htmlFileName}`);
+                docFormData.append('caption', `📄 Html File (Preview/Play Version): ${htmlFileName}`);
 
                 const docResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
                     method: 'POST',
@@ -1442,7 +1745,7 @@
                 }
 
                 statusEl.style.color = '#16a34a';
-                statusEl.innerText = "✅ ပုံနှင့် Play Mode HTML File သန့်သန့်ကို Telegram သို့ ပို့ပြီးပါပြီ!";
+                statusEl.innerText = "✅ ပုံနှင့် Preview Html File ကို Telegram သို့ အောင်မြင်စွာ ပို့ပြီးပါပြီ!";
             } catch (error) {
                 statusEl.style.color = '#dc2626';
                 statusEl.innerText = "❌ အမှားအယွင်းရှိသည်: " + error.message;
